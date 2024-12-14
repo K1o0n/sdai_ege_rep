@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+    <!-- Basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script src="https://vk.com/js/api/openapi.js?169" type="text/javascript"></script>
+
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+     <!-- Site Metas -->
+    <title>ТО "Объектив"</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Site Icons -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/лого.jpg') }}" type="image/x-icon" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <!-- Site CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/flaticon.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/prettyPhoto.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css ') }}">
+
+	<script src="{{ url_for('static', filename='js/modernizr.js') }}"></script> <!-- Modernizr -->
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+<body id="page-top" class="politics_version">
+
+
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="https://vk.com/basistphoto" target="_blank">
+			<img class="img-thumbnail" src="{{ url_for('static', filename='images/навбар.png') }}" alt="" width="200" />
+		</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Меню
+          <i class="fa fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav text-uppercase ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger active" href="#home">Главная</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#about">О нас</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#services">Фотографы</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#portfolio">Портфолио</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#testimonials">Отзывы</a>
+            </li>
+			<li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#vk_groups">Блог</a>
+            </li>
+			<li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="https://vk.com/im?media=&sel=-224850454" target="_blank">Свяжитесь с нами</a>
+            </li>
+              <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="/sign-in">{{ name }}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+	
+	<section id="home" class="main-banner parallaxie" style="background: url({{ url_for('static', filename='images/banner-01.jpg') }})">
+		<div class="heading">
+			<h1>СДАЙ ЕГЭ!</h1>
+			<p>Небольшой фото-лейбл, который запечатлеет ваши воспоминания на плёнку, цифру или другие поверхности</p>
+			<h3 class="cd-headline clip is-full-width">
+				<span>Фотографируем: </span>
+				<span class="cd-words-wrapper">
+					<b class="is-visible">концерты</b>
+					<b>улицы</b>
+					<b>природу</b>
+					<b>людей</b>
+				</span>
+			</h3>
+		</div>
+	</section>
+
+	<svg id="clouds" class="hidden-xs" xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100" viewBox="0 0 85 100" preserveAspectRatio="none">
+        <path d="M-5 100 Q 0 20 5 100 Z
+            M0 100 Q 5 0 10 100
+            M5 100 Q 10 30 15 100
+            M10 100 Q 15 10 20 100
+            M15 100 Q 20 30 25 100
+            M20 100 Q 25 -10 30 100
+            M25 100 Q 30 10 35 100
+            M30 100 Q 35 30 40 100
+            M35 100 Q 40 10 45 100
+            M40 100 Q 45 50 50 100
+            M45 100 Q 50 20 55 100
+            M50 100 Q 55 40 60 100
+            M55 100 Q 60 60 65 100
+            M60 100 Q 65 50 70 100
+            M65 100 Q 70 20 75 100
+            M70 100 Q 75 45 80 100
+            M75 100 Q 80 30 85 100
+            M80 100 Q 85 20 90 100
+            M85 100 Q 90 50 95 100
+            M90 100 Q 95 25 100 100
+            M95 100 Q 100 15 105 100 Z">
+        </path>
+    </svg>
+
+    <div id="about" class="section wb">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="message-box">                        
+                        <h2>Об "Объективе"</h2>
+                        <p> Мы небольшой фото-лейбл, который снимает всё: начиная случайными улицами и прохожиими, заканчивая концертами, фотосетами и мероприятиями.</p>
+						<p>"Объектив" появился в начале 2024 года и начал активно работать с разными инди-лейблами. На нашем счету уже более 1500 фотографий, фестиваль "Дыши-3" и более 10 других концертов и фестивалей, огромное количество фотографий города, природы, людей. </p>
+                        <p>5 наших фотографов зафиксируют каждый момент Вашей жизни, каждую эмоцию и каждое состояние души.</p>
+
+                        <a href="https://vk.com/albums-224850454" class="sim-btn btn-hover-new" data-text="Все наши работы" target="_blank"><span>Все наши работы</span></a>
+                    </div><!-- end messagebox -->
+                </div><!-- end col -->
+
+                <div class="col-md-6">
+                    <div class="right-box-pro wow fadeIn">
+                        <img src="{{ url_for('static', filename='images/лого.jpg') }}" alt="" class="img-fluid img-rounded">
+                    </div><!-- end media -->
+                </div><!-- end col -->
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </div><!-- end section -->
+	
+    <div id="services" class="section lb">
+        <div class="container">
+            <div class="section-title text-left">
+                <h3>Наша команда фотографов:</h3>
+            </div><!-- end title -->
+
+            <div class="row">
+				<div class="col-md-4">
+                    <div class="services-inner-box" >
+                        <img a="https://vk.com/album-224850454_300133102" src="{{ url_for('static', filename='images/People/Gleb_Basov.jpg') }}" class="peoplePhoto">
+						<h2>Глеб Басов</h2>
+						<p>Основатель "Объектива"</p>
+					</div>
+                </div><!-- end col -->
+                <div class="col-md-4">
+                   <div class="services-inner-box" >
+                        <img  a="https://vk.com/album-224850454_301611700" src="{{ url_for('static', filename='images/People/Artem_Koscheev.jpg') }}" class="peoplePhoto">
+						<h2>Артём Кощеев</h2>
+						<p>Мастер аналоговой съемки</p>
+					</div>
+                </div><!-- end col -->
+				<div class="col-md-4">
+                   <div class="services-inner-box" >
+                        <img src="{{ url_for('static', filename='images/People/Egor_Perec.jpg') }}" class="peoplePhoto">
+						<h2>Егор Перец</h2>
+						<p>Русская Хтонь</p>
+					</div>
+                </div><!-- end col -->
+                <div class="col-md-4">
+                       <div class="services-inner-box" >
+                            <img  a="https://vk.com/album-224850454_300421511" src="{{ url_for('static', filename='images/People/Milena_Evlaxova.jpg') }}" class="peoplePhoto">
+                            <h2>Милена Евлахова</h2>
+                            <p>Скорая фотографирующая помощь</p>
+                       </div>
+                </div><!-- end col -->
+               <div class="col-md-4">
+                       <div class="services-inner-box" >
+                            <img  a="https://vk.com/album-224850454_301988193" src="{{ url_for('static', filename='images/People/Alexandr_Bloxov.jpg') }}" class="peoplePhoto">
+                            <h2>Александр Блохов</h2>
+                            <p>Работает на пиве</p>
+                       </div>
+                </div><!-- end col -->
+                <div class="col-md-4">
+                       <div class="services-inner-box" >
+                            <img src="{{ url_for('static', filename='images/People/add.png') }}" class="peoplePhoto">
+                            <h2>Хочешь в команду?</h2>
+                            <p class="contact"><a href="https://vk.com/im?media=&sel=-224850454" target="_blank">Тогда напишите нам!</a></p>
+                       </div>
+                </div><!-- end col -->
+                </div>
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </div><!-- end section -->
+	
+	<div id="portfolio" class="section lb">
+		<div class="container">
+			<div class="section-title text-left">
+                <h3>Наши работы:</h3>
+            </div><!-- end title -->
+			
+			<div class="gallery-menu row">
+				<div class="col-md-12">
+					<div class="button-group filter-button-group text-left">
+						<a href="https://vk.com/album-224850454_300133102" type="button" target="_blank">Глеб Басов</a>
+						<a href="https://vk.com/album-224850454_301611700" type="button" target="_blank">Артём Кощеев</a>
+						<a href="https://vk.com/album-224850454_300421511" type="button" target="_blank">Милена Евлахова</a>
+						<a href="https://vk.com/album-224850454_301988193" type="button" target="_blank">Артём Блохов</a>
+					</div>
+				</div>
+			</div>
+
+            каруселька
+
+        </div>
+
+    </div>
+	 <div id="testimonials" class="section wb">
+        <div class="container">
+            <div class="section-title text-left">
+                <h3>Отзывы:</h3>
+            </div><!-- end title -->
+
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="testi-carousel owl-carousel owl-theme">
+                        <div class="testimonial clearfix">
+                            <div class="desc">
+                                <h3><i class="fa fa-quote-left"></i> Прекрасное чувство сцены!</h3>
+                                <p class="lead">Ребята невероятно точно чувствуют сцену и выстраивают композицию кадра за мгновение до щелчка затвора. Пока они не стали всемирно известными творцами афиш и глянцевых страниц, спешите обратиться к ним за фотосессией. </p>
+                            </div>
+                            <div class="testi-meta">
+                                <img src="{{ url_for('static', filename='images/reviews/TAISHI.jpg') }}" alt="" class="img-fluid alignleft">
+                                <h4> <font color = "223436"> ТЭЙШИ </font> <small><font color = "223436">- инди-группа</font></small></h4>
+                            </div>
+                            <!-- end testi-meta -->
+                        </div>
+                        <!-- end testimonial -->
+
+                        <div class="testimonial clearfix">
+                            <div class="desc">
+                                <h3><i class="fa fa-quote-left"></i> Оперативная работа!</h3>
+                                <p class="lead">Фотки кайфовые, отправляются оперативно и показывают целостную картину концертов, оставляя приятное впечатление!</p>
+                            </div>
+                            <div class="testi-meta">
+                                <img src="{{ url_for('static', filename='images/reviews/bezdarniy.jpg') }}" alt="" class="img-fluid alignleft">
+                                <h4><font color = "223436">Бездарный Лейбл</font> <small><font color = "223436">- муз-лейбл</font></small></h4>
+                            </div>
+                            <!-- end testi-meta -->
+                        </div>
+                        <!-- end testimonial -->
+
+                        <div class="testimonial clearfix">
+                            <div class="desc">
+                                <h3><i class="fa fa-quote-left"></i> Быстро и качественно!</h3>
+                                <p class="lead">Отличные фотографии! Ребята работают быстро и качественно. </p>
+                            </div>
+                            <div class="testi-meta">
+                                <img src="{{ url_for('static', filename='images/reviews/zmihi.jpg') }}" alt="" class="img-fluid alignleft">
+                                 <h4><font color = "223436">Великие Жмыхи</font> <small><font color = "223436">- муз-группа</font></small></h4>
+                            </div>
+                            <!-- end testi-meta -->
+                        </div>
+                        <!-- end testimonial -->
+                    </div><!-- end carousel -->
+                </div><!-- end col -->
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </div><!-- end section -->
+
+    <script type="text/javascript">
+      VK.init({
+        apiId: 134219,
+        onlyWidgets: true
+      });
+</script>
+    <!-- Put this script tag to the <head> of your page -->
+    <script type="text/javascript" src="https://vk.com/js/api/openapi.js?168"></script>
+
+    <!-- Put this div tag to the place, where the Group block will be -->
+    <div class="vk_groups" id="vk_groups"></div>
+    <script type="text/javascript">
+      VK.Widgets.Group("vk_groups", {mode: 4, wide: 1, width: 1000, height: 600, color1: "FFFFFF", color2: "000000", color3: "5181B8"}, 224850454);
+    </script>
+
+    <div class="copyrights">
+        <div class="container">
+            <div class="footer-distributed">
+                <div class="footer-left">
+                    <p class="footer-links">
+                        <a href="#home">Главная</a>
+                        <a href="#about">О нас</a>
+                        <a href="#services">Фотографы</a>
+                        <a href="#portfolio">Портфолио</a>
+                        <a href="#testimonials">Отзывы</a>
+                    </p>
+                    <p class="footer-company-name">All Rights Reserved. &copy; 2024 </p>
+                </div>
+            </div>
+        </div><!-- end container -->
+    </div><!-- end copyrights -->
+
+    <a href="#" id="scroll-to-top" class="dmtop global-radius"><i class="fa fa-angle-up"></i></a>
+
+    <!-- ALL JS FILES -->
+    <script src="{{ url_for('static', filename='js/all.js') }}"></script>
+	<!-- Camera Slider -->
+	<script src="{{ url_for('static', filename='js/jquery.mobile.customized.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/jquery.easing.1.3.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/parallaxie.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/headline.js') }}"></script>
+	<!-- Contact form JavaScript -->
+    <script src="{{ url_for('static', filename='js/jqBootstrapValidation.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/contact_me.js') }}"></script>
+    <!-- ALL PLUGINS -->
+    <script src="{{ url_for('static', filename='js/owl.carousel.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/portfolio.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.vide.js') }}"></script>
+
+</body>
+</html>
