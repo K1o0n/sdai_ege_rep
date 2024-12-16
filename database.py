@@ -28,8 +28,10 @@ def getTasks():
     cursor = connection.cursor()
     response = cursor.execute("""SELECT * FROM tasks""")
     ret = []
+
     for line in response:
-        ret.append([line[1], f"{line[0]}_task", "None"])
+        ret.append([line[1], f"{line[0]}_task"])
+    print(ret)
     return ret
 
 def getAnswers():
@@ -39,9 +41,9 @@ def getAnswers():
     ret = []
     for line in response:
         print(line)
-        ret.append([line[1], f"{line[4]}_task"])
+        ret.append([line[1], line[4], f"{line[0]}_task"])
     return ret
 
 # createUser(('Penkina Alla Evgenievna', '+72347135312', 'penkina@gmail.com', 'pAssWoRd'))
 
-getAnswers()
+getTasks()

@@ -5,10 +5,10 @@ def check(answ):
     right_answers = []
     response = database.getAnswers()
     for line in response:
-        right_answers.append(line[0])
+        right_answers.append([line[1], line[2]])
     for item in right_answers:
         if answ[item[1]] == item[0]:
             checked.append(True)
         else:
             checked.append(False)
-    return(checked)
+    return([checked, right_answers])
