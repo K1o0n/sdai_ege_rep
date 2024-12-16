@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 
 import check_answers
+import database
 
 app = Flask(__name__)
 
@@ -18,22 +19,18 @@ def index():
 
 @app.route("/tasks", methods=['POST', 'GET'])
 def tasks():
-    N = 6
     kwargs = dict()
+    task = []
+    tasks = database.getTasks()
     if request.method == 'GET':
-        task = []
-        for i in range(1, N + 1):
-            name = "static/tasks/" + str(i) + "_task.txt"
-            file = open(name, mode="r", encoding="UTF-8")
-            s = file.read()
-            file.close()
-            s = s.replace('\n', '<br>')
-            task.append([s, name[13:-4], "None"])
+        for item in tasks:
+            s = item[1].replace('\n', '<br>')
+            task.append([s, f"{item[0]}_task", "None"])
         kwargs["tasks"] = task
         return render_template("task_page.html", **kwargs)
     elif request.method == 'POST':
         print(request.form)
-        post = check_answers.check(request.form, N)
+        post = check_answers.check(request.form)
         task = []
         for i in range(1, N + 1):
             name = "static/tasks/" + str(i) + "_task.txt"
@@ -52,7 +49,7 @@ def tasks():
                 data = data[:-1]
             task.append([s, name[13:-4], color, request.form[key], data])
         print(task)
-        if "check_answers" in request.form and request.form["check_answers"] == 'on':
+        if "check_answers" in request.form:
             kwargs["check_answers"] = True
         else:
             kwargs["check_answers"] = False

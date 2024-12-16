@@ -1,13 +1,14 @@
-def check(answ, N):
+import database
+
+def check(answ):
     checked = []
-    for i in range(1, N + 1):
-        key = str(i) + "_task"
-        right_ans = "static/tasks/" + str(i) + "_answer.txt"
-        with open(right_ans) as file:
-            data = file.read()
-            data = data[:-1]
-            if answ[key] == data:
-                checked.append(True)
-            else:
-                checked.append(False)
+    right_answers = []
+    response = database.getAnswers()
+    for line in response:
+        right_answers.append(line[0])
+    for item in right_answers:
+        if answ[item[1]] == item[0]:
+            checked.append(True)
+        else:
+            checked.append(False)
     return(checked)

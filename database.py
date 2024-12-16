@@ -26,20 +26,22 @@ def addTask(data):
 def getTasks():
     connection = sqlite3.connect('EGE.db')
     cursor = connection.cursor()
-    req = cursor.execute("""SELECT * FROM tasks""")
+    response = cursor.execute("""SELECT * FROM tasks""")
     ret = []
-    for line in req:
+    for line in response:
         ret.append([line[1], f"{line[0]}_task", "None"])
     return ret
 
 def getAnswers():
     connection = sqlite3.connect('EGE.db')
     cursor = connection.cursor()
-    req = cursor.execute("""SELECT * FROM tasks""")
+    response = cursor.execute("""SELECT * FROM tasks""")
     ret = []
-    for line in req:
-        ret.append([line[1], f"{line[]}_task", "None"])
+    for line in response:
+        print(line)
+        ret.append([line[1], f"{line[4]}_task"])
     return ret
 
 # createUser(('Penkina Alla Evgenievna', '+72347135312', 'penkina@gmail.com', 'pAssWoRd'))
 
+getAnswers()
