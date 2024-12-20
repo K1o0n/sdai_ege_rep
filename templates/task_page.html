@@ -91,6 +91,9 @@
             .green {
                 color: green;
             }
+            .none {
+                color: black;
+            }
             .check_answers {
                 color: black;
             }
@@ -101,7 +104,11 @@
                 <form action="" method="post" >
 
                 {% for task in tasks %}
+
                     <div class = "task-text">
+                        <div class = "num">
+                            <b> №{{ task[3] }} </b>
+                        </div>
                     {{ task[0]|safe }}
                         <div class="task_answers">
                             <table border="1" width="30%" cellpadding="5">
@@ -111,11 +118,11 @@
                                </tr>
                                <tr>
                                 <td>
-                                    <input style="margin:auto" value="{{ task[3] }}" class="{{ task[2] }}" type="text" name="{{ task[1] }}" id="{{ task[1] }}">
+                                    <input style="width:100%; margin:auto" value="{{ task[4] }}" class="{{ task[2] }}" type="text" name="{{ task[1] }}" id="{{ task[1] }}">
                                 </td>
                                 <td style="text-align:center">
                                     {% if check_answers %}
-                                        {{ task[4] }}
+                                        {{ task[5] }}
                                         {% else %}
                                             ***
                                     {% endif %}
