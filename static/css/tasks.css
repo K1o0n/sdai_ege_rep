@@ -5,12 +5,12 @@
 
 main {
     margin-left: 10vh;
-    margin-top: 10vh
+    margin-top: 14vh;
 }
 .task-text {
     margin-top: 40px;
     color: black;
-    font-size: 1.2em
+    font-size: 1.2em;
 }
 
 .button {
@@ -22,7 +22,7 @@ main {
   display: inline-block;
   font-size: 16px;
   margin-top: 40px;
-  margin-bottom: 40px
+  margin-bottom: 40px;
 }
 
 .button:hover {
@@ -30,3 +30,6 @@ main {
   color: white;
 }
 
+.num {
+    font-size: 25px;
+}

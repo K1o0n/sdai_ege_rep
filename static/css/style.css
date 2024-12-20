@@ -2503,3 +2503,7 @@ select.mobile-device {
       color: blue;
       text-decoration: underline;
 }
+
+.num {
+    font: 40px
+}
