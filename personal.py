@@ -24,7 +24,7 @@ def tasks():
 
         for item in tasks:
             s = item[0].replace('\n', '<br>')
-            task.append([s, item[1], "None"])
+            task.append([s, item[1], "none", item[2]])
         kwargs["tasks"] = task
         return render_template("task_page.html", **kwargs)
 
@@ -34,12 +34,14 @@ def tasks():
 
         for i in range(len(tasks)):
             s = tasks[i][0].replace('\n', '<br>')
-            if post[1][i][0]:
+            if post[0][i] == True:
                 color = "green"
+            elif post[0][i] == 'none':
+                color = "none"
             else:
                 color = "red"
 
-            task.append([s, tasks[i][1], color, request.form[post[1][i][1]], post[1][i][0]])
+            task.append([s, tasks[i][1], color, tasks[i][2], request.form[post[1][i][1]], post[1][i][0]])
         if "check_answers" in request.form:
             kwargs["check_answers"] = True
         else:

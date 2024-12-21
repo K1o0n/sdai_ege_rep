@@ -9,6 +9,8 @@ def check(answ):
     for item in right_answers:
         if answ[item[1]] == item[0]:
             checked.append(True)
+        elif answ[item[1]] == '':
+            checked.append('none')
         else:
             checked.append(False)
     return([checked, right_answers])

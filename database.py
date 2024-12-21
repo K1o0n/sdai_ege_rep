@@ -30,7 +30,7 @@ def getTasks():
     ret = []
 
     for line in response:
-        ret.append([line[1], f"{line[0]}_task"])
+        ret.append([line[1], f"{line[0]}_task",line[2]])
     print(ret)
     return ret
 
