@@ -9,9 +9,7 @@ app = Flask(__name__)
 
 @app.route("/", methods=['POST', 'GET'])
 def index():
-    kwargs = dict()
-    kwargs['name'] = "Регистрация"
-    return render_template("tasks.html", **kwargs)
+    return render_template("tasks.html")
 
 @app.route("/tasks", methods=['POST', 'GET'])
 def tasks():
@@ -48,6 +46,13 @@ def tasks():
             kwargs["check_answers"] = False
         kwargs["tasks"] = task
         return render_template("task_page.html", **kwargs)
+
+@app.route("/add-task", methods=['POST', 'GET'])
+def add_task():
+    if request.method == 'GET':
+        return render_template("add-task.html")
+    elif request.method == 'POST':
+        pass
 
 if __name__ == "__main__":
     app.run(port=8080, host="127.0.0.1")

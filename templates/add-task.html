@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>СДАЙ ЕГЭ</title>
+  <link rel="shortcut icon" href="{{ url_for('static', filename='images/лого.jpg') }}" type="image/x-icon" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/sign-in.css') }}">
+    <script src="{{ url_for('static', filename='js/add_task.js') }}"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Title section -->
+    <div class="title">Добавление задачи</div>
+    <div class="content">
+      <!-- Registration form -->
+      <form action="#" method="post">
+        <div class="select-num">
+          <label for="select-num">Номер задания</label>
+          <select name="select-num" id="select-num">
+            <option value="">-</option>
+              {% for i in range(1,28) %}
+                <option value="{{ i }}">{{ i }}</option>
+              {% endfor %}
+          </select>
+        </div>
+        <div class="user-details">
+          <!-- Input for Email -->
+          <div class="input-box">
+              <label for="source" class="details">Источник</label>
+              <input type="text" name="source" id="source" placeholder="Введите источник задачи" required>
+          </div>
+        </div>
+          <div class=";l">
+              <label for="task_text" class="details">Условие задачи:</label>
+              <textarea rows="1" id="task_text" name="task_text"></textarea>
+          </div>
+        <!-- Submit button -->
+        <div class="button">
+              <input type="submit" value="Зарегистрироваться">
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
