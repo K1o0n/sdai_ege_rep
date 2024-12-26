@@ -98,13 +98,14 @@
 
                     <div class = "task-text">
                         <div class = "num">
-                            <b> №{{ task[3] }} </b>
+                            <h1> <b> №{{ task[3] }} </b> </h1>
+                            <h6> Сложность: {{ task[6] }} <br>  Источник: {{ task[7] }}</h6>
                         </div>
                     {{ task[0]|safe }}
                         <div class="task_answers">
                             <table border="1" width="30%" cellpadding="5">
                                <tr>
-                                <th style="text-align:center">Ваш ответ:</th>
+                                <th style="text-align:center; width:50%;">Ваш ответ:</th>
                                 <th style="text-align:center" >Правильный ответ:</th>
                                </tr>
                                <tr>

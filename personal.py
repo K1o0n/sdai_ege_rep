@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 @app.route("/", methods=['POST', 'GET'])
 def index():
-    return render_template("tasks.html")
+    return render_template("main.html")
 
 @app.route("/tasks", methods=['POST', 'GET'])
 def tasks():
@@ -22,14 +22,14 @@ def tasks():
 
         for item in tasks:
             s = item[0].replace('\n', '<br>')
-            task.append([s, item[1], "none", item[2]])
+            task.append([s, item[1], "none", item[2], '', '', item[3], item[4]])
         kwargs["tasks"] = task
         return render_template("task_page.html", **kwargs)
 
     elif request.method == 'POST':
         print(request.form)
         post = check_answers.check(request.form)
-
+        database.submitted_data(request.form)
         for i in range(len(tasks)):
             s = tasks[i][0].replace('\n', '<br>')
             if post[0][i] == True:
@@ -39,7 +39,7 @@ def tasks():
             else:
                 color = "red"
 
-            task.append([s, tasks[i][1], color, tasks[i][2], request.form[post[1][i][1]], post[1][i][0]])
+            task.append([s, tasks[i][1], color, tasks[i][2], request.form[post[1][i][1]], post[1][i][0], tasks[i][3], tasks[i][4]])
         if "check_answers" in request.form:
             kwargs["check_answers"] = True
         else:
@@ -52,7 +52,9 @@ def add_task():
     if request.method == 'GET':
         return render_template("add-task.html")
     elif request.method == 'POST':
-        pass
+        print(request.form)
+        database.addTask(request.form)
+        return redirect("/tasks")
 
 if __name__ == "__main__":
     app.run(port=8080, host="127.0.0.1")
