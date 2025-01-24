@@ -92,7 +92,7 @@
 
 
         <main id = "task">
-                <form action="" method="post" >
+		      <form action="" method="post" >
 
                 {% for task in tasks %}
 
@@ -102,37 +102,68 @@
                             <h6> Сложность: {{ task[6] }} <br>  Источник: {{ task[7] }}</h6>
                         </div>
                     {{ task[0]|safe }}
-                        <div class="task_answers">
-                            <table border="1" width="30%" cellpadding="5">
-                               <tr>
-                                <th style="text-align:center; width:50%;">Ваш ответ:</th>
-                                <th style="text-align:center" >Правильный ответ:</th>
-                               </tr>
-                               <tr>
-                                <td>
-                                    <input style="width:100%; margin:auto" value="{{ task[4] }}" class="{{ task[2] }}" type="text" name="{{ task[1] }}" id="{{ task[1] }}">
-                                </td>
-                                <td style="text-align:center">
-                                    {% if check_answers %}
-                                        {{ task[5] }}
-                                        {% else %}
-                                            ***
-                                    {% endif %}
-                                </td>
-                              </tr>
-                             </table>
-
-
+                        <div>
+                          <table border="1" width="30%" cellpadding="5">
+                            <tr>
+                              <th style="text-align:center; width:50%;">Ваш ответ:</th>
+                              <th style="text-align:center" >Правильный ответ:</th>
+                            </tr>
+                            <tr class="task-answers">
+                              <td>
+                                <input style="width:100%; margin:auto" 
+                                       value="{{ task[4] }}" 
+                                       class="{{ task[2] }}" 
+                                       type="text" 
+                                       name="{{ task[1] }}" 
+                                       id="{{ task[1] }}">
+                              </td>
+                              <td style="text-align:center" task-answer="{{ task [5] }}" showing="false">
+                                    ***
+                              </td>
+                            </tr>
+                          </table>
                         </div>
 
                     </div>
                 {% endfor %}
+                    
                     <div class="button">
                         <input type="submit" value="Отправить">
                         <input type="checkbox" id="check_answers" name="check_answers">
                         <label for="check_answers" class="check_answers">Показать ответы</label>
                     </div>
-                </form>
+                    
+                    <!--
+                    <script>
+                      function toggleAnswers() {
+                        b = document.querySelector("#toggleAnswers")
+                        let next = b.innerText;
+                        b.innerText = b.getAttribute("next");
+                        b.setAttribute('next', next);
+                        for (let row of document.querySelectorAll(".task-answers")) {
+                  			  let [user_answer, system_answer] = row.children;
+                          if (system_answer.getAttribute('showing') === 'true') {
+                            system_answer.setAttribute('showing', 'false');
+                            system_answer.innerText = "***";
+                            system_answer.style.color = 'black';
+                            continue;
+                          }
+                          
+                          system_answer.innerText = system_answer.getAttribute("task-answer");
+                          system_answer.setAttribute('showing', 'true');
+                          let ua = user_answer.children[0].value.trim();
+                          let sa = system_answer.getAttribute('task-answer').trim();
+                          if(ua === sa) {
+                            system_answer.style.color = 'green';
+                          } else {  
+                            system_answer.style.color = 'red';
+                          }
+                        }
+                      }
+                    </script>
+                    <button class="button" id="toggleAnswers" next="Скрыть ответы" onclick="toggleAnswers()">Показать ответы</button>
+                    -->
+		      </form> 
         </main>
 
     <!-- ALL JS FILES -->
