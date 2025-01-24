@@ -76,7 +76,7 @@ def get_all_tasks():
     cursor = connect.cursor()
     result = cursor.execute("SELECT * FROM Tasks").fetchall()
     connect.close()
-    return result       # [(id, text, answer, difficulty, ID_type, source)]
+    return result       # [(id, text, answer, difficulty, ID_type, source, solution)]
 
 def get_answers():
     connect = sqlite3.connect("MAIN_BD.db")
