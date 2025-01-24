@@ -70,7 +70,16 @@ def add_teacher_into_course(data):     #list or dict: (ID_teacher, ID_course)
         data = transform_into_list(data)
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO Course_Students VALUES (score, time, ID_teacher, ID_option) VALUES (?, ?)", data)
+    cursor.execute("INSERT INTO Course_Students VALUES (ID_teacher, ID_course) VALUES (?, ?)", data)
+    connect.commit()
+    connect.close()
+
+def add_file(data):     #list or dict: (ID_task, path, type)
+    if type(data) != 'list':
+        data = transform_into_list(data)
+    connect = sqlite3.connect("MAIN_BD.db")
+    cursor = connect.cursor()
+    cursor.execute("INSERT INTO Files VALUES (ID_task, path, type) VALUES (?, ?, ?)", data)
     connect.commit()
     connect.close()
 
