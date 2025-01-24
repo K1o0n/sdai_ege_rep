@@ -116,7 +116,14 @@ form .category label .dot {
 }
 
 form input[type="radio"] {
-  display: none;
+  display: inline;
+  width: 1.3em;
+  height: 1.3em;
+}
+
+.meow {
+  width: 49%;
+  display: inline-block;
 }
 
 form .button {
