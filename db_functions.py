@@ -29,11 +29,10 @@ def add_task(data):         #list or dict: (text, answer, difficulty, num_in_ege
     connect.close()
 
 def add_user(data):     #list or dict (name, surname, patronymic, email, password, telephone, age, country, role (student, teacher, admin), about, path (path to the photo))
-    if type(data) != 'list':
-        data = transform_into_list(data)
+    current = [data['name'], data['surname'], data['patronymic'], data['email'], data['password'], data['telephone'], data['age'], data['country'], data['role'], data['about'], data['path']]
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO Users (name, surname, patronymic, email, password, telephone, age, country, role, about, path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", data)
+    cursor.execute("INSERT INTO Users (name, surname, patronymic, email, password, telephone, age, country, role, about, path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", current)
     connect.commit()
     connect.close()
 
@@ -140,3 +139,17 @@ def get_tasks_id(id_option):
     result = cursor.execute("SELECT id_task FROM Tasks_Options WHERE ID = ?", [id_option]).fetchall()
     connect.close()
     return result  # [(id_task)]
+
+def get_lessons_for_course(id_course):
+    connect = sqlite3.connect("MAIN_BD.db")
+    cursor = connect.cursor()
+    result = cursor.execute("SELECT id_lesson FROM Course_Lessons WHERE ID_course = ?", [id_course]).fetchall()
+    connect.close()
+    return result  # [(id_lesson)]
+
+def get_files_for_lesson(id_lesson):
+    connect = sqlite3.connect("MAIN_BD.db")
+    cursor = connect.cursor()
+    result = cursor.execute("SELECT * FROM Information WHERE ID_lesson = ?", [id_lesson]).fetchall()
+    connect.close()
+    return result  # [(id, path, ID_lesson)]
