@@ -95,16 +95,16 @@ def get_courses():
 def get_user(id_user):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    result = cursor.execute("SELECT * FROM Users WHERE id = ?", id_user).fetchall()
+    result = cursor.execute("SELECT * FROM Users WHERE id = ?", [id_user]).fetchall()
     connect.close()
     return result       # [(name, surname, patronymic, email, password, telephone, age, country, role (student, teacher, admin), about, path (path to the photo))]
 
 def get_user_id(email):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    result = cursor.execute("SELECT * FROM Users WHERE email = ?", email).fetchall()
+    result = cursor.execute("SELECT * FROM Users WHERE email = ?", [email]).fetchall()
     connect.close()
-    return result       # id
+    return result[0][0]     # id
 
 def get_answer(id_task):
     connect = sqlite3.connect("MAIN_BD.db")
