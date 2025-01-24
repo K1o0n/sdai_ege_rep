@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ТО "Объектив"</title>
+  <link rel="shortcut icon" href="{{ url_for('static', filename='images/лого.jpg') }}" type="image/x-icon" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/sign-in.css') }}">
+</head>
+<body>
+  <div class="container">
+    <!-- Title section -->
+    <div class="title">Регистрация</div>
+    <div class="content">
+      <!-- Registration form -->
+      <form action="#" method="post">
+        <div class="user-details">
+          <!-- Input for Full Name -->
+          <div class="input-box">
+            <label for="name" class="details">Имя</label>
+            <input type="text" name="name" id="name" placeholder="Иван" required>
+          </div> 
+	  <div class="input-box">
+            <label for="name" class="details">Фмилия</label>
+            <input type="text" name="surname" id="surname" placeholder="Иванов" required>
+          </div>	
+	  <div class="input-box">
+            <label for="name" class="details">Отчество</label>
+            <input type="text" name="patronymic" id="patronymic" placeholder="Иванович" required>
+          </div>
+          <!-- Input for Email -->
+          <div class="input-box">
+            <label for="e-mail" class="details">Почта</label>
+            <input type="email" name="email" id="email" placeholder="Введите свою почту" required>
+          </div>
+          <!-- Input for Phone Number -->
+          <div class="input-box">
+            <label for="telephone" class="details">Номер телефона</label>
+            <input type="tel" name="telephone" id="telephone" placeholder="Введите ваш номер телефона" required>
+          </div>
+	  <div class="input-box">
+              <label for="age" class="details">Сколько вам полных лет?</label>
+              <input min="14" max="120" name="age" id="age" type="number" placeholder="От 14 до 120" required>
+          </div>
+        </div>
+
+
+          <!-- Input for Password -->
+          <div class="user-details">
+          <div class="input-box">
+            <label for="password" class="details">Пароль</label>
+            <input type="password" name="password" id="password" placeholder="Введите пароль" required>
+          </div>
+          <!-- Input for Confirm Password -->
+          <div class="input-box">
+            <label class="details">Повтор пароля</label>
+            <input type="password" placeholder="Повторно введите пароль" required>
+          </div>
+        </div>
+
+	<fieldset style="border: none;">
+	  <legend>Ваша роль</legend>
+
+          <div>
+	    <span class="meow">
+              <input type="radio" id="student" name="role" value="student">
+              <label for="student" style="display: inline;"> Ученик </label>
+	    </span>
+
+	    <span class="meow">
+              <input type="radio" id="teacher" name="role" value="teacher">
+              <label for="teacher"> Учитель </label>
+	    </span>
+          </div>
+        </fieldset>
+
+        <!-- Submit button -->
+        <div class="button">
+          <input type="submit" value="Зарегистрироваться">
+        </div>
+
+      </form>
+    </div>
+  </div>
+</body>
+</html>
