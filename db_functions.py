@@ -29,8 +29,7 @@ def add_user(data):     #list or dict (name, surname, patronymic, email, passwor
     connect.close()
 
 def add_attempt(data):      #list or dict: (ID_student, ID_task, is_right)
-    current = [data['ID_student'], data['ID_task'], data['is_right']]
-    data.append(time())
+    current = [data['ID_student'], data['ID_task'], data['is_right'], time()]
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
     cursor.execute("INSERT INTO Attempt (ID_student, ID_task, is_right, time) VALUES (?, ?, ?, ?)", current)
@@ -111,7 +110,7 @@ def get_answer(id_task):
     cursor = connect.cursor()
     result = cursor.execute("SELECT answer FROM Tasks WHERE id = ?", [id_task]).fetchall()[0]
     connect.close()
-    return result       # answer (string)
+    return result[0][0]       # answer (string)
 
 def get_options():
     connect = sqlite3.connect("MAIN_BD.db")
@@ -140,3 +139,25 @@ def get_files_for_lesson(id_lesson):
     result = cursor.execute("SELECT * FROM Information WHERE ID_lesson = ?", [id_lesson]).fetchall()
     connect.close()
     return result  # [(id, path, ID_lesson)]
+
+def get_attempts_of_user_task(id_student, id_task):
+    connect = sqlite3.connect("MAIN_BD.db")
+    cursor = connect.cursor()
+    result = cursor.execute("SELECT * FROM Attempts WHERE ID_user = ? AND ID_task = ?", [id_student, id_task]).fetchall()
+    connect.close()
+    return result  # (ID, ID_student, ID_task, is_right, date)
+
+def get_attempts_of_user(id_student):
+    connect = sqlite3.connect("MAIN_BD.db")
+    cursor = connect.cursor()
+    result = cursor.execute("SELECT * FROM Attempts WHERE ID_user = ?", [id_student]).fetchall()
+    connect.close()
+    return result  # (ID, ID_student, ID_task, is_right, date)
+
+def get_type_name(id_type):
+    connect = sqlite3.connect("MAIN_BD.db")
+    cursor = connect.cursor()
+    result = cursor.execute("SELECT name FROM Type WHERE ID = ?", [id_type]).fetchall()
+    connect.close()
+    return result[0][0] # name
+
