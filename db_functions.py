@@ -3,12 +3,6 @@ from time import time
 
 # Special  functions:
 
-def transform_into_list(data):
-    result = []
-    for key in data.keys():
-        result.append(data[key])
-    return result
-
 def get_id_type(num):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
@@ -19,12 +13,10 @@ def get_id_type(num):
 # Add functions:
 
 def add_task(data):         #list or dict: (text, answer, difficulty, num_in_ege, source)
-    if isinstance(data, dict):
-        data = transform_into_list(data)
-    data[3] = get_id_type(data[3])
+    current = [data['text'], data['answer'], data['difficulty'], get_id_type(data['num_in_ege']), data['source']]
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO Users (text, answer, difficulty, source, ID_tupe) VALUES (?, ?, ?, ?, ?)", data)
+    cursor.execute("INSERT INTO Users (text, answer, difficulty, source, ID_tupe) VALUES (?, ?, ?, ?, ?)", current)
     connect.commit()
     connect.close()
 
@@ -37,48 +29,43 @@ def add_user(data):     #list or dict (name, surname, patronymic, email, passwor
     connect.close()
 
 def add_attempt(data):      #list or dict: (ID_student, ID_task, is_right)
-    if type(data) != 'list':
-        data = transform_into_list(data)
+    current = [data['ID_student'], data['ID_task'], data['is_right']]
     data.append(time())
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO Attempt (ID_student, ID_task, is_right, time) VALUES (?, ?, ?, ?)", data)
+    cursor.execute("INSERT INTO Attempt (ID_student, ID_task, is_right, time) VALUES (?, ?, ?, ?)", current)
     connect.commit()
     connect.close()
 
 def add_result(data):       #list or dict: (score, time, ID_student, ID_option)
-    if type(data) != 'list':
-        data = transform_into_list(data)
+    current = [data['score'], data['time'], data['ID_student'], data['ID_option']]
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO Results (score, time, ID_student, ID_option) VALUES (?, ?, ?, ?)", data)
+    cursor.execute("INSERT INTO Results (score, time, ID_student, ID_option) VALUES (?, ?, ?, ?)", current)
     connect.commit()
     connect.close()
 
 def add_student_into_course(data):     #list or dict: (ID_student, ID_course)
-    if type(data) != 'list':
-        data = transform_into_list(data)
+    current = [data['ID_student'], data['ID_course']]
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO Course_teachers VALUES (ID_student, ID_course) VALUES (?, ?)", data)
+    cursor.execute("INSERT INTO Course_teachers VALUES (ID_student, ID_course) VALUES (?, ?)", current)
     connect.commit()
     connect.close()
 
 def add_teacher_into_course(data):     #list or dict: (ID_teacher, ID_course)
-    if type(data) != 'list':
-        data = transform_into_list(data)
+    current = [data['ID_teacher'], data['ID_student']]
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO Course_Students VALUES (ID_teacher, ID_course) VALUES (?, ?)", data)
+    cursor.execute("INSERT INTO Course_Students VALUES (ID_teacher, ID_course) VALUES (?, ?)", current)
     connect.commit()
     connect.close()
 
 def add_file(data):     #list or dict: (ID_task, path, type)
-    if type(data) != 'list':
-        data = transform_into_list(data)
+    current = [data['ID_task'], data['path'], data['type']]
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO Files VALUES (ID_task, path, type) VALUES (?, ?, ?)", data)
+    cursor.execute("INSERT INTO Files VALUES (ID_task, path, type) VALUES (?, ?, ?)", current)
     connect.commit()
     connect.close()
 
