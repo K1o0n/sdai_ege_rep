@@ -127,3 +127,17 @@ def get_answer(id_task):
     connect.close()
     return result       # answer (string)
 
+def get_options():
+    connect = sqlite3.connect("MAIN_BD.db")
+    cursor = connect.cursor()
+    result = cursor.execute("SELECT * FROM Options").fetchall()
+    connect.close()
+    return result  # [(id, name, ID_teacher)]
+
+def get_tasks_id(id_option):
+    connect = sqlite3.connect("MAIN_BD.db")
+    cursor = connect.cursor()
+    result = cursor.execute("SELECT id_task FROM Options_Tasks WHERE ID = ?", id_option).fetchall()
+    connect.close()
+    return result  # [(id_task)]
+
