@@ -123,7 +123,7 @@ def get_user_id(email):
 def get_answer(id_task):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    result = cursor.execute("SELECT answer FROM Tasks WHERE id = ?", id_task).fetchall()[0]
+    result = cursor.execute("SELECT answer FROM Tasks WHERE id = ?", [id_task]).fetchall()[0]
     connect.close()
     return result       # answer (string)
 
@@ -137,7 +137,6 @@ def get_options():
 def get_tasks_id(id_option):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    result = cursor.execute("SELECT id_task FROM Options_Tasks WHERE ID = ?", id_option).fetchall()
+    result = cursor.execute("SELECT id_task FROM Tasks_Options WHERE ID = ?", [id_option]).fetchall()
     connect.close()
     return result  # [(id_task)]
-
