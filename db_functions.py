@@ -6,7 +6,7 @@ from time import time
 def get_id_type(num):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    result = cursor.execute("SELECT id FROM Types WHERE num_in_ege").fetchall()[0]
+    result = cursor.execute("SELECT id FROM Types WHERE num_in_ege = ", [num]).fetchall()[0]
     connect.close()
     return result       # id
 
@@ -131,7 +131,7 @@ def get_messages(status): # (1-active, 2-banned, 3-deleted)
 def get_user(id_user, status):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    result = cursor.execute("SELECT * FROM Users WHERE id = ? AND status != 3", [id_user]).fetchall()
+    result = cursor.execute("SELECT * FROM Users WHERE id = ? AND status != ?", [id_user, status]).fetchall()
     connect.close()
     return result       # [(name, surname, patronymic, email, password, telephone, age, country, role (student, teacher, admin), about, path (path to the photo)), date, status (1-active, 2-banned, 3-deleted)]
 
