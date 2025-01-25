@@ -26,7 +26,7 @@ def sign_up():
     data['path'] = None
     db.add_user(data)
     session['email'] = data['email']
-    return "123"
+    return redirect('/dashboard/')
 
 
 @app.route('/sign-in/', methods=['GET', 'POST'])
@@ -39,18 +39,18 @@ def sign_in():
     # orms were invented in 1995... People before 1995:
     if user and user[0][4] == data['password']:
         session['email'] = data['email']
-        return "123"
+        return redirect('/dashboard/')
     else:
         return render_template('sign-in.html', error='Неверные данные!')
 
 @app.route('/dashboard/')
 def dashboard():
     if 'email' not in session:
-        return redirect('/sign-in')
+        return redirect('/sign-in/')
     uid = db.get_user_id(session['email'], 1)
     user = db.get_user(uid, 1)
     if not user:
-        return redirect('/sign-in')
+        return redirect('/sign-in/')
     
     [n, s, p, e, _, t, *_] = user
     return render_template('dashboard.html', 
