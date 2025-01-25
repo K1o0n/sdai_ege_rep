@@ -28,7 +28,7 @@ def index():
         google_data = google.get(user_info_endpoint).json()
         print(google_data)
 
-    return render_template('index.j2',
+    return render_template('oauth.html',
                            google_data=google_data,
                            fetch_url=google.base_url + user_info_endpoint)
 
