@@ -49,7 +49,7 @@ def add_task(data):         # dict: (text, answer, difficulty, num_in_ege, date,
     connect.commit()
     connect.close()
 
-def add_user(data):     # dict (name, surname, patronymic, email, password, telephone, age, country, role (student, teacher, admin), about, path (path to the photo))
+def add_user(data):     # dict (name, surname, patronymic, email, password, telephone, age, country, role (user, user, admin), about, path (path to the photo))
     current = [data['name'], data['surname'], data['patronymic'], data['email'], data['password'], data['telephone'], data['age'], data['country'], data['role'], data['about'], data['path'], time(), 1]
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
@@ -57,36 +57,35 @@ def add_user(data):     # dict (name, surname, patronymic, email, password, tele
     connect.commit()
     connect.close()
 
-def add_attempt(data):      # dict: (ID_student, ID_task, is_right, ID_course)
-    current = [data['ID_student'], data['ID_task'], data['is_right'], data['answer'], time(), data['ID_result'], data['ID_course']]
+def add_attempt(data):      # dict: (ID_user, ID_task, is_right, ID_course)
+    current = [data['ID_user'], data['ID_task'], data['is_right'], data['answer'], time(), data['ID_result'], data['ID_course']]
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO Attempt (ID_student, ID_task, is_right, time) VALUES (?, ?, ?, ?, ?, ?, ?)", current)
+    cursor.execute("INSERT INTO Attempt (ID_user, ID_task, is_right, time) VALUES (?, ?, ?, ?, ?, ?, ?)", current)
     connect.commit()
     connect.close()
 
-def add_result(data):       # dict: (score, time, ID_student, ID_option)
-    current = [data['score'], data['time'], data['ID_student'], data['ID_option'], data['']]
+def add_result(data):       # dict: (score, time, ID_user, ID_option)
+    current = [data['score'], data['time'], data['ID_user'], data['ID_option'], data['']]
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO Results (score, time, ID_student, ID_option) VALUES (?, ?, ?, ?)", current)
-    connect.commit()
-    connect.close()
-    return
-
-def add_student_into_course(data):     # dict: (ID_student, ID_course)
-    current = [data['ID_student'], data['ID_course']]
-    connect = sqlite3.connect("MAIN_BD.db")
-    cursor = connect.cursor()
-    cursor.execute("INSERT INTO Course_teachers VALUES (ID_student, ID_course) VALUES (?, ?)", current)
+    cursor.execute("INSERT INTO Results (score, time, ID_user, ID_option) VALUES (?, ?, ?, ?)", current)
     connect.commit()
     connect.close()
 
-def add_teacher_into_course(data):     # dict: (ID_teacher, ID_course)
-    current = [data['ID_teacher'], data['ID_student']]
+def add_student_into_course(data):     # dict: (ID_user, ID_course)
+    current = [data['ID_user'], data['ID_course']]
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO Course_Students VALUES (ID_teacher, ID_course) VALUES (?, ?)", current)
+    cursor.execute("INSERT INTO Course_users VALUES (ID_user, ID_course) VALUES (?, ?)", current)
+    connect.commit()
+    connect.close()
+
+def add_teacher_into_course(data):     # dict: (ID_user, ID_course)
+    current = [data['ID_user'], data['ID_user']]
+    connect = sqlite3.connect("MAIN_BD.db")
+    cursor = connect.cursor()
+    cursor.execute("INSERT INTO Course_users VALUES (ID_user, ID_course) VALUES (?, ?)", current)
     connect.commit()
     connect.close()
 
@@ -127,7 +126,7 @@ def get_courses(status): # (1-active, 2-banned, 3-deleted)
     cursor = connect.cursor()
     result = cursor.execute("SELECT * FROM Courses WHERE status = ? ORDER BT date", [status]).fetchall()
     connect.close()
-    return result       # [(id, name, ID_teacher, about, is_public, date, status)]
+    return result       # [(id, name, ID_user, about, is_public, date, status)]
 
 def get_messages(status): # (1-active, 2-banned, 3-deleted)
     connect = sqlite3.connect("MAIN_BD.db")
@@ -141,7 +140,7 @@ def get_user(id_user, status):
     cursor = connect.cursor()
     result = cursor.execute("SELECT * FROM Users WHERE id = ? AND status != ?", [id_user, status]).fetchall()
     connect.close()
-    return result       # [(name, surname, patronymic, email, password, age, country, role (student, teacher, admin), about, path (path to the photo)), date, status (1-active, 2-banned, 3-deleted)]
+    return result       # [(name, surname, patronymic, email, password, age, country, role (user, user, admin), about, path (path to the photo)), date, status (1-active, 2-banned, 3-deleted)]
 
 def get_user_id(email, status): # (1-active, 2-banned, 3-deleted)
     connect = sqlite3.connect("MAIN_BD.db")
@@ -166,7 +165,7 @@ def get_options():
     cursor = connect.cursor()
     result = cursor.execute("SELECT * FROM Options").fetchall()
     connect.close()
-    return result  # [(id, name, ID_teacher)]
+    return result  # [(id, name, ID_user)]
 
 def get_tasks_for_option(id_option):
     connect = sqlite3.connect("MAIN_BD.db")
@@ -182,10 +181,10 @@ def get_task(id_task, status):
     connect.close()
     return result  # [(id, text, answer, difficulty, ID_type, source, solution, status)]
 
-def get_lessons_for_course(id_course):
+def get_blok_for_course(id_course):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    result = cursor.execute("SELECT id_lesson FROM Course_Lessons WHERE ID_course = ?", [id_course]).fetchall()
+    result = cursor.execute("SELECT * FROM Blocks WHERE ID_course = ?", [id_course]).fetchall()
     connect.close()
     return result  # [(id_lesson)]
 
@@ -196,25 +195,25 @@ def get_files_for_lesson(id_lesson):
     connect.close()
     return result  # [(id, path, ID_lesson)]
 
-def get_attempts_of_user_task(id_student, id_task):
+def get_attempts_of_user_task(id_user, id_task):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    result = cursor.execute("SELECT * FROM Attempts WHERE ID_user = ? AND ID_task = ? ORDER BY date", [id_student, id_task]).fetchall()
+    result = cursor.execute("SELECT * FROM Attempts WHERE ID_user = ? AND ID_task = ? ORDER BY date", [id_user, id_task]).fetchall()
     connect.close()
-    return result  # [(ID, ID_student, ID_task, answer, is_correct, date, ID_course)]
+    return result  # [(ID, ID_user, ID_task, answer, is_correct, date, ID_course)]
 
-def get_attempts_by_task_type(id_student):
+def get_attempts_by_task_type(id_user):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    result = cursor.execute("SELECT Attempts.date, Attempts.is_correct, ID_type, Types.name FROM Attempts JOIN Tasks JOIN Types ON Attempts.ID_task = Tasks.ID AND Tasks.ID_type = Types.ID WHERE Attempts.ID_user = ? ORDER BY Types.name",[id_student]).fetchall()
+    result = cursor.execute("SELECT Attempts.date, Attempts.is_correct, ID_type, Types.name FROM Attempts JOIN Tasks JOIN Types ON Attempts.ID_task = Tasks.ID AND Tasks.ID_type = Types.ID WHERE Attempts.ID_user = ? ORDER BY Types.name",[id_user]).fetchall()
     connect.close()     # [(date, is_correct, ID_type, Types.name)]
 
-def get_attempts_of_user(id_student):
+def get_attempts_of_user(id_user):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    result = cursor.execute("SELECT * FROM Attempts WHERE ID_user = ?", [id_student]).fetchall()
+    result = cursor.execute("SELECT * FROM Attempts WHERE ID_user = ?", [id_user]).fetchall()
     connect.close()
-    return result  # (ID, ID_student, ID_task, is_right, date)
+    return result  # (ID, ID_user, ID_task, is_right, date)
 
 def get_type_name(id_type):
     connect = sqlite3.connect("MAIN_BD.db")
@@ -303,7 +302,7 @@ def unban_message(id_message):
 
 # Change functions
 
-def change_user(id_user, data): #list or dict (name, surname, patronymic, email, password, telephone, age, country, role (student, teacher, admin), about, path (path to the photo))
+def change_user(id_user, data): #list or dict (name, surname, patronymic, email, password, telephone, age, country, role (user, user, admin), about, path (path to the photo))
     current = [data['name'], data['surname'], data['patronymic'], data['email'], data['password'], data['telephone'], data['age'], data['country'], data['role'], data['about'], data['path'], 1]
     current += [id_user]
     connect = sqlite3.connect("MAIN_BD.db")
@@ -329,5 +328,3 @@ def change_message(id_message, data):       # dict: (name, text, ID_user, date)
     cursor.execute("UPDATE Messages SET name=?, text=?, ID_user=?, date=?, status=? WHERE ID = ?", current).fetchall()
     connect.commit()
     connect.close()
-
-print(get_attempts_by_task_type(1))
