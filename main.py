@@ -1,7 +1,9 @@
 from flask import Flask, render_template, session, request, redirect
 import db_functions as db
+from os import urandom
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = urandom(16)
 
 def auth(route):
     def inner(*args, **kwargs):
@@ -52,7 +54,8 @@ def dashboard():
     if not user:
         return redirect('/sign-in/')
     
-    [n, s, p, e, _, t, *_] = user
+    print(user)
+    [_, n, s, p, e, _, _, _, _, _, t, *_] = user[0]
     return render_template('dashboard.html', 
                            name=n+s+p, 
                            email=e, 
