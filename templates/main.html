@@ -59,11 +59,26 @@
                   <a class="nav-link js-scroll-trigger active" href="/">Главная</a>
                 </li>
                 <li class="nav-item">
+                  <a class="nav-link js-scroll-trigger" href="/courses">Курсы</a>
+                </li>
+                <li class="nav-item">
                   <a class="nav-link js-scroll-trigger" href="/tasks">Задачи</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link js-scroll-trigger" href="/add-task">Добавить задачу</a>
                 </li>
+                {% if user %}
+                <li class="nav-item">
+                  <a style="text-align: right" class="nav-link js-scroll-trigger" href="/dashboard">Личный кабинет</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                  <a style="text-align: right" class="nav-link js-scroll-trigger" href="/sign-in">Войти</a>
+                </li>
+                <li class="nav-item">
+                  <a style="text-align: right" class="nav-link js-scroll-trigger" href="/sign-up">Регистрация</a>
+                </li>
+                {% endif %}
               </ul>
             </div>
           </div>
