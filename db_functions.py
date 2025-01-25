@@ -206,7 +206,7 @@ def get_attempts_of_user_task(id_student, id_task):
 def get_attempts_by_task_type(id_student):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    result = cursor.execute("SELECT Attempts.date, Attempts.is_correct, ID_type, Types.name FROM Attempts JOIN Tasks JOIN Types AS Attempts.ID_task = Tasks.ID AND Tasks.ID_type = Types.ID WHERE Attempts.ID_user = ? ORDER BY Types.name",[id_student]).fetchall()
+    result = cursor.execute("SELECT Attempts.date, Attempts.is_correct, ID_type, Types.name FROM Attempts JOIN Tasks JOIN Types ON Attempts.ID_task = Tasks.ID AND Tasks.ID_type = Types.ID WHERE Attempts.ID_user = ? ORDER BY Types.name",[id_student]).fetchall()
     connect.close()     # [(date, is_correct, ID_type, Types.name)]
 
 def get_attempts_of_user(id_student):
@@ -329,3 +329,5 @@ def change_message(id_message, data):       # dict: (name, text, ID_user, date)
     cursor.execute("UPDATE Messages SET name=?, text=?, ID_user=?, date=?, status=? WHERE ID = ?", current).fetchall()
     connect.commit()
     connect.close()
+
+print(get_attempts_by_task_type(1))
