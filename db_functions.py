@@ -6,15 +6,19 @@ from time import time
 def get_id_type(num):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    result = cursor.execute("SELECT id FROM Types WHERE num_in_ege = ", [num]).fetchall()[0]
+    result = cursor.execute("SELECT id FROM Types WHERE num_in_ege = ?", [num]).fetchall()
     connect.close()
-    return result       # id
+    if not result:
+        return -1
+    return result[0][0]      # id
 
 def get_status_task(id_message):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
     result = cursor.execute("SELECT status FROM Messages WHERE ID = ?", [id_message]).fetchall()
     connect.close()
+    if not result:
+        return -1
     return result[0][0]
 
 def get_status_user(id_message):
@@ -22,6 +26,8 @@ def get_status_user(id_message):
     cursor = connect.cursor()
     result = cursor.execute("SELECT status FROM Messages WHERE ID = ?", [id_message]).fetchall()
     connect.close()
+    if not result:
+        return -1
     return result[0][0]
 
 def get_status_message(id_message):
@@ -29,6 +35,8 @@ def get_status_message(id_message):
     cursor = connect.cursor()
     result = cursor.execute("SELECT status FROM Messages WHERE ID = ?", [id_message]).fetchall()
     connect.close()
+    if not result:
+        return -1
     return result[0][0]
 
 # Add functions:
@@ -45,7 +53,7 @@ def add_user(data):     # dict (name, surname, patronymic, email, password, tele
     current = [data['name'], data['surname'], data['patronymic'], data['email'], data['password'], data['telephone'], data['age'], data['country'], data['role'], data['about'], data['path'], time(), 1]
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO Users (name, surname, patronymic, email, password, telephone, age, country, role, about, path, date, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", current)
+    cursor.execute("INSERT INTO Users (name, surname, patronymic, email, password, telephone, age, country, role, about, path, date, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", current)
     connect.commit()
     connect.close()
 
@@ -131,22 +139,26 @@ def get_messages(status): # (1-active, 2-banned, 3-deleted)
 def get_user(id_user, status):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    result = cursor.execute("SELECT * FROM Users WHERE id = ? AND status = ?", [id_user, status]).fetchall()
+    result = cursor.execute("SELECT * FROM Users WHERE id = ? AND status != ?", [id_user, status]).fetchall()
     connect.close()
-    return result       # [(id, name, surname, patronymic, email, password, age, country, role (student, teacher, admin), about, telephone, path (path to the photo), date, status (1-active, 2-banned, 3-deleted))]
+    return result       # [(name, surname, patronymic, email, password, age, country, role (student, teacher, admin), about, path (path to the photo)), date, status (1-active, 2-banned, 3-deleted)]
 
 def get_user_id(email, status): # (1-active, 2-banned, 3-deleted)
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
     result = cursor.execute("SELECT * FROM Users WHERE email = ? AND status = ?", [email, status]).fetchall()
     connect.close()
+    if not result:
+        return -1
     return result[0][0]     # id
 
 def get_answer(id_task):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    result = cursor.execute("SELECT answer FROM Tasks WHERE id = ?", [id_task]).fetchall()[0]
+    result = cursor.execute("SELECT answer FROM Tasks WHERE id = ?", [id_task]).fetchall()
     connect.close()
+    if not result:
+        return ''
     return result[0][0]       # answer (string)
 
 def get_options():
@@ -163,12 +175,12 @@ def get_tasks_for_option(id_option):
     connect.close()
     return result  # [(id_task)]
 
-def get_task(id_task):
+def get_task(id_task, status):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    result = cursor.execute("SELECT * FROM Tasks WHERE ID = ?", [id_task]).fetchall()[0]
+    result = cursor.execute("SELECT * FROM Tasks WHERE ID = ? AND status = ?", [id_task, status]).fetchall()
     connect.close()
-    return result  # [(id, )]
+    return result  # [(id, text, answer, difficulty, ID_type, source, solution, status)]
 
 def get_lessons_for_course(id_course):
     connect = sqlite3.connect("MAIN_BD.db")
@@ -187,9 +199,15 @@ def get_files_for_lesson(id_lesson):
 def get_attempts_of_user_task(id_student, id_task):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    result = cursor.execute("SELECT * FROM Attempts WHERE ID_user = ? AND ID_task = ?", [id_student, id_task]).fetchall()
+    result = cursor.execute("SELECT * FROM Attempts WHERE ID_user = ? AND ID_task = ? ORDER BY date", [id_student, id_task]).fetchall()
     connect.close()
-    return result  # (ID, ID_student, ID_task, is_right, date)
+    return result  # [(ID, ID_student, ID_task, answer, is_correct, date, ID_course)]
+
+def get_attempts_by_task_type(id_student):
+    connect = sqlite3.connect("MAIN_BD.db")
+    cursor = connect.cursor()
+    result = cursor.execute("SELECT Attempts.date, Attempts.is_correct, ID_type, Types.name FROM Attempts JOIN Tasks JOIN Types AS Attempts.ID_task = Tasks.ID AND Tasks.ID_type = Types.ID WHERE Attempts.ID_user = ? ORDER BY Types.name",[id_student]).fetchall()
+    connect.close()     # [(date, is_correct, ID_type, Types.name)]
 
 def get_attempts_of_user(id_student):
     connect = sqlite3.connect("MAIN_BD.db")
@@ -203,6 +221,8 @@ def get_type_name(id_type):
     cursor = connect.cursor()
     result = cursor.execute("SELECT name FROM Type WHERE ID = ?", [id_type]).fetchall()
     connect.close()
+    if not result:
+        return ''
     return result[0][0] # name
 
 # Del functions
