@@ -55,7 +55,7 @@
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">
+            <a class="nav-link active" aria-current="page" href="/dashboard">
               <span data-feather="home"></span>
               Личный Кабинет
             </a>
@@ -71,14 +71,7 @@
     </nav>
 
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-          <img class="avatar" src="{{ image_path }}">
-          <div class="main-info">
-            <p> Ваше имя: {{ name }} </p>
-            <p> Ваша почта: {{ email }} </p>
-            <p> Ваш номер телефона: {{ telephone }} </p>
-	    <p> Ваш возраст: {{ age }} </p>
-	    <p> Ваша страна проживания: {{ country }} </p>
-        </div>
+         {% for group in groups %}
       </main>
     </div>
   </div>
