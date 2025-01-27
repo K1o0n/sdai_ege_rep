@@ -45,7 +45,7 @@ def add_task(data):         # dict: (text, answer, difficulty, num_in_ege, date,
     current = [data['text'], data['answer'], data['difficulty'], get_id_type(data['num_in_ege']), data['source'], time(), 1]
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO Users (text, answer, difficulty, source, ID_type, date, status) VALUES (?, ?, ?, ?, ?, ?, ?)", current)
+    cursor.execute("INSERT INTO Tasks (text, answer, difficulty, source, ID_type, date, status) VALUES (?, ?, ?, ?, ?, ?, ?)", current)
     connect.commit()
     connect.close()
 
@@ -181,7 +181,7 @@ def get_task(id_task, status):
     connect.close()
     return result  # [(id, text, answer, difficulty, ID_type, source, solution, status)]
 
-def get_tasks_by_type(type_id, status):
+def get_tasks_by_type(id_type, status):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
     result = cursor.execute("SELECT * FROM Tasks WHERE ID_type = ? AND status = ?", [id_type, status]).fetchall()

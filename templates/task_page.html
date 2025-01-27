@@ -105,15 +105,12 @@
 
         <main id = "task">
 		      <form action="" method="post" >
-
-                {% for task in tasks %}
-
                     <div class = "task-text">
                         <div class = "num">
-                            <h1> <b> №{{ task[3] }} </b> </h1>
-                            <h6> Сложность: {{ task[6] }} <br>  Источник: {{ task[7] }}</h6>
+                            <h1> <b> №{{ task[4] }} </b> </h1>
+                            <h6> Сложность: {{ task[3] }} <br>  Источник: {{ task[5] }}</h6>
                         </div>
-                    {{ task[0]|safe }}
+                    {{ task[1]|safe }}
                         <div>
                           <table border="1" width="30%" cellpadding="5">
                             <tr>
@@ -135,9 +132,7 @@
                             </tr>
                           </table>
                         </div>
-
                     </div>
-                {% endfor %}
                     
                     <div class="button">
                         <input type="submit" value="Отправить">

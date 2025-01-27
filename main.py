@@ -1,4 +1,6 @@
 from flask import Flask, render_template, session, request, redirect
+
+import db_functions
 import db_functions as db
 from os import urandom
 
@@ -100,13 +102,22 @@ def courses():
 
 @app.route('/task-lesson/<course_id>/<num>')
 def task_lesson(course_id, num):
-    #task = запрос к бд
+    task = db_functions.get_task(course_id + num, 1)
     return render_template(
         'task-lesson.html',
         course_name='Тестовый курс',
-        #task= task,
+        task= task,
         id = course_id,
         task_num = num)
+
+@app.route("/add-task", methods=['POST', 'GET'])
+def add_task():
+    if request.method == 'GET':
+        return render_template("add-task.html")
+    elif request.method == 'POST':
+        print(request.form)
+        db_functions.add_task(request.form)
+        return redirect("/")
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080)
