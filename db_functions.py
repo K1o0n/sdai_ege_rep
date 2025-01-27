@@ -181,6 +181,13 @@ def get_task(id_task, status):
     connect.close()
     return result  # [(id, text, answer, difficulty, ID_type, source, solution, status)]
 
+def get_tasks_by_params(params, status):        # dict: {ID_type:(x1, x2, x3...), difficulty:()):
+    connect = sqlite3.connect("MAIN_BD.db")
+    cursor = connect.cursor()
+    result = cursor.execute("SELECT * FROM Tasks WHERE ID_type IN ? AND difficulty IN ? AND status = ?", [params[ID_type], params[difficulty], status]).fetchall()
+    connect.close()
+    return result  # [(id, text, answer, difficulty, ID_type, source, solution, status)]
+
 def get_tasks_by_type(id_type, status):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
