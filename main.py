@@ -57,7 +57,10 @@ def dashboard():
     print(uid, user)
     if not user:
         return redirect('/sign-in/')
-    
+
+    labels = [str(i) for i in range(1, 28)]
+    correct = [i for i in range(10, 38)]
+    incorrect = [c for c in correct]
     # orms were invented in 1995... People before 1995:
     [_, name, surname, patronymic, email, 
      age, _, country, _, about, phone, path, *_] = user[0]
@@ -68,8 +71,12 @@ def dashboard():
                            country=country,
                            image_path=path,
                            color='Цвета в нашем сервисе пока не поддерживаются, приносим свои извнинения. За Россию!',
-                           telephone=phone
+                           telephone=phone,
+                           labels=labels,
+                           correct=correct,
+                           incorrect=incorrect
                            )
+
 
 
 @app.route('/logout/')
@@ -169,7 +176,15 @@ def submit_task():
 
     return data
 
-
+@app.route("/my-groups", methods=['POST', 'GET'])
+def my_groups():
+    if request.method == 'GET':
+        groups = [[[1,1],[2,3],[4,6],[1,6],["-",1]],[[1,1],[2,3],[4,6],[1,6],["-",1]],[[1,1],[2,3],[4,6],[1,6],["-",1]]]
+        return render_template("groups.html", groups = groups)
+    elif request.method == 'POST':
+        print(request.form)
+        db_functions.add_task(request.form)
+        return redirect("/")
 
 
 if __name__ == "__main__":
