@@ -76,14 +76,37 @@ def logout():
     return redirect('/')
 
 
-@app.route('/courses/')
-def courses():
-    html = open('Samples_For_Courses/1.html', 'r').read()
+@app.route('/text-lesson/<course_id>')
+def text_lesson(course_id):
+    html = open(f'Samples_For_Courses/{course_id}.html', 'r', encoding='utf8').read()
     return render_template(
         'text-lesson.html', 
         course_name='Тестовый курс', 
-        materials=html)
+        materials=html,
+        id = course_id)
 
+@app.route('/video-lesson/<course_id>')
+def video_lesson(course_id):
+    url = open(f'Samples_For_Courses/{course_id}_url.txt', 'r', encoding='utf8').read()
+    return render_template(
+        'video-lesson.html',
+        course_name='Тестовый курс',
+        video_url=url,
+        id = course_id)
+
+@app.route('/courses')
+def courses():
+    return render_template('courses.html')
+
+@app.route('/task-lesson/<course_id>/<num>')
+def task_lesson(course_id, num):
+    #task = запрос к бд
+    return render_template(
+        'task-lesson.html',
+        course_name='Тестовый курс',
+        #task= task,
+        id = course_id,
+        task_num = num)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080)
