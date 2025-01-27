@@ -181,6 +181,27 @@ def get_task(id_task, status):
     connect.close()
     return result  # [(id, text, answer, difficulty, ID_type, source, solution, status)]
 
+def get_tasks_by_type(type_id, status):
+    connect = sqlite3.connect("MAIN_BD.db")
+    cursor = connect.cursor()
+    result = cursor.execute("SELECT * FROM Tasks WHERE ID_type = ? AND status = ?", [id_type, status]).fetchall()
+    connect.close()
+    return result  # [(id, text, answer, difficulty, ID_type, source, solution, status)]
+
+def get_tasks_by_difficulty(difficulty, status):
+    connect = sqlite3.connect("MAIN_BD.db")
+    cursor = connect.cursor()
+    result = cursor.execute("SELECT * FROM Tasks WHERE difficulty = ? AND status = ?", [difficulty, status]).fetchall()
+    connect.close()
+    return result  # [(id, text, answer, difficulty, ID_type, source, solution, status)]
+    
+def get_tasks_by_source(source, status):
+    connect = sqlite3.connect("MAIN_BD.db")
+    cursor = connect.cursor()
+    result = cursor.execute("SELECT * FROM Tasks WHERE source = ? AND status = ?", [source, status]).fetchall()
+    connect.close()
+    return result  # [(id, text, answer, difficulty, ID_type, source, solution, status)]
+
 def get_blok_for_course(id_course):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
