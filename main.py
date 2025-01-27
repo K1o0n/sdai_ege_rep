@@ -100,7 +100,7 @@ def video_lesson(course_id):
 def courses():
     return render_template('courses.html')
 
-@app.route('/task-lesson/<course_id>/<num>')
+@app.route('/task-lesson/<course_id>/<int:num>')
 def task_lesson(course_id, num):
     tasks = db_functions.get_tasks_for_course(num)
     tasks.append(tasks[0])
