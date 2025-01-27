@@ -39,7 +39,7 @@ def sign_in():
     uid = db.get_user_id(data['email'], 1)
     user = db.get_user(uid, 1)
     # orms were invented in 1995... People before 1995:
-    if user and user[0][4] == data['password']:
+    if user and user[0][6] == data['password']:
         session['email'] = data['email']
         return redirect('/dashboard/')
     else:
@@ -51,17 +51,28 @@ def dashboard():
         return redirect('/sign-in/')
     uid = db.get_user_id(session['email'], 1)
     user = db.get_user(uid, 1)
+    print(uid, user)
     if not user:
         return redirect('/sign-in/')
     
-    print(user)
-    [_, n, s, p, e, _, _, _, _, _, t, *_] = user[0]
+    # orms were invented in 1995... People before 1995:
+    [_, name, surname, patronymic, email, 
+     age, _, country, _, about, phone, path, *_] = user[0]
     return render_template('dashboard.html', 
-                           name=n+s+p, 
-                           email=e, 
+                           name=f'{surname} {name} {patronymic}', 
+                           email=email, 
+                           age=age,
+                           country=country,
+                           image_path=path,
                            color='Цвета в нашем сервисе пока не поддерживаются, приносим свои извнинения. За Россию!',
-                           telephone=t
+                           telephone=phone
                            )
+
+@app.route('/logout/')
+def logout():
+    if 'email' in session:
+        del session['email']
+    return redirect('/')
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080)

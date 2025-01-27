@@ -53,7 +53,7 @@ def add_user(data):     # dict (name, surname, patronymic, email, password, tele
     current = [data['name'], data['surname'], data['patronymic'], data['email'], data['password'], data['telephone'], data['age'], data['country'], data['role'], data['about'], data['path'], time(), 1]
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO Users (name, surname, patronymic, email, password, telephone, age, country, role, about, path, date, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", current)
+    cursor.execute("INSERT INTO Users (name, surname, patronymic, email, password, telephone, age, country, role, about, path, date, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", current)
     connect.commit()
     connect.close()
 
@@ -138,7 +138,7 @@ def get_messages(status): # (1-active, 2-banned, 3-deleted)
 def get_user(id_user, status):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    result = cursor.execute("SELECT * FROM Users WHERE id = ? AND status != ?", [id_user, status]).fetchall()
+    result = cursor.execute("SELECT * FROM Users WHERE id = ? AND status = ?", [id_user, status]).fetchall()
     connect.close()
     return result       # [(name, surname, patronymic, email, password, age, country, role (user, user, admin), about, path (path to the photo)), date, status (1-active, 2-banned, 3-deleted)]
 

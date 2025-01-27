@@ -107,7 +107,7 @@ main {
   box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
 }
 
-form .button input {
+.button a {
   height: 100%;
   width: 100%;
   border-radius: 5px;
@@ -121,7 +121,7 @@ form .button input {
   background: #223436;
 }
 
-form .button input:hover {
+.button a:hover {
   background: #1ca1af;
 }
 
