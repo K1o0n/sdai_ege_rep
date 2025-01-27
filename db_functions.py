@@ -202,6 +202,20 @@ def get_tasks_by_source(source, status):
     connect.close()
     return result  # [(id, text, answer, difficulty, ID_type, source, solution, status)]
 
+def get_tasks_for_course(id_course):
+    connect = sqlite3.connect("MAIN_BD.db")
+    cursor = connect.cursor()
+    result = cursor.execute("SELECT * FROM Course_Tasks JOIN Tasks ON Tasks.ID = Course_Tasks.ID_task WHERE ID_course = ?", [id_course]).fetchall()
+    connect.close()
+    return result  # [(ID, ID_course, ID_task, is_required, ID, text, answer, difficulty, ID_type, source, solution, status)]
+
+def get_lessons_for_course(id_course):
+    connect = sqlite3.connect("MAIN_BD.db")
+    cursor = connect.cursor()
+    result = cursor.execute("SELECT * FROM Lessons_Course JOIN Lessons ON Lessons.ID = Lessons_Couses.ID_task WHERE ID_course = ?", [id_course]).fetchall()
+    connect.close()
+    return result  # [(ID, ID_course, ID_task, is_required, ID, name)]
+
 def get_blok_for_course(id_course):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
