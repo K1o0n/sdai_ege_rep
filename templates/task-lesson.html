@@ -130,7 +130,7 @@
                             <h1> <b> №{{ task[3] }} </b> </h1>
                             <h6> Сложность: {{ task[6] }} <br>  Источник: {{ task[7] }}</h6>
                         </div>
-                    {{ task[0]|safe }}
+                    {{ task[5]|safe }}
                         <div>
                           <table border="1" width="30%" cellpadding="5">
                             <tr>
@@ -146,7 +146,7 @@
                                        name="{{ task[1] }}"
                                        id="{{ task[1] }}">
                               </td>
-                              <td style="text-align:center" task-answer="{{ task [5] }}" showing="false">
+                              <td style="text-align:center" task-answer="{{ task [6] }}" showing="false">
                                     ***
                               </td>
                             </tr>

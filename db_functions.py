@@ -124,7 +124,7 @@ def get_answers():
 def get_courses(status): # (1-active, 2-banned, 3-deleted)
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    result = cursor.execute("SELECT * FROM Courses WHERE status = ? ORDER BT date", [status]).fetchall()
+    result = cursor.execute("SELECT * FROM Courses WHERE status = ? ORDER BY date", [status]).fetchall()
     connect.close()
     return result       # [(id, name, ID_user, about, is_public, date, status)]
 
