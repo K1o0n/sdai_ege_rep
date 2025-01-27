@@ -3,6 +3,7 @@ from flask import Flask, render_template, session, request, redirect
 import db_functions
 import db_functions as db
 from os import urandom
+import sqlite3
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = urandom(16)
@@ -120,6 +121,56 @@ def add_task():
         print(request.form)
         db_functions.add_task(request.form)
         return redirect("/")
+
+
+@app.route('/tasks/')
+def tasks():
+    tasks = db.get_all_tasks(1)
+    tasks = [(i[0], i[1], i[3], i[4], i[5], i[2]) for i in tasks]
+    '''
+    task = [
+        1,         # task id
+        "text",    # task statement
+        5,         # difficulty
+        1,         # number
+        'Kompege', # source
+        1488       # answer
+        ]
+    '''
+    return render_template('task_page.html', tasks=tasks)
+
+
+@app.route('/submit-task')
+def submit_task(): 
+    if 'email' not in session:
+        return redirect('/sign-in/')
+    uid = db.get_user_id(session['email'], 1)
+    user = db.get_user(uid, 1)
+    print(uid, user)
+    if not user:
+        return redirect('/sign-in/')
+    
+    # orms were invented in 1995... People before 1995:
+    [user_id, *_] = user[0]
+    data = request.json
+    task_id = data['task_id']
+    answer  = data['ans'].strip()
+    correct_answer = db.get_task(task_id, 1)[0][2].strip()
+
+    # For now trying to not change db_functions, so move this later
+    conn = sqlite3.connect("MAIN_BD.db")
+    conn.cursor().execute(
+            '''insert into Attempts 
+               (ID_task, ID_user, answer, is_correct, date, ID_course)
+               values (?, ?, ?, ?, NULL, NULL)''',
+            (task_id, user_id, answer, answer == correct_answer)).fetchall()
+    conn.commit()
+    conn.close()
+
+    return data
+
+
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080)
