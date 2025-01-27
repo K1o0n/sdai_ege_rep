@@ -68,11 +68,22 @@ def dashboard():
                            telephone=phone
                            )
 
+
 @app.route('/logout/')
 def logout():
     if 'email' in session:
         del session['email']
     return redirect('/')
+
+
+@app.route('/courses/')
+def courses():
+    html = open('Samples_For_Courses/1.html', 'r').read()
+    return render_template(
+        'text-lesson.html', 
+        course_name='Тестовый курс', 
+        materials=html)
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080)
