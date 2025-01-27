@@ -27,6 +27,17 @@
           font-size: 3.5rem;
         }
       }
+
+      table, td, th {
+        /* задаем границу для всех элементов */
+        border: 3px solid #245488;
+      }
+
+      td, th {
+        /* делаем отступ в ячейках, выставляем выравнивание текста */
+        padding: 10px 20px;
+        text-align: center;
+      }
     </style>
 
     
@@ -36,7 +47,7 @@
   <body>
     
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Личный кабинет</a>
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="/">Вернуться на главную</a>
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -55,13 +66,13 @@
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/dashboard">
+            <a class="nav-link" aria-current="page" href="/dashboard">
               <span data-feather="home"></span>
               Личный Кабинет
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/my-groups">
+            <a class="nav-link active" href="/my-groups">
               <span data-feather="file"></span>
               Группы
             </a>
@@ -71,7 +82,24 @@
     </nav>
 
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-         {% for group in groups %}
+        {% for i in range(0, groups|length) %}
+        <h1> Группа {{i + 1}} </h1>
+        <table>
+          <tr>
+            <td>Учителя.</td>
+            <td>Ученики.</td>
+          </tr>
+          {% for j in range(groups[i]|length) %}
+            <tr>
+              <td>{{groups[i][j][0]}}</td>
+              <td>{{groups[i][j][1]}}</td>
+            </tr>
+          {% endfor %}
+        </table>
+        <br>
+        <br>
+        <br>
+        {% endfor %}
       </main>
     </div>
   </div>
