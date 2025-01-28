@@ -116,11 +116,12 @@
                 </table>
              </div>
           </div>
-          <button 
+          <button
+            style="background: #223436; color: white;"
             class="button" 
             id="toggleAnswers-{{ task[0] }}" 
             next="Скрыть ответ" 
-            onclick="toggleAnswers({{ task[0] }})">Показать ответ</button>
+            onclick="toggleAnswers({{ task[0] }})">Показать правильный ответ</button>
         {% endfor %}
         <script>
            function submitAnswer(task_id, ans) {
