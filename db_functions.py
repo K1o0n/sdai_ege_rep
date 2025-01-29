@@ -178,10 +178,9 @@ def get_groups_for_student(student_id):
 def get_options_for_group(id_group):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    result = cursor.execute("SELECT * FROM Options JOIN Groups_Options ON Groups.ID = .ID_group WHERE ID_group = ?",
-        [id_group]).fetchall()
+    result = cursor.execute("SELECT Oprions.ID, Options.name, Options.ID_user FROM Options JOIN Groups_Options ON Groups_Options.ID_option = Option.ID WHERE ID_group = ?",[id_group]).fetchall()
     connect.close()
-    return result  # [(id, name)]
+    return result  # [(id, name, id_of_creator)]
 
 def get_messages(status): # (1-active, 2-banned, 3-deleted)
     connect = sqlite3.connect("MAIN_BD.db")
