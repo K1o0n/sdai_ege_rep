@@ -184,7 +184,7 @@ def get_task(id_task, status):
 def get_tasks_by_params(params, status):        # dict: {ID_type:(x1, x2, x3...), difficulty:()):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    result = cursor.execute("SELECT * FROM Tasks WHERE ID_type IN ? AND difficulty IN ? AND status = ?", [params[ID_type], params[difficulty], status]).fetchall()
+    result = cursor.execute("SELECT * FROM Tasks WHERE ID_type IN ? AND difficulty IN ? AND status = ?", [params['ID_type'], params['difficulty'], status]).fetchall()
     connect.close()
     return result  # [(id, text, answer, difficulty, ID_type, source, solution, status)]
 
@@ -219,7 +219,7 @@ def get_tasks_for_course(id_course):
 def get_lessons_for_course(id_course):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    result = cursor.execute("SELECT * FROM Lessons_Course JOIN Lessons ON Lessons.ID = Lessons_Couses.ID_task WHERE ID_course = ?", [id_course]).fetchall()
+    result = cursor.execute("SELECT * FROM Lessons_Course JOIN Lessons ON Lessons.ID = Lessons_Courses.ID_task WHERE ID_course = ?", [id_course]).fetchall()
     connect.close()
     return result  # [(ID, ID_course, ID_task, is_required, ID, name)]
 
@@ -249,6 +249,7 @@ def get_attempts_by_task_type(id_user):
     cursor = connect.cursor()
     result = cursor.execute("SELECT Attempts.date, Attempts.is_correct, ID_type, Types.name FROM Attempts JOIN Tasks JOIN Types ON Attempts.ID_task = Tasks.ID AND Tasks.ID_type = Types.ID WHERE Attempts.ID_user = ? ORDER BY Types.name",[id_user]).fetchall()
     connect.close()     # [(date, is_correct, ID_type, Types.name)]
+    return result
 
 def get_attempts_of_user(id_user):
     connect = sqlite3.connect("MAIN_BD.db")
