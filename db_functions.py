@@ -77,7 +77,7 @@ def add_student_into_course(data):     # dict: (ID_user, ID_course)
     current = [data['ID_user'], data['ID_course']]
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO Course_users VALUES (ID_user, ID_course) VALUES (?, ?)", current)
+    cursor.execute("INSERT INTO Course_users (ID_user, ID_course) VALUES (?, ?)", current)
     connect.commit()
     connect.close()
 
@@ -85,7 +85,7 @@ def add_teacher_into_course(data):     # dict: (ID_user, ID_course)
     current = [data['ID_user'], data['ID_user']]
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO Course_users VALUES (ID_user, ID_course) VALUES (?, ?)", current)
+    cursor.execute("INSERT INTO Course_users (ID_user, ID_course) VALUES (?, ?)", current)
     connect.commit()
     connect.close()
 
@@ -93,7 +93,7 @@ def add_file(data):     # dict: (ID_task, path, type)
     current = [data['ID_task'], data['path'], data['type']]
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO Files VALUES (ID_task, path, type) VALUES (?, ?, ?)", current)
+    cursor.execute("INSERT INTO Files (ID_task, path, type) VALUES (?, ?, ?)", current)
     connect.commit()
     connect.close()
 
@@ -101,7 +101,7 @@ def add_message(data): # dict: (name, text, ID_user, date)
     current = [data['name'], data['text'], data['ID_user'], data['date'], 1]
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO Messages VALUES (name, text, ID_user, date, status) VALUES (?, ?, ?, ?, ?)", current)
+    cursor.execute("INSERT INTO Messages (name, text, ID_user, date, status) VALUES (?, ?, ?, ?, ?)", current)
     connect.commit()
     connect.close()
 
@@ -109,7 +109,7 @@ def add_teacher_into_group(group_id, teacher_id):
     current = [group_id, teacher_id]
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO Groups_Teachers VALUES (ID_group, ID_teacher) VALUES (?, ?)", current)
+    cursor.execute("INSERT INTO Groups_Teachers (ID_group, ID_teacher) VALUES (?, ?)", current)
     connect.commit()
     connect.close()
 
@@ -117,17 +117,19 @@ def add_student_into_group(group_id, student_id):
     current = [group_id, student_id]
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO Groups_Students VALUES (ID_group, ID_Student) VALUES (?, ?)", current)
+    cursor.execute("INSERT INTO Groups_Students (ID_group, ID_Student) VALUES (?, ?)", current)
     connect.commit()
     connect.close()
 
-def add_group(data, teacher_ID): # dict: (name)
+def add_group(data, teacher_id): # dict: (name)
     current = [data['name']]
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO Groups VALUES (ID_group, ID_Student) VALUES (?, ?)", current)
+    cursor.execute("INSERT INTO Groups VALUES (name) VALUES (?)", current)
+    group_id = cursor.execute("SELECT max(ID) FROM Groups WHERE name = ?)", current)
     connect.commit()
     connect.close()
+    add_teacher_into_group(group_id, teacher_id)
 
 # Get functions:
 
@@ -158,6 +160,28 @@ def get_course(course_id):
     result = cursor.execute("SELECT * FROM Courses WHERE ID = ?", [course_id]).fetchall()
     connect.close()
     return result       # [(id, name, about, is_public, date, status)]
+
+def get_groups_for_teacher(teacher_id):
+    connect = sqlite3.connect("MAIN_BD.db")
+    cursor = connect.cursor()
+    result = cursor.execute("SELECT Groups.ID, Groups.name FROM Groups JOIN Groups_Teachers ON Groups.ID = Groups_Teachers.ID_group WHERE ID_user = ?", [teacher_id]).fetchall()
+    connect.close()
+    return result  # [(id, name)]
+
+def get_groups_for_student(student_id):
+    connect = sqlite3.connect("MAIN_BD.db")
+    cursor = connect.cursor()
+    result = cursor.execute("SELECT Groups.ID, Groups.name FROM Groups JOIN Groups_Students ON Groups.ID = Groups_Students.ID_group WHERE ID_user = ?", [student_id]).fetchall()
+    connect.close()
+    return result  # [(id, name)]
+
+def get_options_for_group(id_group):
+    connect = sqlite3.connect("MAIN_BD.db")
+    cursor = connect.cursor()
+    result = cursor.execute("SELECT * FROM Options JOIN Groups_Options ON Groups.ID = .ID_group WHERE ID_group = ?",
+        [id_group]).fetchall()
+    connect.close()
+    return result  # [(id, name)]
 
 def get_messages(status): # (1-active, 2-banned, 3-deleted)
     connect = sqlite3.connect("MAIN_BD.db")
