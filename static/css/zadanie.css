@@ -14,7 +14,7 @@
     padding: 10px;
     text-align: center;
     font-family: 'Roboto mono';
-    width: 1920px;
+    width: 100%; /* Changed from 1920px to 100% */
 }
 
 .text p {
@@ -22,7 +22,6 @@
     background-color: #fff;
     border: 1px solid #ddd;
     margin: 10px 0;
-
 }
 
 .text pre {
@@ -32,6 +31,9 @@
     margin: 10px 0;
     white-space: pre-wrap;
     word-wrap: break-word;
+    overflow-wrap: break-word;
+    text-indent: -50px; /*Negative indent to pull back the first line*/
+    padding-left: 50px; /* Add padding to push the text to the right */
 }
 
 .text strong {
@@ -44,4 +46,3 @@
     background: #ddd;
     margin: 20px 0;
 }
-
