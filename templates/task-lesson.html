@@ -47,7 +47,7 @@
   <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px;">
     <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
       <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
-      <span class="fs-4">Название курса</span>
+      <span class="fs-4">{{course_name}}</span>
     </a>
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
@@ -104,31 +104,26 @@
   </div>
   <div class="b-example-divider" style="width: 1px;"></div>
   <div class="center">
-        <style>
-            .red{
-                color: red;
-            }
-            .green {
-                color: green;
-            }
-            .none {
-                color: black;
-            }
-            .check_answers {
-                color: black;
-            }
-        </style>
-
+         <style>
+         .red{
+         color: red;
+         }
+         .green {
+         color: green;
+         }
+         .none {
+         color: black;
+         }
+         .check_answers {
+         color: black;
+         }
+      </style>
 
         <main id = "task">
-		      <form action="" method="post" >
-
-                {% for task in tasks %}
-
                     <div class = "task-text">
                         <div class = "num">
-                            <h1> <b> №{{ task[3] }} </b> </h1>
-                            <h6> Сложность: {{ task[6] }} <br>  Источник: {{ task[7] }}</h6>
+                            <h1> <b> №{{ task[8] }} </b> </h1>
+                            <h6> Сложность: {{ task[7] }} <br>  Источник: {{ task[9] }}</h6>
                         </div>
                     {{ task[5]|safe }}
                         <div>
@@ -139,14 +134,12 @@
                             </tr>
                             <tr class="task-answers">
                               <td>
-                                <input style="width:100%; margin:auto"
-                                       value="{{ task[4] }}"
-                                       class="{{ task[2] }}"
-                                       type="text"
-                                       name="{{ task[1] }}"
-                                       id="{{ task[1] }}">
+                                 <input style="width:100%; margin:auto"
+                                    class="{{ task[2] }}"
+                                    type="text"
+                                    id="task-input-{{ task[2] }}">
                               </td>
-                              <td style="text-align:center" task-answer="{{ task [6] }}" showing="false">
+                              <td id="task-answer-{{ task[2] }}" style="text-align:center" task-answer="{{ task [6] }}" showing="false">
                                     ***
                               </td>
                             </tr>
@@ -154,45 +147,61 @@
                         </div>
 
                     </div>
-                {% endfor %}
-
-                    <div class="button">
-                        <input type="submit" value="Отправить">
-                        <input type="checkbox" id="check_answers" name="check_answers">
-                        <label for="check_answers" class="check_answers">Показать ответы</label>
-                    </div>
-
-                    <!--
+                    <button
+                        style="background: #223436; color: white;"
+                        class="button"
+                        id="toggleAnswers-{{ task[2] }}"
+                        next="Скрыть ответ"
+                        onclick="toggleAnswers({{ task[2] }})">Показать правильный ответ
+                    </button>
                     <script>
-                      function toggleAnswers() {
-                        b = document.querySelector("#toggleAnswers")
-                        let next = b.innerText;
-                        b.innerText = b.getAttribute("next");
-                        b.setAttribute('next', next);
-                        for (let row of document.querySelectorAll(".task-answers")) {
-                  			  let [user_answer, system_answer] = row.children;
-                          if (system_answer.getAttribute('showing') === 'true') {
-                            system_answer.setAttribute('showing', 'false');
-                            system_answer.innerText = "***";
-                            system_answer.style.color = 'black';
-                            continue;
-                          }
+                       function submitAnswer(task_id, ans) {
+                         fetch("/submit-task", {
+                           method: "POST",
+                           credentials: "include",
+                           headers: {
+                             "Content-Type": "application/json",
+                           },
+                           body: JSON.stringify({
+                             task_id: task_id,
+                             ans: ans
+                           })
+                         }).then((r) => console.log("GOIDA! Answer received"));
+                       }
 
-                          system_answer.innerText = system_answer.getAttribute("task-answer");
-                          system_answer.setAttribute('showing', 'true');
-                          let ua = user_answer.children[0].value.trim();
-                          let sa = system_answer.getAttribute('task-answer').trim();
-                          if(ua === sa) {
-                            system_answer.style.color = 'green';
-                          } else {
-                            system_answer.style.color = 'red';
-                          }
-                        }
-                      }
-                    </script>
-                    <button class="button" id="toggleAnswers" next="Скрыть ответы" onclick="toggleAnswers()">Показать ответы</button>
-                    -->
-		      </form>
+                       function changeText(task_id) {
+                         let toggle_button = document.querySelector(`#toggleAnswers-${task_id}`);
+                         let next = toggle_button.innerText;
+                         toggle_button.innerText = toggle_button.getAttribute('next');
+                         toggle_button.setAttribute('next', next);
+                       }
+
+                       function changeAnswers(task_id) {
+                         let ua = document.querySelector(`#task-input-${task_id}`);
+                         let sa = document.querySelector(`#task-answer-${task_id}`);
+                         let showing = sa.getAttribute('showing').trim() === "true";
+                         if(!showing) {
+                           sa.setAttribute('showing', 'true');
+                           let answer = sa.getAttribute('task-answer');
+                           sa.innerText = answer;
+                           if(ua.value.trim() === answer.trim()) {
+                             ua.style.color = 'green';
+                           } else {
+                             ua.style.color = 'red';
+                           }
+                           submitAnswer(task_id, ua.value.trim());
+                         } else {
+                           sa.setAttribute('showing', 'false');
+                           sa.innerText = "***";
+                           ua.style.color = 'black';
+                         }
+                       }
+
+                       function toggleAnswers(task_id) {
+                         changeText(task_id);
+                         changeAnswers(task_id);
+                       }
+                </script>
         </main>
   </div>
 </main>
