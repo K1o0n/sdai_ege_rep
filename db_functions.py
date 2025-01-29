@@ -105,6 +105,30 @@ def add_message(data): # dict: (name, text, ID_user, date)
     connect.commit()
     connect.close()
 
+def add_teacher_into_group(group_id, teacher_id):
+    current = [group_id, teacher_id]
+    connect = sqlite3.connect("MAIN_BD.db")
+    cursor = connect.cursor()
+    cursor.execute("INSERT INTO Groups_Teachers VALUES (ID_group, ID_teacher) VALUES (?, ?)", current)
+    connect.commit()
+    connect.close()
+
+def add_student_into_group(group_id, student_id):
+    current = [group_id, student_id]
+    connect = sqlite3.connect("MAIN_BD.db")
+    cursor = connect.cursor()
+    cursor.execute("INSERT INTO Groups_Students VALUES (ID_group, ID_Student) VALUES (?, ?)", current)
+    connect.commit()
+    connect.close()
+
+def add_group(data, teacher_ID): # dict: (name)
+    current = [data['name']]
+    connect = sqlite3.connect("MAIN_BD.db")
+    cursor = connect.cursor()
+    cursor.execute("INSERT INTO Groups VALUES (ID_group, ID_Student) VALUES (?, ?)", current)
+    connect.commit()
+    connect.close()
+
 # Get functions:
 
 def get_all_tasks(status): # (1-active, 2-banned, 3-deleted)
@@ -126,7 +150,14 @@ def get_courses(status): # (1-active, 2-banned, 3-deleted)
     cursor = connect.cursor()
     result = cursor.execute("SELECT * FROM Courses WHERE status = ? ORDER BY date", [status]).fetchall()
     connect.close()
-    return result       # [(id, name, ID_user, about, is_public, date, status)]
+    return result       # [(id, name, about, is_public, date, status)]
+
+def get_course(course_id):
+    connect = sqlite3.connect("MAIN_BD.db")
+    cursor = connect.cursor()
+    result = cursor.execute("SELECT * FROM Courses WHERE ID = ?", [course_id]).fetchall()
+    connect.close()
+    return result       # [(id, name, about, is_public, date, status)]
 
 def get_messages(status): # (1-active, 2-banned, 3-deleted)
     connect = sqlite3.connect("MAIN_BD.db")
