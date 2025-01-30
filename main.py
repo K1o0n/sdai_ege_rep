@@ -101,7 +101,7 @@ def text_lesson(course_id):
     html = open(f'Samples_For_Courses/{course_id}.html', 'r', encoding='utf8').read()
     return render_template(
         'text-lesson.html', 
-        course_name=db_functions.get_courses(course_id),
+        course_name=db_functions.get_course(course_id)[0][1],
         materials=html,
         id = course_id,
         user=True)
@@ -118,7 +118,7 @@ def video_lesson(course_id):
     url = open(f'Samples_For_Courses/{course_id}_url.txt', 'r', encoding='utf8').read()
     return render_template(
         'video-lesson.html',
-        course_name=db_functions.get_courses(course_id),
+        course_name=db_functions.get_course(course_id)[0][1],
         video_url=url,
         id = course_id,
         user=True)
@@ -142,15 +142,14 @@ def task_lesson(course_id, num):
     if not user:
         return redirect('/sign-in/')
 
-    tasks = db_functions.get_tasks_for_course(num)
-    tasks.append(tasks[0])
+    tasks = db_functions.get_tasks_for_course(course_id)
     print(tasks)
     return render_template(
-        'task-lesson.html',
-        course_name=db_functions.get_courses(course_id),
-        task= tasks[num],
-        id = course_id,
-        task_num = num,
+        'test.html',
+        course_name=db_functions.get_course(course_id)[0][1],
+        task=tasks[num - 1],
+        id=course_id,
+        task_num=num,
         user=True)
 
 @app.route("/add-task", methods=['POST', 'GET'])

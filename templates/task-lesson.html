@@ -7,10 +7,8 @@
     <meta name="generator" content="Hugo 0.84.0">
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sidebars/">
 
-    
-
     <!-- Bootstrap core CSS -->
-<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
 
     <style>
       .bd-placeholder-img {
@@ -26,179 +24,244 @@
           font-size: 3.5rem;
         }
       }
-      .center {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: auto;
-            margin-bottom: auto;
-        }
+
+      /* Центрирование контента */
+      .main-content {
+        margin-left: 600px;
+        margin-right: 20%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        padding: 20px;
+      }
+
+      /* Стилизация текста задачи */
+      .task-text {
+        text-align: left;
+        max-width: 850px;
+        width: 100%;
+      }
+
+      .task-text .num h1 {
+        font-size: 4rem;
+        margin-bottom: 20px;
+      }
+
+      .task-text h6 {
+        font-size: 1rem;
+        color: #555;
+        margin-bottom: 20px;
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 60%;
+      }
+
+      table th, table td {
+        text-align: center;
+        padding: 10px;
+        border: 1px solid #ddd;
+      }
+
+      /* Стиль кнопки */
+      .button {
+        background: #223436;
+        color: white;
+        margin-top: 20px;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        border-radius: 5px;
+      }
+
+      .button:hover {
+        background: #3a4a50;
+      }
+
+      /* Фиксированный сайдбар */
+      .d-flex.flex-column.flex-shrink-0 {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 280px;
+        padding: 20px;
+        background-color: #343a40;
+        color: white;
+        z-index: 1000;
+      }
+
+      .d-flex.flex-column.flex-shrink-0 h1 {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      .d-flex.flex-column.flex-shrink-0 a {
+        color: white;
+        text-decoration: none;
+      }
+
+      .d-flex.flex-column.flex-shrink-0 .nav-item {
+        margin-bottom: 15px;
+      }
+
+      .d-flex.flex-column.flex-shrink-0 .nav-link {
+        color: white;
+      }
     </style>
 
-    
     <!-- Custom styles for this template -->
-   <link href="{{ url_for('static', filename='css/sidebars.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/sidebars.css') }}" rel="stylesheet">
 
   </head>
+
   <body>
-
-
-<main>
-  <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px;">
-    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-      <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
-      <span class="fs-4">Название курса</span>
-    </a>
-    <hr>
-    <ul class="nav nav-pills flex-column mb-auto">
-      <li class="nav-item">
-      <b>1 Теория</b>
-      </li>
-      <li class="nav-item">
-        <a style="color: white" href="/video-lesson/{{id}}" class="nav-link" aria-current="page">
-          <svg class="bi me-2" width="16" height="16"><use xlink:href="video-lesson/{{id}}"/></svg>
-          1.1 Видео-Урок
+    <main class="d-flex">
+      <!-- Sidebar -->
+      <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+          <svg class="bi me-2" width="40" height="32"><use xlink:href="/"/></svg>
+          <h1> <b> <span class="fs-4">  {{ course_name }} </span> </b> </h1>
         </a>
-      </li>
-      <li>
-        <a href="/text-lesson/{{id}}" class="nav-link text-white">
-          <svg class="bi me-2" width="16" height="16"><use xlink:href="/text-lesson/{{id}}"/></svg>
-          1.2 Теория к задаче
-        </a>
-      </li>
-      <li class="nav-item">
-      <b>2 Отрешка</b>
-      </li>
-      <li>
-        <a href="/task-lesson/{{id}}/1" class="nav-link text-white">
-          <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"/></svg>
-          2.1 Задача №1
-        </a>
-      </li>
-      <li>
-        <a href="/task-lesson/{{id}}/2" class="nav-link text-white">
-          <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
-          2.1 Задача №2
-        </a>
-      </li>
-      <li>
-        <a href="/task-lesson/{{id}}/3" class="nav-link text-white">
-          <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
-          2.1 Задача №3
-        </a>
-      </li>
-      <li>
-        <a href="/task-lesson/{{id}}/4" class="nav-link text-white">
-          <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
-          2.1 Задача №4
-        </a>
-      </li>
-      <li>
-        <a href="/task-lesson/{{id}}/5" class="nav-link text-white">
-          <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
-          2.1 Задача №5
-        </a>
-      </li>
-    </ul>
-    <hr>
-  </div>
-  <div class="b-example-divider" style="width: 1px;"></div>
-  <div class="center">
-        <style>
-            .red{
-                color: red;
-            }
-            .green {
-                color: green;
-            }
-            .none {
-                color: black;
-            }
-            .check_answers {
-                color: black;
-            }
-        </style>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item"><b>1 Теория</b></li>
+          <li class="nav-item">
+            <a style="color: white" href="/video-lesson/{{id}}" class="nav-link" aria-current="page">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="video-lesson/{{id}}"/></svg>
+              1.1 Видео-Урок
+            </a>
+          </li>
+          <li>
+            <a href="/text-lesson/{{id}}" class="nav-link text-white">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="/text-lesson/{{id}}"/></svg>
+              1.2 Теория к задаче
+            </a>
+          </li>
+          <li class="nav-item"><b>2 Отрешка</b></li>
+          <li>
+            <a href="/task-lesson/{{id}}/1" class="nav-link text-white">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"/></svg>
+              2.1 Задача №1
+            </a>
+          </li>
+          <li>
+            <a href="/task-lesson/{{id}}/2" class="nav-link text-white">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
+              2.1 Задача №2
+            </a>
+          </li>
+          <li>
+            <a href="/task-lesson/{{id}}/3" class="nav-link text-white">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
+              2.1 Задача №3
+            </a>
+          </li>
+          <li>
+            <a href="/task-lesson/{{id}}/4" class="nav-link text-white">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
+              2.1 Задача №4
+            </a>
+          </li>
+          <li>
+            <a href="/task-lesson/{{id}}/5" class="nav-link text-white">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
+              2.1 Задача №5
+            </a>
+          </li>
+        </ul>
+        <hr>
+      </div>
 
+      <!-- Main content -->
+      <div class="main-content" style="margin-left: 320px;">
+        <div class="task-text">
+          <div class="num">
+            <h1> <b> №{{ task[8] }} </b> </h1>
+            <h6> Сложность: {{ task[7] }} <br> Источник: {{ task[9] }}</h6>
+          </div>
+            <p style="font-size: 1.2rem">
+                {{ task[5]|safe }}
+            </p>
+            <div>
+            <table>
+              <tr>
+                <th>Ваш ответ:</th>
+                <th>Правильный ответ:</th>
+              </tr>
+              <tr>
+                <td>
+                  <input style="width:100%; margin:auto"
+                    class="{{ task[2] }}"
+                    type="text"
+                    id="task-input-{{ task[0] }}">
+                </td>
+                <td id="task-answer-{{ task[0] }}" task-answer="{{ task[6] }}" showing="false">
+                  ***
+                </td>
+              </tr>
+            </table>
+          </div>
+          <button class="button" id="toggleAnswers-{{ task[0] }}" next="Скрыть ответ" onclick="toggleAnswers({{ task[0] }})">
+            Показать правильный ответ
+          </button>
+        </div>
+      </div>
+    </main>
 
-        <main id = "task">
-		      <form action="" method="post" >
+    <script>
+      function submitAnswer(task_id, ans) {
+        fetch("/submit-task", {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            task_id: task_id,
+            ans: ans
+          })
+        }).then((r) => console.log("GOIDA! Answer received"));
+      }
 
-                {% for task in tasks %}
+      function changeText(task_id) {
+        let toggle_button = document.querySelector(`#toggleAnswers-${task_id}`);
+        let next = toggle_button.innerText;
+        toggle_button.innerText = toggle_button.getAttribute('next');
+        toggle_button.setAttribute('next', next);
+      }
 
-                    <div class = "task-text">
-                        <div class = "num">
-                            <h1> <b> №{{ task[3] }} </b> </h1>
-                            <h6> Сложность: {{ task[6] }} <br>  Источник: {{ task[7] }}</h6>
-                        </div>
-                    {{ task[5]|safe }}
-                        <div>
-                          <table border="1" width="30%" cellpadding="5">
-                            <tr>
-                              <th style="text-align:center; width:50%;">Ваш ответ:</th>
-                              <th style="text-align:center" >Правильный ответ:</th>
-                            </tr>
-                            <tr class="task-answers">
-                              <td>
-                                <input style="width:100%; margin:auto"
-                                       value="{{ task[4] }}"
-                                       class="{{ task[2] }}"
-                                       type="text"
-                                       name="{{ task[1] }}"
-                                       id="{{ task[1] }}">
-                              </td>
-                              <td style="text-align:center" task-answer="{{ task [6] }}" showing="false">
-                                    ***
-                              </td>
-                            </tr>
-                          </table>
-                        </div>
+      function changeAnswers(task_id) {
+        let ua = document.querySelector(`#task-input-${task_id}`);
+        let sa = document.querySelector(`#task-answer-${task_id}`);
+        let showing = sa.getAttribute('showing').trim() === "true";
+        if(!showing) {
+          sa.setAttribute('showing', 'true');
+          let answer = sa.getAttribute('task-answer');
+          sa.innerText = answer;
+          if(ua.value.trim() === answer.trim()) {
+            ua.style.color = 'green';
+          } else {
+            ua.style.color = 'red';
+          }
+          submitAnswer(task_id, ua.value.trim());
+        } else {
+          sa.setAttribute('showing', 'false');
+          sa.innerText = "***";
+          ua.style.color = 'black';
+        }
+      }
 
-                    </div>
-                {% endfor %}
+      function toggleAnswers(task_id) {
+        changeText(task_id);
+        changeAnswers(task_id);
+      }
+    </script>
 
-                    <div class="button">
-                        <input type="submit" value="Отправить">
-                        <input type="checkbox" id="check_answers" name="check_answers">
-                        <label for="check_answers" class="check_answers">Показать ответы</label>
-                    </div>
-
-                    <!--
-                    <script>
-                      function toggleAnswers() {
-                        b = document.querySelector("#toggleAnswers")
-                        let next = b.innerText;
-                        b.innerText = b.getAttribute("next");
-                        b.setAttribute('next', next);
-                        for (let row of document.querySelectorAll(".task-answers")) {
-                  			  let [user_answer, system_answer] = row.children;
-                          if (system_answer.getAttribute('showing') === 'true') {
-                            system_answer.setAttribute('showing', 'false');
-                            system_answer.innerText = "***";
-                            system_answer.style.color = 'black';
-                            continue;
-                          }
-
-                          system_answer.innerText = system_answer.getAttribute("task-answer");
-                          system_answer.setAttribute('showing', 'true');
-                          let ua = user_answer.children[0].value.trim();
-                          let sa = system_answer.getAttribute('task-answer').trim();
-                          if(ua === sa) {
-                            system_answer.style.color = 'green';
-                          } else {
-                            system_answer.style.color = 'red';
-                          }
-                        }
-                      }
-                    </script>
-                    <button class="button" id="toggleAnswers" next="Скрыть ответы" onclick="toggleAnswers()">Показать ответы</button>
-                    -->
-		      </form>
-        </main>
-  </div>
-</main>
-
-
-      <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
-      <script src="{{ url_for('static', filename='js/sidebars.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/sidebars.js') }}"></script>
   </body>
 </html>
