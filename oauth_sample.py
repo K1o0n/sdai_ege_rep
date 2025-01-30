@@ -4,9 +4,9 @@ from dotenv import load_dotenv
 from flask_dance.contrib.google import make_google_blueprint, google
 from flask import Flask, render_template, session, request, redirect, url_for
 import db_functions as db
-import logging
+# import logging
 # from urllib.parse import quote as url_quote
-from werkzeug.security import generate_password_hash
+# from werkzeug.security import generate_password_hash
 load_dotenv()
 app = Flask(__name__)
 client_id = os.getenv('GOOGLE_CLIENT_ID')
