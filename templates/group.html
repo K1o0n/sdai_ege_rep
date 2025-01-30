@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Курсы</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sidebars/">
+
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .secondary-navbar {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e7e7e7;
+            position: fixed;
+            width: 100%;
+            top: 86px; /* Adjust this value if needed to avoid overlap */
+            z-index: 1030; /* Ensure it appears above other content */
+        }
+
+        .secondary-navbar .nav-link {
+            color: #555;
+        }
+
+        .secondary-navbar .nav-link:hover {
+            color: #000;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding-top: 112px; /* Adjust this value to account for both navbars */
+        }
+
+        main {
+            flex: 1;
+        }
+
+        .footer-distributed {
+            background-color: #292c2f;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <div class="container-fluid">
+              <a class="navbar-brand " target="_blank", href="#">
+              <img class="img-thumbnail" src="{{ url_for('static', filename='images/kegeh.png') }}" alt="" width="200" />
+              </a>
+              <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+              Главная
+              <i class="fa fa-bars"></i>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                  <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav text-uppercase ml-auto">
+              <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="/">Главная</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="/courses">Курсы</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="/tasks">Задачи</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link js-scroll-trigger" href="/add-task">Добавить задачу</a>
+              </li>
+              {% if user %}
+              <li class="nav-item">
+                <a style="text-align: right" class="nav-link js-scroll-trigger" href="/dashboard">Личный кабинет</a>
+              </li>
+              {% else %}
+              <li class="nav-item">
+                <a style="text-align: right" class="nav-link js-scroll-trigger" href="/sign-in">Войти</a>
+              </li>
+              <li class="nav-item">
+                <a style="text-align: right" class="nav-link js-scroll-trigger" href="/sign-up">Регистрация</a>
+              </li>
+              {% endif %}
+                </ul>
+              </div>
+                </ul>
+              </div>
+            </div>
+      </nav>
+        <!-- Additional Navbar -->
+        <nav class="navbar navbar-expand-lg secondary-navbar">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse" id="secondaryNavbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Лента</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Статистика</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Пользователи</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="py-5 text-center container" style="padding: 1px !important">
+            <div class="row py-lg-5">
+                <div class="col-lg-6 col-md-8 mx-auto">
+                    <h1 class="fw-light" style="margin-top: 10px;"> <b> Наши курсы: </b> </h1>
+                    <h4>Здесь Вы можете увидеть все курсы, которые предоставляет наша платформа.</h4>
+                </div>
+            </div>
+        </section>
+
+        <div class="album py-5 bg-light">
+            <div class="container">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                    <!-- Course cards go here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Футтер, не трогать -->
+    <div class="footer-distributed">
+        <div class="container">
+            <div class="footer-left">
+                <p class="footer-company-name">All Rights Reserved. &copy; 2024 </p>
+            </div>
+        </div><!-- end container -->
+    </div>
+
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+
+</body>
+
+</html>
