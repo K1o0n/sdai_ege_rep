@@ -133,7 +133,7 @@ def courses():
         return redirect('/sign-in/')
     return render_template('courses.html', user=True)
 
-@app.route('/task-lesson/<course_id>/<int:num>')
+@app.route('/task-lesson/<int:course_id>/<int:num>')
 def task_lesson(course_id, num):
     if 'email' not in session:
         return redirect('/sign-in/')
@@ -239,6 +239,13 @@ def my_groups():
         print(request.form)
         db_functions.add_task(request.form)
         return redirect("/")
+    
+@app.route("/group/<int:group_id>")
+def group(group_id):
+    if 'email' not in session:
+        return redirect('/sign-in/')
+    uid = db.get_user_id(session['email'], 1)
+    students = db_functions.get_student
 
 
 if __name__ == "__main__":
