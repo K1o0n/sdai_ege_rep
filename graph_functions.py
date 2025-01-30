@@ -32,7 +32,7 @@ def convert_attempts_by_type(user_id):
     cur_index = 0
     result1 = []
     result2 = []
-    resukt3 = []
+    result3 = []
     correct = 0
     wrong = 0
     while cur_index < len(all_attempts):
