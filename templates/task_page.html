@@ -51,31 +51,32 @@
                            <a class="nav-link js-scroll-trigger active" href="/">Главная</a>
                         </li>
                         <li class="nav-item">
+                           <a class="nav-link js-scroll-trigger" href="/courses">Курсы</a>
+                        </li>
+                        <li class="nav-item">
                            <a class="nav-link js-scroll-trigger" href="/tasks">Задачи</a>
                         </li>
                         <li class="nav-item">
                            <a class="nav-link js-scroll-trigger" href="/add-task">Добавить задачу</a>
                         </li>
-                        <li class="nav-item">
-                           <a class="nav-link js-scroll-trigger" href="/add-task">Добавить задачу</a>
-                        </li>
-                        <div style="margin-left: 100px">
-                           {% if user %}
-                           <li class="nav-item">
-                              <a class="nav-link js-scroll-trigger" href="/dashboard">Личный кабинет</a>
-                           </li>
-                           {% else %}
-                           <li class="nav-item">
-                              <a class="nav-link js-scroll-trigger" href="/sign-in">Войти</a>
-                           </li>
-                           <li class="nav-item">
-                              <a class="nav-link js-scroll-trigger" href="/sign-up">Регистрация</a>
-                           </li>
-                           {% endif %}
-                        </div>
+                        
                      </ul>
                   </div>
                </ul>
+               <div style="margin-left: 100px">
+                  {% if user %}
+                  <li class="nav-item">
+                     <a class="nav-link js-scroll-trigger" href="/dashboard">Личный кабинет</a>
+                  </li>
+                  {% else %}
+                  <li class="nav-item">
+                     <a class="nav-link js-scroll-trigger" href="/sign-in">Войти</a>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link js-scroll-trigger" href="/sign-up">Регистрация</a>
+                  </li>
+                  {% endif %}
+               </div>
             </div>
          </div>
       </nav>
