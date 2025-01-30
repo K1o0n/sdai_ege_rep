@@ -67,6 +67,14 @@
             text-align: center;
             padding: 20px 0;
         }
+
+        .section-content {
+            display: none;
+        }
+
+        .section-content.active {
+            display: block;
+        }
     </style>
 
 
@@ -124,13 +132,13 @@
                 <div class="collapse navbar-collapse" id="secondaryNavbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Лента</a>
+                            <a class="nav-link" href="?section=lenta">Лента</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Статистика</a>
+                            <a class="nav-link" href="?section=statistika">Статистика</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Пользователи</a>
+                            <a class="nav-link" href="?section=polzovateli">Пользователи</a>
                         </li>
                     </ul>
                 </div>
@@ -139,22 +147,38 @@
     </header>
 
     <main>
-        <section class="py-5 text-center container" style="padding: 1px !important">
-            <div class="row py-lg-5">
-                <div class="col-lg-6 col-md-8 mx-auto">
-                    <h1 class="fw-light" style="margin-top: 10px;"> <b> Наши курсы: </b> </h1>
-                    <h4>Здесь Вы можете увидеть все курсы, которые предоставляет наша платформа.</h4>
+        <section id="lenta" class="section-content">
+            <div class="py-5 text-center container">
+                <div class="row py-lg-5">
+                    <div class="col-lg-6 col-md-8 mx-auto">
+                        <h1 class="fw-light">Лента</h1>
+                        <p>Контент для Ленты</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <div class="album py-5 bg-light">
-            <div class="container">
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                    <!-- Course cards go here -->
+        <section id="statistika" class="section-content">
+            <div class="py-5 text-center container">
+                <div class="row py-lg-5">
+                    <div class="col-lg-6 col-md-8 mx-auto">
+                        <h1 class="fw-light">Статистика</h1>
+                        <p>Контент для Статистики</p>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <section id="polzovateli" class="section-content">
+            <div class="py-5 text-center container">
+                <div class="row py-lg-5">
+                    <div class="col-lg-6 col-md-8 mx-auto">
+                        <h1 class="fw-light">Пользователи</h1>
+                        <p>Контент для Пользователей</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Футтер, не трогать -->
@@ -168,6 +192,18 @@
 
 
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const section = urlParams.get('section');
+            if (section) {
+                const sectionElement = document.getElementById(section);
+                if (sectionElement) {
+                    sectionElement.classList.add('active');
+                }
+            }
+        });
+    </script>
 
 </body>
 
