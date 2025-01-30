@@ -223,6 +223,25 @@ def submit_task():
 
     return data
 
+@app.route("/group/<int:group_id>")
+def group(group_id):
+    if 'email' not in session:
+        return redirect('/sign-in/')
+    uid = db.get_user_id(session['email'], 1)
+    students = db_functions.get_students_for_group(group_id)
+    teachers = db_functions.get_teachers_for_group(group_id)
+    role = db_functions.get_user_role(uid, 1)
+    if role == 'teacher':
+        options = db_functions.get_options_for_group(group_id)
+        return render_template("", )
+    else:
+        done_options = db_functions.get_options_for_user_in_group(uid, group_id)
+        not_done_options= db_functions.get_options_for_user_in_group_not_done(uid, group_id)
+        for i in range(len(done_options)):
+            done_options[i].append(db_functions.get_results_for_option_user(done_options[i][0], uid))
+        return render_template("", )
+
+
 @app.route("/my-groups", methods=['POST', 'GET'])
 def my_groups():
     if 'email' not in session:
