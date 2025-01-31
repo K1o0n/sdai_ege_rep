@@ -186,7 +186,7 @@ def get_students_for_group(group_id):
     :param group_id: int
     :return: List[Tuple(id:int, name:str, surname:str)]
     """
-    result = make_request("SELECT Users.id, name, surname FROM Users JOIN Group_Students ON Users.id = Group_Students.ID_user WHERE ID_group = ?", [group_id])
+    result = make_request("SELECT Users.id, name, surname FROM Users JOIN Groups_Students ON Users.id = Groups_Students.ID_user WHERE ID_group = ?", [group_id])
     return result
 
 def get_teachers_for_group(group_id):
@@ -194,7 +194,7 @@ def get_teachers_for_group(group_id):
     :param group_id: int
     :return: List[Tuple(id:int, name:str, surname:str)]
     """
-    result = make_request("SELECT Users.id, name, surname FROM Users JOIN Group_Teachers ON Users.id = Group_Teachers.ID_user WHERE ID_group = ?", [group_id])
+    result = make_request("SELECT Users.id, name, surname FROM Users JOIN Groups_Teachers ON Users.id = Groups_Teachers.ID_user WHERE ID_group = ?", [group_id])
     return result
 
 def get_messages(status):
