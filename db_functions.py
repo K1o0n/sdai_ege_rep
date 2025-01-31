@@ -259,14 +259,6 @@ def get_answer(task_id):
         return ''
     return result[0][0]  # answer (string)
 
-def get_group(group_id):
-    """
-    :param group_id: int
-    :return: List[Tuple(id:int, name:str, id_of_creator:int)]
-    """
-    result = make_request("SELECT * FROM Groups WHERE ID = ?", [group_id])
-    return result
-
 def get_options():
     '''no arguments'''
     result = make_request("SELECT * FROM Options")
