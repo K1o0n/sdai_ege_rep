@@ -99,7 +99,8 @@
             background-color: #000;
             color: #fff;
         }
-        .button{
+
+        .button {
             background-color: transparent;
             background-repeat: no-repeat;
             border: none;
@@ -107,6 +108,7 @@
             overflow: hidden;
             outline: none;
         }
+
         .custom-tooltip {
             position: absolute;
             background-color: #000;
@@ -116,6 +118,16 @@
             font-size: 12px;
             display: none;
             z-index: 1050;
+        }
+        .table th,
+        .table td {
+            color: #333;
+            /* Make the text darker */
+        }
+        .table th:first-child,
+        .table td:first-child {
+            width: 50px;
+            /* Set a fixed width for the first column */
         }
     </style>
  <!-- Это бы хорошо в css засунуть, но я пока оставлю так :# -->
@@ -250,8 +262,8 @@
                             <tbody>
                                 {% for teacher in teachers %}
                                 <tr>
-                                    <th scope="row">{{ loop.index }}</th>
-                                    <td>{{ teacher }}</td>
+                                    <th scope="row">{{ teacher[0] }}</th>
+                                    <td>{{ teacher[1] }} {{ teacher[2] }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -267,8 +279,8 @@
                             <tbody>
                                 {% for user in users %}
                                 <tr>
-                                    <th scope="row">{{ loop.index }}</th>
-                                    <td>{{ user }}</td>
+                                    <th scope="row">{{ user[0] }}</th>
+                                    <td>{{ user[1] }} {{ user[2] }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
