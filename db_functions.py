@@ -134,6 +134,19 @@ def add_group(name, teacher_id):
     connect.close()
     add_teacher_into_group(group_id, teacher_id)
 
+def add_option(data):
+    """
+    params: data: Dict[name:str, user_id:int, date:int]
+    """
+    current = [data['name'], data['user_id'], time(), data['date']]
+    make_interferation("INSERT INTO Options (name, ID_user, date1, date2) VALUES (?, ?, ?, ?)", current)
+
+def add_task_into_option(group_id, task_id):
+    """
+    params: group_id: int
+    params: task_id: int
+    """
+    make_interferation("INSERT INTO Tasks_Options (ID_task, ID_option) VALUES (?, ?)", [task_id, group_id])
 
 # Get functions:
 
@@ -174,10 +187,10 @@ def get_groups_for_student(student_id):
 def get_options_for_group(group_id):
     """
     :param group_id: int
-    :return: List[Tuple(id:int, name:int, id_of_creator:int)]
+    :return: List[Tuple(id:int, name:int, id_of_creator:int, date1:int, date2:int)]
     """
     result = make_request(
-        "SELECT Options.ID, Options.name, Options.ID_user FROM Options JOIN Groups_Options ON Groups_Options.ID_option = Option.ID WHERE ID_group = ?",
+        "SELECT Options.ID, Options.name, Options.ID_user, Options.date1, Options.date2 FROM Options JOIN Groups_Options ON Groups_Options.ID_option = Option.ID WHERE ID_group = ?",
         [group_id])
     return result
 
@@ -223,7 +236,7 @@ def get_options_for_user_in_group(user_id, group_id):
     """
     :param user_id: int
     :param group_id: int
-    :return: List[Tuple[id:int, name:str, user_id:int]]
+    :return: List[Tuple[id:int, name:str, user_id:int, date1:int, date2:int]]
     """
     result = make_request(
         "SELECT * FROM Options JOIN Groups_Options ON Options.ID = Groups_Options.ID_option WHERE ID_group = ? AND ID_Option IN (SELECT ID_option FROM Results WHERE ID_user = ?)",
@@ -234,7 +247,7 @@ def get_options_for_user_in_group_not_done(user_id, group_id):
     """
     :param user_id: int
     :param group_id: int
-    :return: List[Tuple[id:int, name:str, user_id:int]]
+    :return: List[Tuple[id:int, name:str, user_id:int, date1:int, date2:int]]
     """
     result = make_request(
         "SELECT * FROM Options JOIN Groups_Options ON Options.ID = Groups_Options.ID_option WHERE ID_group = ? AND ID_Option NOT IN (SELECT ID_option FROM Results WHERE ID_user = ?)",
@@ -268,9 +281,11 @@ def get_group(group_id):
     return result
 
 def get_options():
-    '''no arguments'''
-    result = make_request("SELECT * FROM Options")
-    return result  # [(id, name, ID_user)]
+    """
+    return: List[Tuple(id:int, name:str, ID_user:int, date1:int, date2:int)]
+    """
+    result = make_request("SELECT * FROM Options", [])
+    return result
 
 def get_tasks_for_option(option_id):
     '''int option_id'''
