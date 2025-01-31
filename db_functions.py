@@ -3,7 +3,12 @@ from time import time
 
 # Special  functions:
 
-def make_request(request, params=[]):
+def make_request(request, params):
+    """
+    :param request: string
+    :param params: List
+    :return: result (List[Tuple])
+    """
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
     result = cursor.execute(request, params).fetchall()
@@ -11,6 +16,11 @@ def make_request(request, params=[]):
     return result
 
 def make_interferation(request, params):
+    """
+    :param request: string
+    :param params: List
+    :return: result (List[Tuple])
+    """
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
     cursor.execute(request, params)
@@ -18,18 +28,30 @@ def make_interferation(request, params):
     connect.close()
 
 def get_id_type(num):
+    """
+    :param num: int
+    :return: id (int)
+    """
     result = make_request("SELECT id FROM Types WHERE num_in_ege = ?", [num])
     if not result:
         return -1
-    return result[0][0]  # id
+    return result[0][0]
 
 def get_status_task(id_message):
+    """
+    :param id_message: int
+    :return: status (int)
+    """
     result = make_request("SELECT status FROM Tasks WHERE ID = ?", [id_message])
     if not result:
         return -1
     return result[0][0]
 
 def get_status_user(id_message):
+    """
+    :param id_message: int
+    :return: status (int)
+    """
     result = make_request("SELECT status FROM Users WHERE ID = ?", [id_message])
     if not result:
         return -1
@@ -150,11 +172,14 @@ def get_groups_for_student(student_id):
     return result  # [(id, name)]
 
 def get_options_for_group(group_id):
-    '''int group_id'''
+    """
+    :param group_id: int
+    :return: List[Tuple(id:int, name:int, id_of_creator:int)]
+    """
     result = make_request(
         "SELECT Options.ID, Options.name, Options.ID_user FROM Options JOIN Groups_Options ON Groups_Options.ID_option = Option.ID WHERE ID_group = ?",
         [group_id])
-    return result  # [(id, name, id_of_creator)]
+    return result
 
 def get_students_for_group(group_id):
     '''int group_id'''
@@ -189,20 +214,34 @@ def get_user_id(email, status):
     return result[0][0]  # id
 
 def get_options_for_user_in_group(user_id, group_id):
-    '''int user_id, int group_id'''
+    """
+    :param user_id: int
+    :param group_id: int
+    :return: List[Tuple[id:int, name:str, user_id:int]]
+    """
     result = make_request(
         "SELECT * FROM Options JOIN Groups_Options ON Options.ID = Groups_Options.ID_option WHERE ID_group = ? AND ID_Option IN (SELECT ID_option FROM Results WHERE ID_user = ?)",
         [group_id, user_id])
     return result
 
 def get_options_for_user_in_group_not_done(user_id, group_id):
-    '''int user_id, int group_id'''
+    """
+    :param user_id: int
+    :param group_id: int
+    :return: List[Tuple[id:int, name:str, user_id:int]]
+    """
     result = make_request(
         "SELECT * FROM Options JOIN Groups_Options ON Options.ID = Groups_Options.ID_option WHERE ID_group = ? AND ID_Option NOT IN (SELECT ID_option FROM Results WHERE ID_user = ?)",
         [group_id, user_id])
     return result
 
 def get_results_for_option_user(user_id, option_id):
+    """
+
+    :param user_id: int
+    :param option_id: int
+    :return: List[Tuple[id:int, score:int, time:int, user_id:int, option_id:int]]
+    """
     '''int user_id, int option_id'''
     result = make_request("SELECT * FROM Results WHERE ID_option = ? AND ID_user = ?", [option_id, user_id])
     return result
