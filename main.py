@@ -225,21 +225,28 @@ def submit_task():
 
 @app.route("/group/<int:group_id>")
 def group(group_id):
-    if 'email' not in session:
-        return redirect('/sign-in/')
-    uid = db.get_user_id(session['email'], 1)
+    # if 'email' not in session:
+    #     return redirect('/sign-in/')
+    # uid = db.get_user_id(session['email'], 1)
     students = db_functions.get_students_for_group(group_id)
     teachers = db_functions.get_teachers_for_group(group_id)
-    role = db_functions.get_user_role(uid, 1)
-    if role == 'teacher':
-        options = db_functions.get_options_for_group(group_id)
-        return render_template("", )
-    else:
-        done_options = db_functions.get_options_for_user_in_group(uid, group_id)
-        not_done_options= db_functions.get_options_for_user_in_group_not_done(uid, group_id)
-        for i in range(len(done_options)):
-            done_options[i].append(db_functions.get_results_for_option_user(done_options[i][0], uid))
-        return render_template("", )
+    # group_name = db.get_group(group_id)[0][1] Оно теоретически работает, просто в db нет групп еще
+    group_name = "Группа усиленной подготовки по Латеху"
+    done_options = ["Вариант 1", "Вариант 2", "Вариант 3", "Вариант 4"]
+    und_options = ["Вариант 5", "Вариант 13"]
+    return render_template('group.html', teachers=teachers, users=students, ADMIN=0,
+                           group_name=group_name, course_id=group_id,
+                           done_options=done_options, und_options=und_options)
+    # role = db_functions.get_user_role(uid, 1)
+    # if role == 'teacher':
+    #     options = db_functions.get_options_for_group(group_id)
+    #     return render_template("", )
+    # else:
+    #     done_options = db_functions.get_options_for_user_in_group(uid, group_id)
+    #     not_done_options= db_functions.get_options_for_user_in_group_not_done(uid, group_id)
+    #     for i in range(len(done_options)):
+    #         done_options[i].append(db_functions.get_results_for_option_user(done_options[i][0], uid))
+    #     return render_template("", )
 
 
 @app.route("/my-groups", methods=['POST', 'GET'])
