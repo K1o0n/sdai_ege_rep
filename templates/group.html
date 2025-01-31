@@ -103,10 +103,14 @@
         .button {
             background-color: transparent;
             background-repeat: no-repeat;
-            border: none;
+            border: 1px solid #ccc; /* Light gray border */
             cursor: pointer;
             overflow: hidden;
             outline: none;
+        }
+
+        .button:hover {
+            border: 1px solid #ccc; /* Ensure the border remains on hover */
         }
 
         .custom-tooltip {
@@ -128,6 +132,49 @@
         .table td:first-child {
             width: 50px;
             /* Set a fixed width for the first column */
+        }
+        .card-deadline {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+        .btn-card {
+            background-color: #828d99;
+            border-color: #828d99; /* Initial border color */
+            border: 1px solid #828d99 !important; /* Убедитесь, что граница сохраняется */
+        }
+
+        .btn-card:hover {
+            background-color: #fff;
+            border-color: #828d99 !important; /* Keep border on hover - !important is crucial */
+            border: 1px solid #828d99 !important; /* Убедитесь, что граница сохраняется */
+        }
+        .solved-tasks {
+            display: none;
+        }
+
+        .card-body:hover .solved-tasks {
+            display: inline;
+        }
+
+        .card-body:hover .default-tasks {
+            display: none;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 1050;
+            text-align: center;
         }
     </style>
  <!-- Это бы хорошо в css засунуть, но я пока оставлю так :# -->
@@ -213,24 +260,45 @@
             <div class="py-5 text-center container">
                 <div class="row py-lg-5">
                     <div class="col-lg-6 col-md-8 mx-auto">
-                        <h1 class="fw-light">Нерешенные варианты</h1>
-                        {% for und_option in und_options %}
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ und_option }}</h5>
-                                <p class="card-text">Описание для {{ und_option }}</p>
+                        {% if ADMIN %}
+                            <h1 class="fw-light">Заданные варианты</h1>
+                            {% for und_option in und_options %}
+                            <div class="card mb-3">
+                                <div class="card-body position-relative">
+                                    <h5 class="card-title">{{ und_option.name }}</h5>
+                                    <p class="card-text">Решенные задачи: --/--</p>
+                                    <a href="/group/{{ course_id }}/variant/{{ und_option.name.split(' ')[1] }}" class="btn btn-card">Перейти к варианту</a>
+                                    <div class="card-deadline">{{ und_option.deadline.strftime('%Y-%m-%d %H:%M') }}</div>
+                                </div>
                             </div>
-                        </div>
-                        {% endfor %}
-                        <h1 class="fw-light">Решенные варианты</h1>
-                        {% for done_option in done_options %}
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ done_option }}</h5>
-                                <p class="card-text">Описание для {{ done_option }}</p>
+                            {% endfor %}
+                        {% else %}
+                            <h1 class="fw-light">Нерешенные варианты</h1>
+                            {% for und_option in und_options %}
+                            <div class="card mb-3">
+                                <div class="card-body position-relative">
+                                    <h5 class="card-title">{{ und_option.name }}</h5>
+                                    <p class="card-text">Решенные задачи: --/--</p>
+                                    <a href="/group/{{ course_id }}/variant/{{ und_option.name.split(' ')[1] }}" class="btn btn-card">Перейти к варианту</a>
+                                    <div class="card-deadline">{{ und_option.deadline.strftime('%Y-%m-%d %H:%M') }}</div>
+                                </div>
                             </div>
-                        </div>
-                        {% endfor %}
+                            {% endfor %}
+                            <h1 class="fw-light">Решенные варианты</h1>
+                            {% for done_option in done_options %}
+                            <div class="card mb-3">
+                                <div class="card-body position-relative">
+                                    <h5 class="card-title">{{ done_option.name }}</h5>
+                                    <p class="card-text">
+                                        <span class="default-tasks">Решенные задачи: --/--</span>
+                                        <span class="solved-tasks">Решенные задачи: {{ done_option.solved_tasks }}/{{ done_option.total_tasks }}</span>
+                                    </p>
+                                    <a href="/group/{{ course_id }}/variant/{{ done_option.name.split(' ')[1] }}" class="btn btn-card">Посмотреть результаты</a>
+                                    <div class="card-deadline">{{ done_option.deadline.strftime('%Y-%m-%d %H:%M') }}</div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -242,6 +310,7 @@
                     <div class="col-lg-6 col-md-8 mx-auto">
                         <h1 class="fw-light">Статистика</h1>
                         <p>Контент для Статистики</p>
+                        <!-- Глеб, твой черед страдать! -->
                     </div>
                 </div>
             </div>
@@ -289,7 +358,84 @@
                 </div>
             </div>
         </section>
+        <section id="admin" class="section-content">
+            <div class="py-5 text-center container">
+                <div class="row py-lg-5">
+                    <div class="col-lg-6 col-md-8 mx-auto">
+                        <button class="btn btn-primary mb-3" id="add-user-btn">Добавить пользователя в группу</button>
+                        <button class="btn btn-primary mb-3" id="add-option-btn">Добавить вариант</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-8 mx-auto">
+                        <div id="add-user-form" style="display: none;">
+                            <form id="user-form" action="{{ url_for('add_user_to_group') }}" method="post">
+                                <div class="form-group">
+                                    <label for="user-id">ID пользователя:</label>
+                                    <input type="text" class="form-control" id="user-id" name="user-id">
+                                </div>
+                                <div class="form-group">
+                                    <label>Роль:</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="role" id="role-student" value="student" checked>
+                                        <label class="form-check-label" for="role-student">Студент</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="role" id="role-teacher" value="teacher">
+                                        <label class="form-check-label" for="role-teacher">Учитель</label>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="group_id" value="{{ course_id }}">
+                                <button type="submit" class="btn btn-primary">Отправить</button>
+                            </form>
+                        </div>
+
+                        <div id="add-option-form" style="display: none;">
+                            <form id="option-form" action="{{ url_for('add_option_to_group') }}" method="post">
+                                <div class="form-group">
+                                    <label for="option-id">ID варианта:</label>
+                                    <input type="text" class="form-control" id="option-id" name="option-id">
+                                </div>
+                                <input type="hidden" name="group_id" value="{{ course_id }}">
+                                <button type="submit" class="btn btn-primary">Отправить</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-8 mx-auto">
+                        <h2>Пользователи группы</h2>
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Имя</th>
+                                    <th scope="col">Действие</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                <tr>
+                                    <th scope="row">{{ user[0] }}</th>
+                                    <td>{{ user[1] }} {{ user[2] }}</td>
+                                    <td>
+                                        <form action="{{ url_for('remove_user_from_group') }}" method="post" style="display:inline;">
+                                            <input type="hidden" name="user_id" value="{{ user[0] }}">
+                                            <input type="hidden" name="group_id" value="{{ course_id }}">
+                                            <button type="submit" class="btn btn-danger btn-sm">&times;</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
+
+    <div class="popup" id="popup-message">Отправлено!</div>
 
     <!-- Футтер, не трогать -->
     <div class="footer-distributed">
@@ -333,6 +479,54 @@
                 }, 1000);
             });
         }
+        document.getElementById('add-user-btn').addEventListener('click', function() {
+            var userForm = document.getElementById('add-user-form');
+            var optionForm = document.getElementById('add-option-form');
+            if (userForm.style.display === 'none') {
+                userForm.style.display = 'block';
+                optionForm.style.display = 'none';
+            } else {
+                userForm.style.display = 'none';
+                document.getElementById('user-form').reset();
+            }
+        });
+
+        document.getElementById('add-option-btn').addEventListener('click', function() {
+            var optionForm = document.getElementById('add-option-form');
+            var userForm = document.getElementById('add-user-form');
+            if (optionForm.style.display === 'none') {
+                optionForm.style.display = 'block';
+                userForm.style.display = 'none';
+            } else {
+                optionForm.style.display = 'none';
+                document.getElementById('option-form').reset();
+            }
+        });
+
+        function showPopup(message) {
+            var popup = document.getElementById('popup-message');
+            popup.textContent = message;
+            popup.style.display = 'block';
+            setTimeout(function() {
+                popup.style.display = 'none';
+            }, 2000);
+        }
+
+        document.getElementById('user-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            showPopup('Отправлено!');
+            document.getElementById('add-user-form').style.display = 'none';
+            this.submit(); // Submit the form after showing the popup
+            document.getElementById('user-form').reset();
+        });
+
+        document.getElementById('option-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            showPopup('Отправлено!');
+            document.getElementById('add-option-form').style.display = 'none';
+            this.submit(); // Submit the form after showing the popup
+            document.getElementById('option-form').reset();
+        });
     </script>
 
 </body>

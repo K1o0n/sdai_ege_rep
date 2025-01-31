@@ -1,10 +1,10 @@
-from flask import Flask, render_template, session, request, redirect
+from flask import Flask, render_template, session, request, redirect, url_for
 
 import db_functions
 import db_functions as db
 from os import urandom
 import sqlite3
-
+import time, datetime
 app = Flask(__name__)
 app.config['SECRET_KEY'] = urandom(16)
 
@@ -222,33 +222,70 @@ def submit_task():
     conn.close()
 
     return data
-
-@app.route("/group/<int:group_id>")
+def make_time(x):
+    tt = time.localtime(x)
+    return datetime.datetime(tt.tm_year, tt.tm_mon, tt.tm_mday, tt.tm_hour, tt.tm_min)
+@app.route("/group/<int:group_id>", methods=["POST", "GET"])
 def group(group_id):
-    # if 'email' not in session:
-    #     return redirect('/sign-in/')
-    # uid = db.get_user_id(session['email'], 1)
+    if 'email' not in session:
+        return redirect('/sign-in/')
+    uid = db.get_user_id(session['email'], 1)
     students = db_functions.get_students_for_group(group_id)
     teachers = db_functions.get_teachers_for_group(group_id)
-    # group_name = db.get_group(group_id)[0][1] Оно теоретически работает, просто в db нет групп еще
-    group_name = "Группа усиленной подготовки по Латеху"
-    done_options = ["Вариант 1", "Вариант 2", "Вариант 3", "Вариант 4"]
-    und_options = ["Вариант 5", "Вариант 13"]
-    return render_template('group.html', teachers=teachers, users=students, ADMIN=0,
+    ADMIN = db_functions.get_user_role(uid, 1) == 'teacher'
+    ADMIN = 1
+    students.sort(key = lambda x: x[0])
+    try:
+        group_name = db.get_group(group_id)[0][1] #Оно теоретически работает, просто в db нет групп еще
+    except Exception:
+        group_name = "Группа усиленной подготовки по Латеху"
+    if ADMIN:
+        all_options = db_functions.get_options_for_group(group_id)
+        UNDONE_options = [{"name": i[1], "deadline": make_time(i[4]), "solved_tasks": 0, "total_tasks": 0} for i in all_options]
+        DONE_options = []
+        return render_template('group.html', teachers=teachers, users=students, ADMIN=ADMIN,
                            group_name=group_name, course_id=group_id,
-                           done_options=done_options, und_options=und_options)
-    # role = db_functions.get_user_role(uid, 1)
-    # if role == 'teacher':
-    #     options = db_functions.get_options_for_group(group_id)
-    #     return render_template("", )
-    # else:
-    #     done_options = db_functions.get_options_for_user_in_group(uid, group_id)
-    #     not_done_options= db_functions.get_options_for_user_in_group_not_done(uid, group_id)
-    #     for i in range(len(done_options)):
-    #         done_options[i].append(db_functions.get_results_for_option_user(done_options[i][0], uid))
-    #     return render_template("", )
+                           done_options=DONE_options, und_options=UNDONE_options)
+    else:
+        done_options = db_functions.get_options_for_user_in_group(uid, group_id)
+        not_done_options= db_functions.get_options_for_user_in_group_not_done(uid, group_id)
+        def __get(x) -> tuple[int, int]:
+            solved: int = db.get_results_for_option_user(uid, x)[1]
+            total : int = db.get_task_count_for_option(x)
+            return (solved, total)
+        done_options = [(i[1], i[4], *__get(i[0])) for i in done_options]
+        DONE_options = [{"name": i[0], "deadline": make_time(i[1]), "solved_tasks": i[2], "total_tasks": i[3]} for i in done_options]
+        UNDONE_options = [{"name": i[1], "deadline": make_time(i[4]), "solved_tasks": 0, "total_tasks": 0} for i in not_done_options]
+        return render_template('group.html', teachers=teachers, users=students, ADMIN=ADMIN,
+                            group_name=group_name, course_id=group_id,
+                            done_options=DONE_options, und_options=UNDONE_options)
 
+@app.route("/add_user_to_group", methods=["POST"])
+def add_user_to_group():
+    print(request.form)
+    user_id = request.form.get("user-id")
+    role = request.form.get("role")
+    group_id = request.form.get("group_id")
+    # Add logic to add the user to the group with the specified role
+    # Example: db_functions.add_user_to_group(user_id, group_id, role)
+    return redirect(url_for("group", group_id=group_id, section="admin"))
 
+@app.route("/add_option_to_group", methods=["POST"])
+def add_option_to_group():
+    print(request.form)
+    option_id = request.form.get("option-id")
+    group_id = request.form.get("group_id")
+    # Add logic to add the option to the group
+    # Example: db_functions.add_option_to_group(option_id, group_id)
+    return redirect(url_for("group", group_id=group_id, section="admin"))
+@app.route("/remove_user_from_group", methods=["POST"])
+def remove_user_from_group():
+    print(request.form)
+    user_id = request.form.get("user-id")
+    group_id = request.form.get("group_id")
+    # Add logic to remove the user from the group
+    # Example: db_functions.remove_user_from_group(user_id, group_id)
+    return redirect(url_for("group", group_id=group_id, section="admin"))
 @app.route("/my-groups", methods=['POST', 'GET'])
 def my_groups():
     if 'email' not in session:
@@ -269,4 +306,3 @@ def my_groups():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080)
-

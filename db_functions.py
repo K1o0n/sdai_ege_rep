@@ -190,7 +190,7 @@ def get_options_for_group(group_id):
     :return: List[Tuple(id:int, name:int, id_of_creator:int, date1:int, date2:int)]
     """
     result = make_request(
-        "SELECT Options.ID, Options.name, Options.ID_user, Options.date1, Options.date2 FROM Options JOIN Groups_Options ON Groups_Options.ID_option = Option.ID WHERE ID_group = ?",
+        "SELECT Options.ID, Options.name, Options.ID_user, Options.date1, Options.date2 FROM Options JOIN Groups_Options ON Groups_Options.ID_option = Options.ID WHERE ID_group = ?",
         [group_id])
     return result
 
@@ -236,7 +236,7 @@ def get_options_for_user_in_group(user_id, group_id):
     """
     :param user_id: int
     :param group_id: int
-    :return: List[Tuple[id:int, name:str, user_id:int, date1:int, date2:int]]
+    :return: List[Tuple[id:int, name:str, user_id:int, date1:int (Дата добавления варианта), date2:int (Дата сдачи)]]
     """
     result = make_request(
         "SELECT * FROM Options JOIN Groups_Options ON Options.ID = Groups_Options.ID_option WHERE ID_group = ? AND ID_Option IN (SELECT ID_option FROM Results WHERE ID_user = ?)",
@@ -264,7 +264,15 @@ def get_results_for_option_user(user_id, option_id):
     '''int user_id, int option_id'''
     result = make_request("SELECT * FROM Results WHERE ID_option = ? AND ID_user = ?", [option_id, user_id])
     return result
-
+def get_task_count_for_option(option_id) -> int:
+    """
+    :param option_id: int
+    :return: int - the count of tasks associated with the given option_id.
+    """
+    result = make_request("SELECT COUNT(*) FROM Tasks_Options WHERE option_id = ?", [option_id])
+    if not result:
+        return 0
+    return result[0][0]
 def get_answer(task_id):
     '''int task_id'''
     result = make_request("SELECT answer FROM Tasks WHERE id = ?", [task_id])
