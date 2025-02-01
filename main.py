@@ -245,7 +245,7 @@ def group(group_id):
         DONE_options = []
         return render_template('group.html', teachers=teachers, users=students, ADMIN=ADMIN,
                            group_name=group_name, course_id=group_id,
-                           done_options=DONE_options, und_options=UNDONE_options)
+                           done_options=DONE_options, und_options=UNDONE_options, user = True)
     else:
         done_options = db_functions.get_options_for_user_in_group(uid, group_id)
         not_done_options= db_functions.get_options_for_user_in_group_not_done(uid, group_id)
@@ -258,7 +258,7 @@ def group(group_id):
         UNDONE_options = [{"name": i[1], "deadline": make_time(i[4]), "solved_tasks": 0, "total_tasks": 0} for i in not_done_options]
         return render_template('group.html', teachers=teachers, users=students, ADMIN=ADMIN,
                             group_name=group_name, course_id=group_id,
-                            done_options=DONE_options, und_options=UNDONE_options)
+                            done_options=DONE_options, und_options=UNDONE_options, user = True)
 
 @app.route("/add_user_to_group", methods=["POST"])
 def add_user_to_group():
