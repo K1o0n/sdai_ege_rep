@@ -173,6 +173,7 @@ def add_task():
 def tasks():
     if 'email' not in session:
         return redirect('/sign-in/')
+    # session['email'] = 'k1o0n@yandex.ru'
     uid = db.get_user_id(session['email'], 1)
     user = db.get_user(uid, 1)
     if not user:
@@ -190,7 +191,7 @@ def tasks():
         1488       # answer
         ]
     '''
-    return render_template('task_page.html', tasks=tasks, user=True)
+    return render_template('test_task_page.html', tasks=tasks, user=True)
 
 
 @app.route('/submit-task', methods=["POST"])

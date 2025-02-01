@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ru">
+<!-- Basic -->
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<script src="https://vk.com/js/api/openapi.js?169" type="text/javascript"></script>
+<!-- Mobile Metas -->
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<!-- Site Metas -->
+<title>Сдай Егэ</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="">
+<!-- Site Icons -->
+<link rel="shortcut icon" href="{{ url_for('static', filename='images/лого.jpg') }}" type="image/x-icon" />
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+<!-- Site CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<!-- Responsive CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+<!-- Custom CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/flaticon.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/prettyPhoto.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tasks.css') }}">
+<script src="{{ url_for('static', filename='js/modernizr.js') }}"></script> <!-- Modernizr -->
+<!--[if lt IE 9]>
+   <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+   <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+   <![endif]-->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      jax: ["input/TeX", "output/HTML-CSS"],
+      extensions: ["tex2jax.js"],
+      "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] },
+      tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], displayMath: [ ["$$","$$"], ["\\[", "\\]"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno" },
+      TeX: { noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } } },
+      messageStyle: "none"
+    });
+    </script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"></script>
+
+<body id="page-top" class="politics_version">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" target="_blank" href="#">
+                <img class="img-thumbnail" src="{{ url_for('static', filename='images/kegeh.png') }}" alt=""
+                    width="200" />
+            </a>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                aria-label="Toggle navigation">
+                Главная
+                <i class="fa fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <div class="collapse navbar-collapse" id="navbarResponsive">
+                        <ul class="navbar-nav text-uppercase ml-auto">
+                            <li class="nav-item">
+                                <a class="nav-link js-scroll-trigger" href="/">Главная</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link js-scroll-trigger" href="/courses">Курсы</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link js-scroll-trigger" href="/tasks">Задачи</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link js-scroll-trigger" href="/add-task">Добавить задачу</a>
+                            </li>
+                        </ul>
+                    </div>
+                </ul>
+                <ul class="navbar-nav text-uppercase ml-auto">
+                    {% if user %}
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="/dashboard">Личный кабинет</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="/sign-in">Войти</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="/sign-up">Регистрация</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <style>
+        .red {
+            color: red;
+        }
+
+        .green {
+            color: green;
+        }
+
+        .none {
+            color: black;
+        }
+
+        .check_answers {
+            color: black;
+        }
+        .content-wrapper {
+            display: flex;
+            justify-content: space-between;
+            margin-left: 10%; /* Add left margin */
+            margin-top: 100px;
+        }
+        .task-content {
+            width: 70%;
+        }
+        .empty-space {
+            width: 20%;
+            display: flex;
+            align-items: center; /* Center vertically */
+            justify-content: center; /* Center horizontally */
+            padding: 10px;
+            /* background-color: #f8f9fa; */
+            border-left: 1px #e7e7e7;
+            /* box-shadow: -2px 0 5px rgba(0,0,0,0.1); */
+            position: relative;
+        }
+        .filter-panel {
+            width: 80%;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-left: 1px solid #e7e7e7;
+            border: 1px solid #727272;
+            border-radius: 15px;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 15%;
+            right: 2%;
+            max-width: 16%; /* Ensure it doesn't overflow the right edge */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+        }
+        .form-check-inline {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .form-check-inline .form-check {
+            width: 33%;
+        }
+        .centered-form-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .centered-button {
+            display: flex;
+            justify-content: center;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            justify-content: center;
+            align-items: center;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            max-height: 200px; /* Set max height for scroll */
+            overflow-y: auto; /* Enable vertical scroll */
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            text-align: center; /* Center the text */
+        }
+        .dropdown-content .form-check {
+            padding: 4px 8px; /* Reduce padding */
+            display: block;
+            width: 100%; /* Make the checkboxes take full width */
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        /* Custom scrollbar styles */
+        .dropdown-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        .dropdown-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .dropdown-content::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        .dropdown-content::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+    <div class="content-wrapper">
+        <div class="task-content">
+            {% for task in tasks %}
+            <div class="task-text">
+                <div class="num">
+                    <h1> <b> №{{ task[3] }} </b> </h1>
+                    <h6> Сложность: \({{ task[2] }}\) <br> Источник: {{ task[4] }}</h6>
+                </div>
+                {{ task[1]|safe }}
+                <div>
+                    <table border="1" width="30%" cellpadding="5">
+                        <tr>
+                            <th style="text-align:center; width:50%;">Ваш ответ:</th>
+                            <th style="text-align:center">Правильный ответ:</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input style="width:100%; margin:auto" class="{{ task[2] }}" type="text"
+                                    id="task-input-{{ task[0] }}">
+                            </td>
+                            <td id="task-answer-{{ task[0] }}" style="text-align:center" task-answer="{{ task[5] }}"
+                                showing="false">
+                                ***
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <button style="background: #223436; color: white;" class="button" id="toggleAnswers-{{ task[0] }}"
+                next="Скрыть ответ" onclick="toggleAnswers({{ task[0] }})">Показать правильный ответ</button>
+            {% endfor %}
+        </div>
+        <div class="empty-space">
+            <div class="filter-panel">
+                <h5>Фильтры</h5>
+                <form>
+                    <div class="form-group">
+                        <label for="difficulty">Сложность</label>
+                        <div id="difficulty" class="form-check-inline">
+                            {% for i in range(1, 11) %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="{{ i }}" id="difficulty{{ i }}">
+                                <label class="form-check-label" for="difficulty{{ i }}">{{ i }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-group centered-form-group">
+                        <label for="task-type">Тип задания</label>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="taskTypeButton" style="width: 100%; font-size: 10pt;">
+                                Выберите тип задания
+                            </button>
+                            <div class="dropdown-content">
+                                {% for i in range(1, 28) %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="task-type" value="type{{ i }}" id="type{{ i }}" onclick="updateTaskTypeButton({{ i }})">
+                                    <label class="form-check-label" for="type{{ i }}">Тип {{ i }}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group centered-form-group">
+                        <label for="source">Источник</label>
+                        <div id="source">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="source1" id="source1">
+                                <label class="form-check-label" for="source1">Источник 1</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="source2" id="source2">
+                                <label class="form-check-label" for="source2">Источник 2</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="source3" id="source3">
+                                <label class="form-check-label" for="source3">Источник 3</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="centered-button">
+                        <button type="submit" class="btn btn-primary">Применить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        function updateTaskTypeButton(type) {
+            document.getElementById('taskTypeButton').innerText = 'Тип ' + type;
+        }
+        function submitAnswer(task_id, ans) {
+            fetch("/submit-task", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    task_id: task_id,
+                    ans: ans
+                })
+            }).then((r) => console.log("GOIDA! Answer received"));
+        }
+
+        function changeText(task_id) {
+            let toggle_button = document.querySelector(`#toggleAnswers-${task_id}`);
+            let next = toggle_button.innerText;
+            toggle_button.innerText = toggle_button.getAttribute('next');
+            toggle_button.setAttribute('next', next);
+        }
+
+        function changeAnswers(task_id) {
+            let ua = document.querySelector(`#task-input-${task_id}`);
+            let sa = document.querySelector(`#task-answer-${task_id}`);
+            let showing = sa.getAttribute('showing').trim() === "true";
+            if (!showing) {
+                sa.setAttribute('showing', 'true');
+                let answer = sa.getAttribute('task-answer');
+                sa.innerText = answer;
+                if (ua.value.trim() === answer.trim()) {
+                    ua.style.color = 'green';
+                } else {
+                    ua.style.color = 'red';
+                }
+                submitAnswer(task_id, ua.value.trim());
+            } else {
+                sa.setAttribute('showing', 'false');
+                sa.innerText = "***";
+                ua.style.color = 'black';
+            }
+        }
+
+        function toggleAnswers(task_id) {
+            changeText(task_id);
+            changeAnswers(task_id);
+        }
+    </script>
+    <!-- ALL JS FILES -->
+    <script src="{{ url_for('static', filename='js/all.js') }}"></script>
+    <!-- Camera Slider -->
+    <script src="{{ url_for('static', filename='js/jquery.mobile.customized.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.easing.1.3.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/parallaxie.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/headline.js') }}"></script>
+    <!-- Contact form JavaScript -->
+    <script src="{{ url_for('static', filename='js/jqBootstrapValidation.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/contact_me.js') }}"></script>
+    <!-- ALL PLUGINS -->
+    <script src="{{ url_for('static', filename='js/owl.carousel.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/portfolio.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.vide.js') }}"></script>
+</body>
+
+</html>
