@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Темы форума</h1>
+    <div class="topics-list">
+        {% for topic in topics %}
+            <div class="topic-card">
+                <h2><a href="{{ url_for('topic', topic_id=topic.id) }}">{{ topic.title }}</a></h2>
+                <p>{{ topic.content }}</p>
+                <small>ID темы: {{ topic.id }}</small>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
