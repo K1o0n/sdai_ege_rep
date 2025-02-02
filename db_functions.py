@@ -134,19 +134,22 @@ def add_group(name, teacher_id):
     connect.close()
     add_teacher_into_group(group_id, teacher_id)
 
-def add_option(data):
+def add_option(data) -> int:
     """
     params: data: Dict[name:str, user_id:int, date:int]
+    return: int - Номер варианта, который был добавлен в базу данных.
     """
     current = [data['name'], data['user_id'], time(), data['date']]
     make_interferation("INSERT INTO Options (name, ID_user, date1, date2) VALUES (?, ?, ?, ?)", current)
+    result = make_request("SELECT max(ID) FROM Options", [])
+    return result[0][0]
 
-def add_task_into_option(group_id, task_id):
+def add_task_into_option(option_id, task_id):
     """
-    params: group_id: int
+    params: option_id: int
     params: task_id: int
     """
-    make_interferation("INSERT INTO Tasks_Options (ID_task, ID_option) VALUES (?, ?)", [task_id, group_id])
+    make_interferation("INSERT INTO Tasks_Options (ID_task, ID_option) VALUES (?, ?)", [task_id, option_id])
 
 # Get functions:
 

@@ -29,6 +29,8 @@ def sign_up():
     if request.method == 'GET':
         return render_template('sign-up.html')
     data = dict(request.form)
+    if db.get_user_id(data['email'], 1) == -1:
+        return render_template('sign-up.html', error='Пользователь с таким email уже существует!')
     data['country'] = 'Russia! GOYDA!'
     data['about'] = None
     data['path'] = None
@@ -260,7 +262,21 @@ def group(group_id):
         return render_template('group.html', teachers=teachers, users=students, ADMIN=ADMIN,
                             group_name=group_name, course_id=group_id,
                             done_options=DONE_options, und_options=UNDONE_options, user = True)
-
+# @app.route("/add_option", methods=["POST", "GET"])
+# def add_option():
+#     if 'email' not in session:
+#         return redirect('/sign-in/')
+#     uid = db.get_user_id(session['email'], 1)
+#     name = request.form["name"]
+#     arr = [int(x) for x in request.form["tasks"]]
+#     if request.method == "POST":
+#         __to_add = [(name, uid, time.time())]
+#         __id = db.add_option(__to_add) # теперь существует какой-то новый вариант
+#         for __x in arr:
+#             db.add_task_into_option(__id, __x)
+#         return redirect("/")
+#     else:
+#         return render_template("add_variant.html", user = True)
 @app.route("/add_user_to_group", methods=["POST"])
 def add_user_to_group():
     print(request.form)
