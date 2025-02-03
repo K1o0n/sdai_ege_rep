@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="form-wrapper">
+    <div class="create-topic-card">
+        <h1 class="form-title">🎯 Новая тема</h1>
+
+        <form method="POST" class="topic-form">
+            <div class="form-group animated-input">
+                <input type="text" id="title" name="title" required>
+                <label for="title">Заголовок темы</label>
+                <div class="underline"></div>
+            </div>
+
+            <div class="form-group animated-input">
+                <textarea id="content" name="content" rows="6" required></textarea>
+                <label for="content">Содержание темы</label>
+                <div class="underline"></div>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <span class="btn-text">Создать тему</span>
+                <span class="btn-icon">🚀</span>
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

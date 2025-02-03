@@ -1,11 +1,12 @@
 from flask import Flask, render_template, session, request, redirect, url_for
-
 import db_functions
 import db_functions as db
 from os import urandom
 import sqlite3
 import time, datetime
+
 app = Flask(__name__)
+DATABASE = 'forum.db'
 app.config['SECRET_KEY'] = urandom(16)
 
 def auth(route):
@@ -29,7 +30,7 @@ def sign_up():
     if request.method == 'GET':
         return render_template('sign-up.html')
     data = dict(request.form)
-    if db.get_user_id(data['email'], 1) == -1:
+    if db.get_user_id(data['email'], 1) != -1:
         return render_template('sign-up.html', error='Пользователь с таким email уже существует!')
     data['country'] = 'Russia! GOYDA!'
     data['about'] = None
@@ -147,7 +148,7 @@ def task_lesson(course_id, num):
     tasks = db_functions.get_tasks_for_course(course_id)
     print(tasks)
     return render_template(
-        'test.html',
+        'task-lesson.html',
         course_name=db_functions.get_course(course_id)[0][1],
         task=tasks[num - 1],
         id=course_id,
@@ -321,5 +322,144 @@ def my_groups():
         return redirect("/")
 
 
+def init_db():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS topics (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            content TEXT NOT NULL,
+            user_id INTEGER NOT NULL  
+        )
+    ''')
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS comments (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            content TEXT NOT NULL,
+            topic_id INTEGER NOT NULL,
+            user_id INTEGER NOT NULL, 
+            FOREIGN KEY (topic_id) REFERENCES topics (id)
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+# Функция для подключения к базе данных
+def get_db_connection():
+    conn = sqlite3.connect(DATABASE)
+    conn.row_factory = sqlite3.Row  # Возвращает строки в виде словарей
+    return conn
+
+# Главная страница
+@app.route('/forum')
+def forum():
+    conn = get_db_connection()
+    # Получаем темы с количеством комментариев
+    topics = conn.execute('''
+            SELECT 
+                topics.*, 
+                COUNT(comments.id) as comments_count 
+            FROM topics 
+            LEFT JOIN comments ON topics.id = comments.topic_id 
+            GROUP BY topics.id 
+            ORDER BY topics.id DESC
+        ''').fetchall()
+    conn.close()
+    return render_template('forum.html', topics=topics, ADMIN = 1)
+
+# Страница темы
+@app.route('/topic/<int:topic_id>', methods=['GET', 'POST'])
+def topic(topic_id):
+    conn = get_db_connection()
+    if request.method == 'POST':
+        comment_content = request.form['comment']
+        user_id = 1  # Здесь можно добавить логику для получения ID текущего пользователя
+        conn.execute('INSERT INTO comments (content, topic_id, user_id) VALUES (?, ?, ?)',
+                     (comment_content, topic_id, user_id))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('topic', topic_id=topic_id))
+
+    topic = conn.execute('SELECT * FROM topics WHERE id = ?', (topic_id,)).fetchone()
+    comments = conn.execute('SELECT * FROM comments WHERE topic_id = ?', (topic_id,)).fetchall()
+    conn.close()
+    return render_template('topic.html', topic=topic, comments=comments, ADMIN = 1)
+
+# Создание новой темы
+@app.route('/forum/create_topic', methods=['GET', 'POST'])
+def create_topic():
+    if request.method == 'POST':
+        title = request.form['title']
+        content = request.form['content']
+        user_id = 1  # Заглушка - в реальном приложении брать из сессии
+
+        conn = get_db_connection()
+        conn.execute('INSERT INTO topics (title, content, user_id) VALUES (?, ?, ?)',
+                     (title, content, user_id))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('forum'))
+    return render_template('create_topic.html', ADMIN = 1)
+
+# Админская панель
+@app.route('/forum/admin')
+def admin():
+    conn = get_db_connection()
+
+    # Получаем все темы с комментариями
+    topics = conn.execute('''
+        SELECT 
+            topics.id as topic_id,
+            topics.title as topic_title,
+            comments.id as comment_id,
+            comments.content as comment_content,
+            comments.user_id as comment_user_id
+        FROM topics
+        LEFT JOIN comments ON topics.id = comments.topic_id
+        ORDER BY topics.id DESC, comments.id DESC
+    ''').fetchall()
+
+    conn.close()
+
+    # Группируем комментарии по темам
+    grouped = {}
+    for row in topics:
+        topic_id = row['topic_id']
+        if topic_id not in grouped:
+            grouped[topic_id] = {
+                'title': row['topic_title'],
+                'comments': []
+            }
+        if row['comment_id']:  # Если есть комментарий
+            grouped[topic_id]['comments'].append({
+                'id': row['comment_id'],
+                'content': row['comment_content'],
+                'user_id': row['comment_user_id']
+            })
+
+    return render_template('admin.html', grouped_topics=grouped, ADMIN = 1)
+
+# Удаление темы
+@app.route('/delete_topic/<int:topic_id>')
+def delete_topic(topic_id):
+    conn = get_db_connection()
+    conn.execute('DELETE FROM topics WHERE id = ?', (topic_id,))
+    conn.execute('DELETE FROM comments WHERE topic_id = ?', (topic_id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('admin'))
+
+# Удаление комментария
+@app.route('/delete_comment/<int:comment_id>')
+def delete_comment(comment_id):
+    conn = get_db_connection()
+    conn.execute('DELETE FROM comments WHERE id = ?', (comment_id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('admin'))
+
+
 if __name__ == "__main__":
+    init_db()  # Инициализация базы данных форума при запуске приложения
     app.run(host='0.0.0.0', port=8080)

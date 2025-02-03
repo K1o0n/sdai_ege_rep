@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="admin-container">
+        <h1 class="centered-title">Административная панель</h1>
+
+        <div class="admin-content">
+            {% for topic_id, data in grouped_topics.items() %}
+                <div class="admin-topic">
+                    <div class="topic-header">
+                        <h3>{{ data.title }}</h3>
+                        <div class="btn-container">
+                            <a href="{{ url_for('delete_topic', topic_id=topic_id) }}" class="delete-btn">
+                                🗑️ Удалить тему
+                            </a>
+                        </div>
+                    </div>
+
+                    {% if data.comments %}
+                        <div class="comments-section">
+                            <h4 class="centered-subtitle">Комментарии ({{ data.comments|length }}):</h4>
+                            {% for comment in data.comments %}
+                                <div class="admin-comment">
+                                    <p>{{ comment.content }}</p>
+                                    <div class="comment-actions">
+                                        <span>ID: {{ comment.id }}</span>
+                                        <a href="{{ url_for('delete_comment', comment_id=comment.id) }}" class="small-delete-btn">
+                                            ❌ Удалить
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="no-comments">┄ Нет комментариев ┄</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

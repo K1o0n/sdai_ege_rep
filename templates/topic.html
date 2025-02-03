@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+   <div class="main-topic">
+        <h1 class="topic-title">{{ topic.title }}</h1>
+        <div class="topic-meta">
+            <span class="topic-id">ID: {{ topic.id }}</span>
+            <span class="topic-author">Автор: Пользователь #{{ topic.user_id }}</span>
+        </div>
+        <p class="topic-content">{{ topic.content }}</p>
+    </div>
+
+    <h2 class="comments-heading">Комментарии ({{ comments|length }})</h2>
+    <div class="comments-list">
+        {% for comment in comments %}
+            <div class="comment-card">
+                <p class="comment-text">{{ comment.content }}</p>
+                <div class="comment-meta">
+                    <span class="comment-id">#{{ comment.id }}</span>
+                    <span class="comment-author">Пользователь #{{ comment.user_id }}</span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <form method="POST" class="comment-form">
+        <textarea name="comment" placeholder="Напишите ваш комментарий..." class="form-control"></textarea>
+        <button type="submit" class="btn btn-primary">Опубликовать</button>
+    </form>
+{% endblock %}
