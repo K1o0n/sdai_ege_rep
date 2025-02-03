@@ -123,16 +123,16 @@ def add_student_into_group(group_id, student_id):
     current = [group_id, student_id]
     make_interferation("INSERT INTO Groups_Students (ID_group, ID_user) VALUES (?, ?)", current)
 
-def add_group(name, teacher_id):
+def add_group(name, user_id):
     '''str name, int teacher_id'''
     current = [name]
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO Groups VALUES (name) VALUES (?)", current)
-    group_id = cursor.execute("SELECT max(ID) FROM Groups WHERE name = ?)", current)
+    cursor.execute("INSERT INTO Groups (name, ID_user) VALUES (?, ?)", (name, user_id))
+    group_id = cursor.execute("SELECT max(ID) FROM Groups WHERE name = ?", current).fetchone()[0]
     connect.commit()
     connect.close()
-    add_teacher_into_group(group_id, teacher_id)
+    add_teacher_into_group(group_id, user_id)
 
 def add_option(data) -> int:
     """
