@@ -782,3 +782,175 @@ h2.comments-heading {
         padding: 15px;
     }
 }
+
+/* Стили для личного кабинета */
+.profile-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.profile-title {
+    font-size: 2.5em;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.profile-status {
+    padding: 10px 25px;
+    border-radius: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+.profile-status.teacher {
+    background: rgba(46, 204, 113, 0.15);
+    color: #2ecc71;
+}
+
+.profile-status.student {
+    background: rgba(52, 152, 219, 0.15);
+    color: #3498db;
+}
+
+.profile-card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    display: flex;
+    gap: 40px;
+    margin-bottom: 30px;
+}
+
+.avatar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.avatar-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: linear-gradient(#2c4a4d, #0097a8, #0097a8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar-initials {
+    color: white;
+    font-size: 3em;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.edit-btn {
+    background: none;
+    border: 2px solid #0097a8;
+    color: black;
+    padding: 10px 25px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.edit-btn:hover {
+    background: #0097a8;
+    color: white;
+}
+
+.profile-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.info-item {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+
+.info-label {
+    display: block;
+    color: #7f8c8d;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.info-value {
+    font-size: 1.2em;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.additional-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.stats-card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.stats-card h3 {
+    margin-top: 0;
+    color: #2c3e50;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+.stat-value {
+    color: #ff6f61;
+    font-weight: bold;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .profile-card {
+        flex-direction: column;
+        padding: 25px;
+    }
+
+    .profile-title {
+        font-size: 2em;
+    }
+
+    .avatar-circle {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .info-value {
+        font-size: 1em;
+    }
+}

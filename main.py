@@ -64,26 +64,26 @@ def dashboard():
     user = db.get_user(uid, 1)
     if not user:
         return redirect('/sign-in/')
-
     data = graph_functions.convert_attempts_by_type(uid)
     labels = data[0]
     correct = data[1]
     incorrect = data[2]
     # orms were invented in 1995... People before 1995:
-    [_, name, surname, patronymic, email, 
-     age, _, country, _, about, phone, path, *_] = user[0]
-    return render_template('dashboard.html', 
-                           name=f'{surname} {name} {patronymic}', 
-                           email=email, 
-                           age=age,
-                           country=country,
-                           image_path=path,
-                           color='Цвета в нашем сервисе пока не поддерживаются, приносим свои извнинения. За Россию!',
-                           telephone=phone,
+    [_, name, surname, patronymic, email, age, _, country, _, about, phone, path, *_] = user[0]
+    user_data = {
+        'last_name': surname,
+        'first_name': name,
+        'middle_name': patronymic,
+        'email': email,
+        'is_teacher': 1,
+        'created_at': 0,
+    }
+
+    return render_template('profile.html',
+                           user=user_data,
                            labels=labels,
                            correct=correct,
-                           incorrect=incorrect,
-                           user=True
+                           incorrect=incorrect
                            )
 
 
