@@ -115,13 +115,13 @@ def add_message(data):
 def add_teacher_into_group(group_id, teacher_id):
     '''int group_id, int teacher_id'''
     current = [group_id, teacher_id]
-    make_interferation("INSERT INTO Groups_Teachers (ID_group, ID_teacher) VALUES (?, ?)", current)
+    make_interferation("INSERT INTO Groups_Teachers (ID_group, ID_user) VALUES (?, ?)", current)
 
 
 def add_student_into_group(group_id, student_id):
     '''int group_id, int student_id'''
     current = [group_id, student_id]
-    make_interferation("INSERT INTO Groups_Students (ID_group, ID_Student) VALUES (?, ?)", current)
+    make_interferation("INSERT INTO Groups_Students (ID_group, ID_user) VALUES (?, ?)", current)
 
 def add_group(name, teacher_id):
     '''str name, int teacher_id'''
@@ -150,7 +150,12 @@ def add_task_into_option(option_id, task_id):
     params: task_id: int
     """
     make_interferation("INSERT INTO Tasks_Options (ID_task, ID_option) VALUES (?, ?)", [task_id, option_id])
-
+def add_option_into_group(option_id, group_id):
+    """
+    params: option_id: int
+    params: group_id: int
+    """
+    make_interferation("INSERT INTO Groups_Options (ID_group, ID_option) VALUES (?, ?)", [group_id, option_id])
 # Get functions:
 
 def get_all_tasks(status):
@@ -388,6 +393,9 @@ def del_user(user_id):
     '''int user_id'''
     make_interferation("UPDATE Users SET status=3 WHERE ID = ?", [user_id])
 
+def del_user_from_group(group_id, user_id):
+    '''int group_id, int user_id'''
+    make_interferation("DELETE FROM Groups_Students WHERE ID_group = ? AND ID_user = ?", [group_id, user_id])
 def del_task(task_id):
     '''int task_id'''
     make_interferation("UPDATE Tasks SET status=3 WHERE ID = ?", [task_id])
