@@ -4,7 +4,7 @@ import db_functions as db
 from os import urandom
 import sqlite3
 import time, datetime
-
+import random
 import graph_functions
 
 app = Flask(__name__)

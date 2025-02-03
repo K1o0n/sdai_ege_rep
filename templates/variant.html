@@ -92,7 +92,121 @@
          .check_answers {
          color: black;
          }
+	 #timer {
+	     position: fixed;
+	     bottom: 20px;
+	     right: 20px;
+	     z-index: 10;
+	     background-color: #223436;
+	     padding: 2px 7px;
+	     color: #fff;
+	     font-size: 1.2em;
+	 }
       </style>
+      <div id="timer">
+	--:--:--
+      </div>
+      <script>
+	class Timer {
+	    constructor() {
+		this.time = 0;
+		this.element = null;
+		this.control = true;
+		this.callback = null;
+		this.timeLimit = 10;
+	    }
+
+	    set(time, id, callback = null) {
+		this.time = time;
+		this.element = document.getElementById(id);
+		this.callback = callback;
+	    }
+
+	    setTimeLimit(time) {
+		this.timeLimit = time;
+	    }
+
+	    start(type = 'COUNT_DOWN') {
+		this.control = true;
+
+		setTimeout(() => {
+		    if(type == 'COUNT_DOWN')
+			this.countDown();
+		    else if(type == 'COUNT_UP') 
+			this.countUp();
+		}, 1000);
+	    }
+
+	    format() {
+		let hours = parseInt(this.time / 3600);
+		let timeLeft = this.time - hours * 3600;
+		let minutes = parseInt(timeLeft / 60);
+		timeLeft = timeLeft - minutes * 60;
+		let seconds = timeLeft;
+		
+		hours = hours.toString();
+		minutes = minutes.toString();
+		seconds = seconds.toString();
+	    
+		if (hours.length == 1)
+		    hours = '0' + hours;
+		if (minutes.length == 1)
+		    minutes = '0' + minutes;
+		if (seconds.length == 1)
+		    seconds = '0' + seconds;
+		
+		return hours + ':' + minutes + ':' + seconds;
+	    }
+
+	    countDown() {
+		if(!this.control)
+		    return;
+		let timerblock = this.element;
+		timerblock.innerHTML = this.format();
+		timerblock.style.display = 'block';
+
+		if (this.time <= 59) {
+		    timerblock.style.color = 'red';
+		}
+	    
+		if (this.time <= 0) {
+		    timerblock.innerHTML = 'Время вышло!';
+		    this.callback();
+		    this.stop();
+		}
+		else {
+		    setTimeout(() => {
+			this.countDown();
+		    }, 1000);
+		    this.time--;
+		}
+	    }
+
+	    countUp() {
+		if(!this.control)
+		    return;
+		let timerblock = this.element;
+		timerblock.innerHTML = this.format();
+		timerblock.style.display = 'block';
+	    
+		if(this.time >= this.timeLimit) {
+		    timerblock.innerHTML = 'Timer Limit Exceed!';
+		    this.callback();
+		    this.stop();
+		}
+		else {
+		    setTimeout(() => {
+			this.countUp();
+		    }, 1000);
+		    this.time++;
+		}
+	    }
+         
+	    stop() {
+		this.control = false;
+	    }
+	}
+      </script>
       <main id = "task">
         {% for task in tasks %}
           <div class = "task-text">
@@ -130,6 +244,13 @@
             onclick="sendAll()">Отправить тест
 	  </button>
         <script>
+	   let timer = new Timer();
+           timer.set(
+             10,
+	     'timer', 
+	     sendAll);
+	   timer.start();
+
            function submitAnswer(task_id, ans) {
              fetch("/submit-task", {
                method: "POST",
@@ -144,13 +265,6 @@
              }).then((r) => console.log("GOIDA! Answer received"));
            }
 
-           function changeText(task_id) {
-             let toggle_button = document.querySelector(`#toggleAnswers-${task_id}`);
-             let next = toggle_button.innerText;
-             toggle_button.innerText = toggle_button.getAttribute('next');
-             toggle_button.setAttribute('next', next);
-           }
-           
            function changeAnswers(task_id) {
              let ua = document.querySelector(`#task-input-${task_id}`);
              let sa = document.querySelector(`#task-answer-${task_id}`);
@@ -170,14 +284,13 @@
                sa.innerText = "***";
                ua.style.color = 'black';
              }
-           }
-
-           function toggleAnswers(task_id) {
-             changeText(task_id);
-             changeAnswers(task_id);
+	     ua.setAttribute('disabled', 'meow');
            }
 
 	   function sendAll() {
+	       document
+		 .querySelector('#toggleAnswers')
+		 .setAttribute('disabled', 'meow');	
 	       for(let i = 0; i < 50; i++) {
 	           try { changeAnswers(i); }
 		   catch {}
