@@ -236,13 +236,13 @@
         <div class="empty-space">
             <div class="filter-panel">
                 <h5>Фильтры</h5>
-                <form>
+                <form method="post" action="/tasks/">
                     <div class="form-group">
                         <label for="difficulty">Сложность</label>
                         <div id="difficulty" class="form-check-inline">
                             {% for i in range(1, 11) %}
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="{{ i }}" id="difficulty{{ i }}">
+                                <input class="form-check-input" type="checkbox" value="{{ i }}" id="difficulty{{ i }}" name="difficulty">
                                 <label class="form-check-label" for="difficulty{{ i }}">{{ i }}</label>
                             </div>
                             {% endfor %}
@@ -257,7 +257,7 @@
                             <div class="dropdown-content">
                                 {% for i in range(1, 28) %}
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="task-type" value="type{{ i }}" id="type{{ i }}" onclick="updateTaskTypeButton({{ i }})">
+                                    <input class="form-check-input" type="radio" name="task-type" value="{{ i }}" id="type{{ i }}" onclick="updateTaskTypeButton({{ i }})">
                                     <label class="form-check-label" for="type{{ i }}">Тип {{ i }}</label>
                                 </div>
                                 {% endfor %}
@@ -268,15 +268,15 @@
                         <label for="source">Источник</label>
                         <div id="source">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="source1" id="source1">
+                                <input class="form-check-input" type="checkbox" value="source1" id="source1" name="source">
                                 <label class="form-check-label" for="source1">Источник 1</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="source2" id="source2">
+                                <input class="form-check-input" type="checkbox" value="source2" id="source2" name="source">
                                 <label class="form-check-label" for="source2">Источник 2</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="source3" id="source3">
+                                <input class="form-check-input" type="checkbox" value="source3" id="source3" name="source">
                                 <label class="form-check-label" for="source3">Источник 3</label>
                             </div>
                         </div>
