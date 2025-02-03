@@ -176,14 +176,14 @@ def get_course(course_id):
 def get_groups_for_teacher(teacher_id):
     '''int teacher_id'''
     result = make_request(
-        "SELECT Groups.ID, Groups.name FROM Groups JOIN Groups_Teachers ON Groups.ID = Groups_Teachers.ID_group WHERE Groups.ID_user = ?",
+        "SELECT Groups.ID, Groups.name FROM Groups JOIN Groups_Teachers ON Groups.ID = Groups_Teachers.ID_group WHERE Groups_Teachers.ID_user = ?",
         [teacher_id])
     return result  # [(id, name)]
 
 def get_groups_for_student(student_id):
     '''int student_id'''
     result = make_request(
-        "SELECT Groups.ID, Groups.name FROM Groups JOIN Groups_Students ON Groups.ID = Groups_Students.ID_group WHERE Groups.ID_user = ?",
+        "SELECT Groups.ID, Groups.name FROM Groups JOIN Groups_Students ON Groups.ID = Groups_Students.ID_group WHERE Groups_Students.ID_user = ?",
         [student_id])
     return result  # [(id, name)]
 
