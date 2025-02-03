@@ -39,7 +39,7 @@ def sign_up():
     data['path'] = None
     db.add_user(data)
     session['email'] = data['email']
-    return redirect('/dashboard/')
+    return redirect('/')
 
 
 @app.route('/sign-in/', methods=['GET', 'POST'])
@@ -52,7 +52,7 @@ def sign_in():
     # orms were invented in 1995... People before 1995:
     if user and user[0][6] == data['password']:
         session['email'] = data['email']
-        return redirect('/dashboard/')
+        return redirect('/')
     else:
         return render_template('sign-in.html', error='Неверные данные!')
 
