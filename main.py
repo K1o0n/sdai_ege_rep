@@ -355,7 +355,16 @@ def get_db_connection():
 @app.route('/forum')
 def forum():
     conn = get_db_connection()
-    topics = conn.execute('SELECT * FROM topics').fetchall()
+    # Получаем темы с количеством комментариев
+    topics = conn.execute('''
+            SELECT 
+                topics.*, 
+                COUNT(comments.id) as comments_count 
+            FROM topics 
+            LEFT JOIN comments ON topics.id = comments.topic_id 
+            GROUP BY topics.id 
+            ORDER BY topics.id DESC
+        ''').fetchall()
     conn.close()
     return render_template('forum.html', topics=topics, ADMIN = 1)
 

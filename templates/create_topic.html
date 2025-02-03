@@ -1,16 +1,28 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Создать новую тему</h1>
-    <form method="POST" action="{{ url_for('create_topic') }}">
-        <div class="form-group">
-            <label for="title">Заголовок темы:</label>
-            <input type="text" id="title" name="title" required class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="content">Содержание темы:</label>
-            <textarea id="content" name="content" rows="5" required class="form-control"></textarea>
-        </div>
-        <button type="submit" class="btn">Создать тему</button>
-    </form>
+<div class="form-wrapper">
+    <div class="create-topic-card">
+        <h1 class="form-title">🎯 Новая тема</h1>
+
+        <form method="POST" class="topic-form">
+            <div class="form-group animated-input">
+                <input type="text" id="title" name="title" required>
+                <label for="title">Заголовок темы</label>
+                <div class="underline"></div>
+            </div>
+
+            <div class="form-group animated-input">
+                <textarea id="content" name="content" rows="6" required></textarea>
+                <label for="content">Содержание темы</label>
+                <div class="underline"></div>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <span class="btn-text">Создать тему</span>
+                <span class="btn-icon">🚀</span>
+            </button>
+        </form>
+    </div>
+</div>
 {% endblock %}
