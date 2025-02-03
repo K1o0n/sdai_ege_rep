@@ -310,8 +310,10 @@ def get_task(task_id, status):
 
 def get_tasks_by_params(params, status):
     '''dict {ID_type:(x1, x2, x3, ...), difficulty:(x1, x2, x3, ...))'''
-    result = make_request("SELECT * FROM Tasks WHERE ID_type IN ? AND difficulty IN ? AND status = ?",
-                          [params['ID_type'], params['difficulty'], status])
+    s1 = '(' + ', '.join(params['ID_type']) + ')'
+    s2 = '(' + ', '.join(params['difficulty']) + ')'
+    request = "SELECT * FROM Tasks WHERE ID_type IN " + s1 + " AND difficulty IN" + s2 + "AND status = ?"
+    result = make_request(request, [status])
     return result  # [(id, text, answer, difficulty, ID_type, source, solution, status)]
 
 def get_tasks_by_type(type_id, status):
