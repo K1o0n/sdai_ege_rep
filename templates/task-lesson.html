@@ -1,277 +1,245 @@
 <!doctype html>
-<html lang="en">
-  <head>
+<html lang="ru">
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="generator" content="Hugo 0.84.0">
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sidebars/">
+    <title>{{ course_name }} - {{ task[8] }}</title>
 
-    <!-- Bootstrap core CSS -->
+    <!-- Bootstrap 5 -->
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/zadanie.css') }}" rel="stylesheet">
 
     <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
+        :root {
+            --primary-color: #0097a8;
+            --dark-bg: #292c2f;
+            --light-bg: #fffaf4;
+            --text-dark: #2c3e50;
+            --text-light: #f8f9fa;
         }
-      }
 
-      /* Центрирование контента */
-      .main-content {
-        margin-left: 600px;
-        margin-right: 20%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        padding: 20px;
-      }
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
 
-      /* Стилизация текста задачи */
-      .task-text {
-        text-align: left;
-        max-width: 850px;
-        width: 100%;
-      }
+        /* Сайдбар */
+        .course-sidebar {
+            width: 280px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: var(--dark-bg);
+            color: var(--text-light);
+            padding: 1.5rem;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
 
-      .task-text .num h1 {
-        font-size: 4rem;
-        margin-bottom: 20px;
-      }
+        .course-sidebar .nav-link {
+            color: rgba(255,255,255,0.7);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
 
-      .task-text h6 {
-        font-size: 1rem;
-        color: #555;
-        margin-bottom: 20px;
-      }
+        .course-sidebar .nav-link:hover,
+        .course-sidebar .nav-link.active {
+            background: var(--primary-color);
+            color: var(--text-light);
+        }
 
-      table {
-        border-collapse: collapse;
-        width: 60%;
-      }
+        /* Основной контент */
+        .main-content {
+            margin-left: 280px;
+            padding: 2rem;
+            min-height: 100vh;
+        }
 
-      table th, table td {
-        text-align: center;
-        padding: 10px;
-        border: 1px solid #ddd;
-      }
+        /* Заголовок задачи */
+        .task-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
 
-      /* Стиль кнопки */
-      .button {
-        background: #223436;
-        color: white;
-        margin-top: 20px;
-        padding: 10px 20px;
-        border: none;
-        cursor: pointer;
-        font-size: 1rem;
-        border-radius: 5px;
-      }
+        .task-number {
+            font-size: 3rem;
+            color: var(--primary-color);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
 
-      .button:hover {
-        background: #3a4a50;
-      }
+        /* Таблица ответов */
+        .answer-table {
+            width: 100%;
+            max-width: 600px;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
 
-      /* Фиксированный сайдбар */
-      .d-flex.flex-column.flex-shrink-0 {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        width: 280px;
-        padding: 20px;
-        background-color: #343a40;
-        color: white;
-        z-index: 1000;
-      }
+        .answer-table td, .answer-table th {
+            padding: 1.2rem;
+            border-bottom: 1px solid #eee;
+        }
 
-      .d-flex.flex-column.flex-shrink-0 h1 {
-        font-size: 1.5rem;
-        font-weight: bold;
-      }
+        .answer-table input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
 
-      .d-flex.flex-column.flex-shrink-0 a {
-        color: white;
-        text-decoration: none;
-      }
+        .answer-table input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
 
-      .d-flex.flex-column.flex-shrink-0 .nav-item {
-        margin-bottom: 15px;
-      }
+        /* Кнопки */
+        .btn-primary {
+            background: var(--primary-color);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
 
-      .d-flex.flex-column.flex-shrink-0 .nav-link {
-        color: white;
-      }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255,111,97,0.3);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .course-sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .task-number {
+                font-size: 2rem;
+            }
+        }
     </style>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      jax: ["input/TeX", "output/HTML-CSS"],
+      extensions: ["tex2jax.js"],
+      "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] },
+      tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], displayMath: [ ["$$","$$"], ["\\[", "\\]"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno" },
+      TeX: { noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } } },
+      messageStyle: "none"
+    });
+    </script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"></script>
 
-    <!-- Custom styles for this template -->
-    <link href="{{ url_for('static', filename='css/sidebars.css') }}" rel="stylesheet">
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        jax: ["input/TeX", "output/HTML-CSS"],
-        extensions: ["tex2jax.js"],
-        "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] },
-        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], displayMath: [ ["$$","$$"], ["\\[", "\\]"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno" },
-        TeX: { noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } } },
-        messageStyle: "none"
-      });
-      </script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"></script>
-  </head>
+</head>
 
-  <body>
-    <main class="d-flex">
-      <!-- Sidebar -->
-      <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark">
-        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-          <svg class="bi me-2" width="40" height="32"><use xlink:href="/"/></svg>
-          <h1> <b> <span class="fs-4">  {{ course_name }} </span> </b> </h1>
-        </a>
-        <hr>
-        <ul class="nav nav-pills flex-column mb-auto">
-          <li class="nav-item"><b>1 Теория</b></li>
-          <li class="nav-item">
-            <a style="color: white" href="/video-lesson/{{id}}" class="nav-link" aria-current="page">
-              <svg class="bi me-2" width="16" height="16"><use xlink:href="video-lesson/{{id}}"/></svg>
-              1.1 Видео-Урок
-            </a>
-          </li>
-          <li>
-            <a href="/text-lesson/{{id}}" class="nav-link text-white">
-              <svg class="bi me-2" width="16" height="16"><use xlink:href="/text-lesson/{{id}}"/></svg>
-              1.2 Теория к задаче
-            </a>
-          </li>
-          <li class="nav-item"><b>2 Отрешка</b></li>
-          <li>
-            <a href="/task-lesson/{{id}}/1" class="nav-link text-white">
-              <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"/></svg>
-              2.1 Задача №1
-            </a>
-          </li>
-          <li>
-            <a href="/task-lesson/{{id}}/2" class="nav-link text-white">
-              <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
-              2.1 Задача №2
-            </a>
-          </li>
-          <li>
-            <a href="/task-lesson/{{id}}/3" class="nav-link text-white">
-              <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
-              2.1 Задача №3
-            </a>
-          </li>
-          <li>
-            <a href="/task-lesson/{{id}}/4" class="nav-link text-white">
-              <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
-              2.1 Задача №4
-            </a>
-          </li>
-          <li>
-            <a href="/task-lesson/{{id}}/5" class="nav-link text-white">
-              <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
-              2.1 Задача №5
-            </a>
-          </li>
-        </ul>
-        <hr>
-      </div>
+<body>
+    <!-- Сайдбар -->
+    <aside class="course-sidebar">
+        <h2 class="mb-4">{{ course_name }}</h2>
+        <nav class="nav flex-column">
+            <h5 class="text-muted mb-2">Теория</h5>
+            <a href="/video-lesson/{{id}}" class="nav-link">🎥 Видео-урок</a>
+            <a href="/text-lesson/{{id}}" class="nav-link">📖 Теория</a>
 
-      <!-- Main content -->
-      <div class="main-content" style="margin-left: 320px;">
-        <div class="task-text">
-          <div class="num">
-            <h1> <b> №{{ task[8] }} </b> </h1>
-            <h6> Сложность: {{ task[7] }} <br> Источник: {{ task[9] }}</h6>
-          </div>
-            <p style="font-size: 1.2rem">
-                {{ task[5]|safe }}
-            </p>
-            <div>
-            <table>
-              <tr>
-                <th>Ваш ответ:</th>
-                <th>Правильный ответ:</th>
-              </tr>
-              <tr>
-                <td>
-                  <input style="width:100%; margin:auto"
-                    class="{{ task[2] }}"
-                    type="text"
-                    id="task-input-{{ task[0] }}">
-                </td>
-                <td id="task-answer-{{ task[0] }}" task-answer="{{ task[6] }}" showing="false">
-                  ***
-                </td>
-              </tr>
-            </table>
-          </div>
-          <button class="button" id="toggleAnswers-{{ task[0] }}" next="Скрыть ответ" onclick="toggleAnswers({{ task[0] }})">
-            Показать правильный ответ
-          </button>
+            <h5 class="text-muted mt-4 mb-2">Практика</h5>
+            {% for i in range(1,6) %}
+            <a href="/task-lesson/{{id}}/{{i}}"
+               class="nav-link {% if i == task_num %}active{% endif %}">
+                ✅ Задача #{{i}}
+            </a>
+            {% endfor %}
+
+        </nav>
+        <div class="sidebar-footer">
+          <form action="/courses">
+            <button onclick="window.history.back()" class="btn-back">
+              ← Вернуться
+            </button>
+          </form>
         </div>
-      </div>
+    </aside>
+
+    <!-- Основной контент -->
+    <main class="main-content">
+        <div class="task-header">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="task-number">#{{ task[8] }}</div>
+                <div>
+                    <div class="badge bg-primary">Сложность: {{ task[7] }}</div>
+                    <div class="text-muted mt-2">Источник: {{ task[9] }}</div>
+                </div>
+            </div>
+
+            <div class="task-description">
+                {{ task[5]|safe }}
+            </div>
+        </div>
+
+        <div class="answer-section">
+            <table class="answer-table mb-4">
+                <tr>
+                    <th width="50%">Ваш ответ</th>
+                    <th width="50%">Правильный ответ</th>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text"
+                               class="form-control"
+                               id="task-input-{{ task[0] }}">
+                    </td>
+                    <td id="task-answer-{{ task[0] }}"
+                        task-answer="{{ task[6] }}"
+                        showing="false">
+                        •••
+                    </td>
+                </tr>
+            </table>
+
+            <button class="btn btn-primary"
+                    id="toggleAnswers-{{ task[0]}}"
+                    onclick="toggleAnswers({{ task[0] }})">
+                Показать ответ
+            </button>
+        </div>
     </main>
 
-    <script>
-      function submitAnswer(task_id, ans) {
-        fetch("/submit-task", {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            task_id: task_id,
-            ans: ans
-          })
-        }).then((r) => console.log("GOIDA! Answer received"));
-      }
-
-      function changeText(task_id) {
-        let toggle_button = document.querySelector(`#toggleAnswers-${task_id}`);
-        let next = toggle_button.innerText;
-        toggle_button.innerText = toggle_button.getAttribute('next');
-        toggle_button.setAttribute('next', next);
-      }
-
-      function changeAnswers(task_id) {
-        let ua = document.querySelector(`#task-input-${task_id}`);
-        let sa = document.querySelector(`#task-answer-${task_id}`);
-        let showing = sa.getAttribute('showing').trim() === "true";
-        if(!showing) {
-          sa.setAttribute('showing', 'true');
-          let answer = sa.getAttribute('task-answer');
-          sa.innerText = answer;
-          if(ua.value.trim() === answer.trim()) {
-            ua.style.color = 'green';
-          } else {
-            ua.style.color = 'red';
-          }
-          submitAnswer(task_id, ua.value.trim());
-        } else {
-          sa.setAttribute('showing', 'false');
-          sa.innerText = "***";
-          ua.style.color = 'black';
-        }
-      }
-
-      function toggleAnswers(task_id) {
-        changeText(task_id);
-        changeAnswers(task_id);
-      }
-    </script>
-
+    <!-- Скрипты -->
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/sidebars.js') }}"></script>
-  </body>
+    <script>
+        // Ваши существующие функции JavaScript
+        function toggleAnswers(task_id) {
+            const answerCell = document.getElementById(`task-answer-${task_id}`);
+            const isShowing = answerCell.getAttribute('showing') === 'true';
+
+            if (!isShowing) {
+                answerCell.textContent = answerCell.getAttribute('task-answer');
+                answerCell.setAttribute('showing', 'true');
+                document.getElementById(`toggleAnswers-${task_id}`).textContent = 'Скрыть ответ';
+            } else {
+                answerCell.textContent = '•••';
+                answerCell.setAttribute('showing', 'false');
+                document.getElementById(`toggleAnswers-${task_id}`).textContent = 'Показать ответ';
+            }
+        }
+    </script>
+</body>
 </html>
