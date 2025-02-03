@@ -172,17 +172,28 @@ def add_task():
         return redirect("/")
 
 
-@app.route('/tasks/')
+@app.route('/tasks/', methods=["GET", "POST"])
 def tasks():
     if 'email' not in session:
         return redirect('/sign-in/')
-    # session['email'] = 'k1o0n@yandex.ru'
-    uid = db.get_user_id(session['email'], 1)
-    user = db.get_user(uid, 1)
-    if not user:
-        return redirect('/sign-in/')
+    if request.method == "GET":
+        # session['email'] = 'k1o0n@yandex.ru'
+        uid = db.get_user_id(session['email'], 1)
+        user = db.get_user(uid, 1)
+        if not user:
+            return redirect('/sign-in/')
 
-    tasks = db.get_all_tasks(1)
+        tasks = db.get_all_tasks(1)
+    else:
+        filters = request.form
+        diffs = filters.getlist("difficulty")
+        sources = filters.getlist("source") # ingore >.<
+        tp = filters.get("task-type")
+        tasks = db.get_tasks_by_params({
+                'ID_type': [tp],
+                'difficulty': diffs
+            }, 1)
+
     tasks = [(i[0], i[1], i[3], i[4], i[5], i[2]) for i in tasks]
     '''
     task = [
