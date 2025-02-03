@@ -277,6 +277,22 @@ def group(group_id):
         return render_template('group.html', teachers=teachers, users=students, ADMIN=ADMIN,
                             group_name=group_name, course_id=group_id,
                             done_options=DONE_options, und_options=UNDONE_options, user = True)
+
+@app.route("/groups")
+def groups():
+    if 'email' not in session:
+        return redirect('/sign-in/')
+    uid = db.get_user_id(session['email'], 1)
+    user = db.get_user(uid, 1)
+
+    if not user:
+        return redirect('/sign-in/')
+    role = db_functions.get_user_role(uid, 1)
+    if role == 'teacher':
+        groups = db_functions.get_groups_for_teacher(uid)
+    else:
+        groups = db_functions.get_groups_for_student(uid)
+    return render_template('groups.html', groups=groups, user=True)
 # @app.route("/add_option", methods=["POST", "GET"])
 # def add_option():
 #     if 'email' not in session:
@@ -380,7 +396,10 @@ def forum():
             ORDER BY topics.id DESC
         ''').fetchall()
     conn.close()
-    return render_template('forum.html', topics=topics, ADMIN = 1)
+    _user = 0
+    if 'email' in session:
+        _user = 1
+    return render_template('forum.html', topics=topics, ADMIN = 1, user = _user)
 
 # Страница темы
 @app.route('/topic/<int:topic_id>', methods=['GET', 'POST'])
@@ -398,7 +417,10 @@ def topic(topic_id):
     topic = conn.execute('SELECT * FROM topics WHERE id = ?', (topic_id,)).fetchone()
     comments = conn.execute('SELECT * FROM comments WHERE topic_id = ?', (topic_id,)).fetchall()
     conn.close()
-    return render_template('topic.html', topic=topic, comments=comments, ADMIN = 1)
+    _user = 0
+    if 'email' in session:
+        _user = 1
+    return render_template('topic.html', topic=topic, comments=comments, ADMIN = 1, user = _user)
 
 # Создание новой темы
 @app.route('/forum/create_topic', methods=['GET', 'POST'])
@@ -414,7 +436,10 @@ def create_topic():
         conn.commit()
         conn.close()
         return redirect(url_for('forum'))
-    return render_template('create_topic.html', ADMIN = 1)
+    _user = 0
+    if 'email' in session:
+        _user = 1
+    return render_template('create_topic.html', ADMIN = 1, user = _user)
 
 # Админская панель
 @app.route('/forum/admin')
@@ -451,8 +476,10 @@ def admin():
                 'content': row['comment_content'],
                 'user_id': row['comment_user_id']
             })
-
-    return render_template('admin.html', grouped_topics=grouped, ADMIN = 1)
+    _user = 0
+    if 'email' in session:
+        _user = 1
+    return render_template('admin.html', grouped_topics=grouped, ADMIN = 1, user=_user)
 
 # Удаление темы
 @app.route('/delete_topic/<int:topic_id>')

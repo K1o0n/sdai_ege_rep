@@ -69,11 +69,14 @@
                      </div>
                  </ul>
                  <ul class="navbar-nav text-uppercase ml-auto">
-                     {% if user %}
-                     <li class="nav-item">
-                         <a class="nav-link js-scroll-trigger" href="/dashboard">Личный кабинет</a>
-                     </li>
-                     {% else %}
+                    {% if user %}
+                    <li class="nav-item">
+                      <a style="text-align: right" class="nav-link js-scroll-trigger" href="/groups">Мои группы</a>
+                    </li>
+                    <li class="nav-item">
+                          <a class="nav-link js-scroll-trigger" href="/dashboard">Личный кабинет</a>
+                    </li>
+                    {% else %}
                      <li class="nav-item">
                          <a class="nav-link js-scroll-trigger" href="/sign-in">Войти</a>
                      </li>

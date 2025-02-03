@@ -1,17 +1,21 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="generator" content="Личный кабинет">
-    <title>Личный кабинет</title>
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Курсы</title>
 
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/album/">
 
     
 
     <!-- Bootstrap core CSS -->
 <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet">
 
     <style>
       .bd-placeholder-img {
@@ -27,82 +31,83 @@
           font-size: 3.5rem;
         }
       }
-
-      table, td, th {
-        /* задаем границу для всех элементов */
-        border: 3px solid #245488;
-      }
-
-      td, th {
-        /* делаем отступ в ячейках, выставляем выравнивание текста */
-        padding: 10px 20px;
-        text-align: center;
-      }
     </style>
 
     
-    <!-- Custom styles for this template -->
-    <link href="{{ url_for('static', filename='css/dashboard.css') }}" rel="stylesheet">
   </head>
   <body>
     
-<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="/">Вернуться на главную</a>
-  <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="navbar-nav">
-    <div class="nav-item text-nowrap">
-      <div class="button">
-        <a href="/logout">Выйти</a>
-      </div>
+<header>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" target="_blank" href="#">
+            <img class="img-thumbnail" src="{{ url_for('static', filename='images/kegeh.png') }}" alt=""
+                width="200" />
+        </a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+            data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+            aria-label="Toggle navigation">
+            Главная
+            <i class="fa fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav text-uppercase ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link js-scroll-trigger" href="/">Главная</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link js-scroll-trigger" href="/courses">Курсы</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link js-scroll-trigger" href="/tasks">Задачи</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link js-scroll-trigger" href="/forum">Форум</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link js-scroll-trigger" href="/add-task">Добавить задачу</a>
+                        </li>
+                    </ul>
+                </div>
+            </ul>
+            <ul class="navbar-nav text-uppercase ml-auto">
+                {% if user %}
+                <li class="nav-item">
+                           <a class="nav-link js-scroll-trigger" href="/dashboard">Личный кабинет</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="/sign-in">Войти</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="/sign-up">Регистрация</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
     </div>
-  </div>
+  </nav>
 </header>
 
-<div class="container-fluid">
-  <div class="row">
-    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-      <div class="position-sticky pt-3">
-        <ul class="nav flex-column">
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="/dashboard">
-              <span data-feather="home"></span>
-              Личный Кабинет
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="/my-groups">
-              <span data-feather="file"></span>
-              Группы
-            </a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+<main>
 
-      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-        {% for i in range(0, groups|length) %}
-        <h1> Группа {{i + 1}} </h1>
-        <table>
-          <tr>
-            <td>Учителя.</td>
-            <td>Ученики.</td>
-          </tr>
-          {% for j in range(groups[i]|length) %}
-            <tr>
-              <td>{{groups[i][j][0]}}</td>
-              <td>{{groups[i][j][1]}}</td>
-            </tr>
-          {% endfor %}
-        </table>
-        <br>
-        <br>
-        <br>
-        {% endfor %}
-      </main>
+
+</main>
+
+ <div class="copyrights">
+        <div class="container">
+            <div class="footer-distributed">
+                <div class="footer-left">
+                    <p class="footer-company-name">All Rights Reserved. &copy; 2024 </p>
+                </div>
+            </div>
+        </div><!-- end container -->
     </div>
-  </div>
 
- </body>
+
+  <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+      
+  </body>
 </html>
