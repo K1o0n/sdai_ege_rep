@@ -189,11 +189,11 @@ def tasks():
         tasks = db.get_all_tasks(1)
     else:
         filters = request.form
-        diffs = filters.getlist("difficulty")
+        diffs = filters.getlist("difficulty") or list(range(1, 11))
         sources = filters.getlist("source") # ingore >.<
-        tp = filters.get("task-type")
+        tps = filters.getlist("task-type") or list(range(1, 28))
         tasks = db.get_tasks_by_params({
-                'ID_type': [tp],
+                'ID_type': tps,
                 'difficulty': diffs
             }, 1)
 
