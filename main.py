@@ -334,25 +334,24 @@ def add_user_to_group():
     user_id = request.form.get("user-id")
     role = request.form.get("role")
     group_id = request.form.get("group_id")
-    # Add logic to add the user to the group with the specified role
-    # Example: db_functions.add_user_to_group(user_id, group_id, role)
+    if role == "teacher":
+        db.add_teacher_into_group(group_id, user_id)
+    else:
+        db.add_student_into_group(group_id, user_id)
     return redirect(url_for("group", group_id=group_id, section="admin"))
 
 @app.route("/add_option_to_group", methods=["POST"])
 def add_option_to_group():
     print(request.form)
-    option_id = request.form.get("option-id")
-    group_id = request.form.get("group_id")
-    # Add logic to add the option to the group
-    # Example: db_functions.add_option_to_group(option_id, group_id)
+    option_id = int(request.form.get("option-id"))
+    group_id = int(request.form.get("group_id"))
+    db.add_option_into_group(option_id, group_id)
     return redirect(url_for("group", group_id=group_id, section="admin"))
 @app.route("/remove_user_from_group", methods=["POST"])
 def remove_user_from_group():
-    print(request.form)
-    user_id = request.form.get("user-id")
+    user_id = request.form.get("user_id")
     group_id = request.form.get("group_id")
-    # Add logic to remove the user from the group
-    # Example: db_functions.remove_user_from_group(user_id, group_id)
+    db.del_user_from_group(group_id, user_id)
     return redirect(url_for("group", group_id=group_id, section="admin"))
 @app.route("/my-groups", methods=['POST', 'GET'])
 def my_groups():
