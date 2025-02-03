@@ -259,8 +259,10 @@ def group(group_id):
         group_name = "Группа усиленной подготовки по Латеху"
     if ADMIN:
         all_options = db_functions.get_options_for_group(group_id)
-        UNDONE_options = [{"name": i[1], "deadline": make_time(i[4]), "solved_tasks": 0, "total_tasks": 0} for i in all_options]
+        UNDONE_options = [{"name": i[1], "deadline": make_time(i[4]), "solved_tasks": 0, "total_tasks": 0, "id": i[0]} for i in all_options]
         DONE_options = []
+        if len(UNDONE_options) == 0:
+            UNDONE_options = [{"name": "Пробный вариант", "deadline": make_time(time.time()), "solved_tasks": 0, "total_tasks": 0, "id": 0}]
         return render_template('group.html', teachers=teachers, users=students, ADMIN=ADMIN,
                            group_name=group_name, course_id=group_id,
                            done_options=DONE_options, und_options=UNDONE_options, user = True)
