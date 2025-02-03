@@ -18,6 +18,7 @@
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/group.css') }}" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Я засунул это в css -->
 
 </head>
@@ -165,8 +166,70 @@
                 <div class="row py-lg-5">
                     <div class="col-lg-6 col-md-8 mx-auto">
                         <h1 class="fw-light">Статистика</h1>
-                        <p>Контент для Статистики</p>
-                        <!-- Глеб, твой черед страдать! -->
+                        <div>
+                            <canvas id="tasksChart" style="width:1000px; height:900px"></canvas>
+                        </div>
+                        <script>
+                            // Данные из Flask-приложения
+                            const labels = {{ labels | safe }};
+                            const correctData = {{ correct | safe }};
+                            const incorrectData = {{ incorrect | safe }};
+
+                            // Настройки диаграммы
+                            const ctx = document.getElementById('tasksChart').getContext('2d');
+                            const tasksChart = new Chart(ctx, {
+                                type: 'bar', // столбчатая диаграмма
+                                data: {
+                                    labels: labels, // Категории (месяцы)
+                                    datasets: [
+                                        {
+                                            label: 'Правильные задачи',
+                                            data: correctData, // Данные для правильных задач
+                                            backgroundColor: 'rgba(75, 192, 192, 0.5)', // Цвет для столбцов
+                                            borderColor: 'rgba(75, 192, 192, 1)', // Цвет рамки
+                                            borderWidth: 1
+                                        },
+                                        {
+                                            label: 'Неправильные задачи',
+                                            data: incorrectData, // Данные для неправильных задач
+                                            backgroundColor: 'rgba(255, 99, 132, 0.5)', // Цвет для столбцов
+                                            borderColor: 'rgba(255, 99, 132, 1)', // Цвет рамки
+                                            borderWidth: 1
+                                        }
+                                    ]
+                                },
+                                options: {
+                                    responsive: true, // Диаграмма адаптируется к размеру окна
+                                    plugins: {
+                                        legend: {
+                                            position: 'top', // Легенда сверху
+                                        },
+                                        tooltip: {
+                                            callbacks: {
+                                                label: function(context) {
+                                                    return `${context.dataset.label}: ${context.raw}`;
+                                                }
+                                            }
+                                        }
+                                    },
+                                    scales: {
+                                        x: {
+                                            title: {
+                                                display: true,
+                                                text: '№ Задачи', // Подпись для оси X
+                                            }
+                                        },
+                                        y: {
+                                            beginAtZero: true, // Начало оси Y с 0
+                                            title: {
+                                                display: true,
+                                                text: 'Количество задач', // Подпись для оси Y
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        </script>
                     </div>
                 </div>
             </div>

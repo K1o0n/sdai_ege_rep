@@ -271,6 +271,10 @@ def group(group_id):
     ADMIN = db_functions.get_user_role(uid, 1) == 'teacher'
     ADMIN = 1
     students.sort(key = lambda x: x[0])
+    data = graph_functions.convert_attempts_by_type(uid)
+    labels = data[0]
+    correct = data[1]
+    incorrect = data[2]
     try:
         group_name = db.get_group(group_id)[0][1] #Оно теоретически работает, просто в db нет групп еще
     except Exception:
@@ -283,7 +287,9 @@ def group(group_id):
             UNDONE_options = [{"name": "Пробный вариант", "deadline": make_time(time.time()), "solved_tasks": 0, "total_tasks": 0, "id": 0}]
         return render_template('group.html', teachers=teachers, users=students, ADMIN=ADMIN,
                            group_name=group_name, course_id=group_id,
-                           done_options=DONE_options, und_options=UNDONE_options, user = True)
+                           done_options=DONE_options, und_options=UNDONE_options, user = True, labels=labels,
+                           correct=correct,
+                           incorrect=incorrect)
     else:
         done_options = db_functions.get_options_for_user_in_group(uid, group_id)
         not_done_options= db_functions.get_options_for_user_in_group_not_done(uid, group_id)
@@ -296,7 +302,9 @@ def group(group_id):
         UNDONE_options = [{"name": i[1], "deadline": make_time(i[4]), "solved_tasks": 0, "total_tasks": 0} for i in not_done_options]
         return render_template('group.html', teachers=teachers, users=students, ADMIN=ADMIN,
                             group_name=group_name, course_id=group_id,
-                            done_options=DONE_options, und_options=UNDONE_options, user = True)
+                            done_options=DONE_options, und_options=UNDONE_options, user = True, labels=labels,
+                           correct=correct,
+                           incorrect=incorrect)
 
 @app.route("/groups")
 def groups():
@@ -312,7 +320,15 @@ def groups():
         groups = db_functions.get_groups_for_teacher(uid)
     else:
         groups = db_functions.get_groups_for_student(uid)
-    return render_template('groups.html', groups=groups, user=True)
+        return render_template('groups.html', groups=groups, user=True, role="teacher")
+
+@app.route("/make_new_group", methods=["POST"])
+def make_new_group():
+    uid = db.get_user_id(session['email'], 1)
+    db.add_group("Новая группа", uid)
+    return redirect(url_for("groups"))
+
+
 # @app.route("/add_option", methods=["POST", "GET"])
 # def add_option():
 #     if 'email' not in session:
