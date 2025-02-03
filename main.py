@@ -5,6 +5,8 @@ from os import urandom
 import sqlite3
 import time, datetime
 
+import graph_functions
+
 app = Flask(__name__)
 DATABASE = 'forum.db'
 app.config['SECRET_KEY'] = urandom(16)
@@ -63,9 +65,10 @@ def dashboard():
     if not user:
         return redirect('/sign-in/')
 
-    labels = [str(i) for i in range(1, 28)]
-    correct = [i for i in range(10, 38)]
-    incorrect = [c for c in correct]
+    data = graph_functions.convert_attempts_by_type(uid)
+    labels = data[0]
+    correct = data[1]
+    incorrect = data[2]
     # orms were invented in 1995... People before 1995:
     [_, name, surname, patronymic, email, 
      age, _, country, _, about, phone, path, *_] = user[0]
