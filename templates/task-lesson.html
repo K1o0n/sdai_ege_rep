@@ -215,6 +215,7 @@
             </table>
 
             <button class="btn btn-primary"
+                    next="Скрыть ответ"
                     id="toggleAnswers-{{ task[0]}}"
                     onclick="toggleAnswers({{ task[0] }})">
                 Показать ответ
@@ -240,6 +241,52 @@
                 document.getElementById(`toggleAnswers-${task_id}`).textContent = 'Показать ответ';
             }
         }
+        function submitAnswer(task_id, ans) {
+        fetch("/submit-task", {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            task_id: task_id,
+            ans: ans
+          })
+        }).then((r) => console.log("GOIDA! Answer received"));
+      }
+
+      function changeText(task_id) {
+        let toggle_button = document.querySelector(`#toggleAnswers-${task_id}`);
+        let next = toggle_button.innerText;
+        toggle_button.innerText = toggle_button.getAttribute('next');
+        toggle_button.setAttribute('next', next);
+      }
+
+      function changeAnswers(task_id) {
+        let ua = document.querySelector(`#task-input-${task_id}`);
+        let sa = document.querySelector(`#task-answer-${task_id}`);
+        let showing = sa.getAttribute('showing').trim() === "true";
+        if(!showing) {
+          sa.setAttribute('showing', 'true');
+          let answer = sa.getAttribute('task-answer');
+          sa.innerText = answer;
+          if(ua.value.trim() === answer.trim()) {
+            ua.style.color = 'green';
+          } else {
+            ua.style.color = 'red';
+          }
+          submitAnswer(task_id, ua.value.trim());
+        } else {
+          sa.setAttribute('showing', 'false');
+          sa.innerText = "***";
+          ua.style.color = 'black';
+        }
+      }
+
+      function toggleAnswers(task_id) {
+        changeText(task_id);
+        changeAnswers(task_id);
+      }
     </script>
 </body>
 </html>
