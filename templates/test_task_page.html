@@ -210,6 +210,13 @@
                     <h6> Сложность: \({{ task[2] }}\) <br> Источник: {{ task[4] }}</h6>
                 </div>
                 {{ task[1]|safe }}
+                {% if task[0] == 23 %}
+                    <br> 
+                    <a href="/static/other/23.xlsx" class="btn btn-link" download>
+                        <img src="{{ url_for('static', filename='images/excel-logo.png')}}" alt="Excel Icon" style="width: 20px; height: 20px; vertical-align: middle;">
+                        3.xlsx
+                    </a>
+                {% endif %}
                 <div>
                     <table border="1" width="30%" cellpadding="5">
                         <tr>
