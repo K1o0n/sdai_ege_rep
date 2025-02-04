@@ -317,13 +317,19 @@ def get_tasks_by_params(params, status):
     '''dict {ID_type:(x1, x2, x3, ...), difficulty:(x1, x2, x3, ...))'''
     mas1 = [str(i) for i in params['ID_type'] if i != None]
     mas2 = [str(i) for i in params['difficulty'] if i != None]
-    print(mas1, mas2)
     s1 = '(' + ', '.join(mas1) + ')'
     s2 = '(' + ', '.join(mas2) + ')'
     request = "SELECT * FROM Tasks WHERE ID_type IN " + s1 + " AND difficulty IN" + s2 + "AND status = ?"
-    print(request)
     result = make_request(request, [status])
     return result  # [(id, text, answer, difficulty, ID_type, source, solution, status)]
+
+def get_cnt_tasks_for_user(user_id, status):
+    result = make_request("SELECT DISTINCT ID_task FROM Attempts JOIN Users ON Attempts.ID_user = Users.ID WHERE is_correct = 1 AND ID_User = ? AND status = ?", [user_id, status])
+    return result
+
+def get_cnt_types_for_user(user_id):
+    result = make_request("SELECT DISTINCT ID_type FROM Attempts JOIN Tasks ON Attempts.ID_task = Tasks.ID WHERE is_correct = 1 AND ID_User = ?",[user_id])
+    return result
 
 def get_tasks_by_type(type_id, status):
     '''int type_id, int status (1-active, 2-banned, 3-deleted)'''
