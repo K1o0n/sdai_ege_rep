@@ -70,12 +70,15 @@ def dashboard():
     incorrect = data[2]
     # orms were invented in 1995... People before 1995:
     [_, name, surname, patronymic, email, age, _, country, _, about, phone, path, *_] = user[0]
+    is_teacher = 0
+    if path == 'teacher':
+        is_teacher = 1
     user_data = {
         'last_name': surname,
         'first_name': name,
         'middle_name': patronymic,
         'email': email,
-        'is_teacher': 1,
+        'is_teacher': is_teacher,
         'created_at': 0,
     }
 
@@ -83,7 +86,8 @@ def dashboard():
                            user=user_data,
                            labels=labels,
                            correct=correct,
-                           incorrect=incorrect
+                           incorrect=incorrect,
+                           user_id = uid
                            )
 
 
@@ -320,7 +324,7 @@ def groups():
         groups = db_functions.get_groups_for_teacher(uid)
     else:
         groups = db_functions.get_groups_for_student(uid)
-        return render_template('groups.html', groups=groups, user=True, role="teacher")
+    return render_template('groups.html', groups=groups, user=True, role="teacher")
 
 @app.route("/make_new_group", methods=["POST"])
 def make_new_group():

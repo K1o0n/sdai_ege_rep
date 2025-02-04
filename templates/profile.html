@@ -34,7 +34,11 @@
 
             <div class="info-item">
                 <span class="info-label">🎓 Статус:</span>
-                <p class="info-value">{{ 'Преподаватель' if user.is_teacher else 'Обучающийся' }}</p>
+                <p class="info-value">{{ 'Преподаватель' if user.is_teacher == 1 else 'Обучающийся' }}</p>
+            </div>
+            <div class="info-item">
+                <span class="info-label">🌌 ID пользователя:</span>
+                <p class="info-value">{{user_id}}</p>
             </div>
         </div>
     </div>
