@@ -289,8 +289,9 @@ def group(group_id):
         DONE_options = []
         if len(UNDONE_options) == 0:
             UNDONE_options = [{"name": "Пробный вариант", "deadline": make_time(time.time()), "solved_tasks": 0, "total_tasks": 0, "id": 0}]
+        token = db.get_group(group_id)[0][3]
         return render_template('group.html', teachers=teachers, users=students, ADMIN=ADMIN,
-                           group_name=group_name, course_id=group_id,
+                           group_name=group_name, course_id=group_id, course_token = token,
                            done_options=DONE_options, und_options=UNDONE_options, user = True, labels=labels,
                            correct=correct,
                            incorrect=incorrect)
@@ -304,19 +305,23 @@ def group(group_id):
         done_options = [(i[1], i[4], *__get(i[0])) for i in done_options]
         DONE_options = [{"name": i[0], "deadline": make_time(i[1]), "solved_tasks": i[2], "total_tasks": i[3]} for i in done_options]
         UNDONE_options = [{"name": i[1], "deadline": make_time(i[4]), "solved_tasks": 0, "total_tasks": 0} for i in not_done_options]
+        token = db.get_group(group_id)[0][3]
         return render_template('group.html', teachers=teachers, users=students, ADMIN=ADMIN,
-                            group_name=group_name, course_id=group_id,
+                            group_name=group_name, course_id=group_id, course_token = token,
                             done_options=DONE_options, und_options=UNDONE_options, user = True, labels=labels,
                            correct=correct,
                            incorrect=incorrect)
 
-@app.route("/groups")
+@app.route("/groups", methods=["POST", "GET"])
 def groups():
     if 'email' not in session:
         return redirect('/sign-in/')
     uid = db.get_user_id(session['email'], 1)
     user = db.get_user(uid, 1)
-
+    if request.method == 'POST':
+        print(request.form)
+        # db_functions.add_task(request.form)
+        return render_template('groups.html', groups=groups, user=True, role="teacher")
     if not user:
         return redirect('/sign-in/')
     role = db_functions.get_user_role(uid, 1)
@@ -372,6 +377,18 @@ def remove_user_from_group():
     user_id = request.form.get("user_id")
     group_id = request.form.get("group_id")
     db.del_user_from_group(group_id, user_id)
+    return redirect(url_for("group", group_id=group_id, section="admin"))
+@app.route("/add_to_group", methods=["POST"])
+def add_to_group():
+    group_code = request.form.get("group_code")
+    user_id = db.get_user_id(session['email'], 1)
+    print(db.get_group_id(group_code), group_code)
+    group_id = db.get_group_id(group_code)[0][0]
+    role = db_functions.get_user_role(user_id, 1)
+    if role == 'teacher':
+        db.add_teacher_into_group(group_id, user_id)
+    else:
+        db.add_student_into_group(group_id, user_id)
     return redirect(url_for("group", group_id=group_id, section="admin"))
 @app.route("/my-groups", methods=['POST', 'GET'])
 def my_groups():

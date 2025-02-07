@@ -32,6 +32,10 @@
         font-size: 3.5rem;
       }
     }
+
+    #add_to_group {
+      display: none;
+    }
   </style>
 
 
@@ -103,7 +107,19 @@
         </div>
       </div>
     </section>
-
+    <section id="add_to_group" class="py-5 text-center container" style="padding: 1px !important;">
+      <div class="row py-lg-5">
+        <div class="col-lg-6 col-md-8 mx-auto">
+          <h1 class="fw-light" style="margin-top: 10px">Ввести код группы</h1>
+          <form action="/add_to_group" method="post">
+            <div class="form-group">
+              <input type="text" class="form-control" name="group_code" placeholder="Введите код группы" required>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Отправить</button>
+          </form>
+        </div>
+      </div>
+    </section>
     <div class="bg-light album py-5" style="min-height: calc(90vh - 200px);">
       <div class="container">
         <div class="row">
@@ -117,29 +133,32 @@
                     <a href="/group/{{ group[0] }}" class="btn btn-sm btn-outline-secondary">Подробнее</a>
                   </div>
                   <div style="background-color: #343a40; color: white; padding: 5px 10px; border-radius: 5px;">
-                    [{{ group[0] }}]
+                    [{{ group[2] }}]
                   </div>
                 </div>
               </div>
             </div>
           </div>
           {% endfor %}
-          {% if role=="teacher" %}
+
           <div class="col-md-4 d-flex align-items-stretch">
             <div class="card mb-4 shadow-sm" style="width: 20rem;">
               <div class="card-body d-flex flex-column">
                 <h5 class="card-title" style="font-size: 1.5em;">Не нашли подходящую группу?</h5>
                 <div class="d-flex justify-content-between align-items-center mt-auto">
+                  {% if role=="teacher" %}
                   <form action="/make_new_group" method="post">
                     <div class="btn-group">
                       <button type="submit" class="btn btn-sm btn-outline-secondary">Создать новую</button>
                     </div>
                   </form>
+                  {% endif %}
+                  <button class="btn btn-sm btn-outline-secondary" onclick="showAddToGroup()">Войти по коду</button>
                 </div>
               </div>
             </div>
           </div>
-          {% endif %}
+
         </div>
       </div>
     </div>
@@ -155,7 +174,27 @@
 
 
   <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+  <script>
+    function showAddToGroup() {
+      document.getElementById('add_to_group').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
+    document.addEventListener('DOMContentLoaded', function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const section = urlParams.get('section');
+      if (section) {
+        const sectionElement = document.getElementById(section);
+        if (sectionElement) {
+          sectionElement.classList.add('active');
+        }
+        const linkElement = document.getElementById('link-' + section);
+        if (linkElement) {
+          linkElement.classList.add('active');
+        }
+      }
+    });
+  </script>
 </body>
 
 </html>
