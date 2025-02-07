@@ -76,12 +76,23 @@ def get_awards(id_user):
         n3 = get_step(c3, 2)
         result = [[c1, n1, c1 - 3 ** n1, 3 ** (n1 + 1)], [c2, n2, c2 - 5 ** n2, 5 ** (n2 + 1)], [c3, n3, c3 - 2 ** n3, 2 ** (n3 + 1)]]
     elif role == 'teacher':
-        options = db.get_options_for_teacher(id_user)
-        groups = db.get_groups_for_student(id_user)
+        options = db.get_cnt_options_for_teacher(id_user)
+        if len(options) == 0:
+            c1 = 0
+        else:
+            c1 = len(options)
+        n1 = get_step(c1, 5)
+        groups = db.get_cnt_groups_for_teacher(id_user)
         if len(groups) == 0:
+            c2 = 0
+        else:
+            c2 = len(groups)
+        n2 = get_step(c2, 2)
+        all_groups = db.get_groups_for_student(id_user)
+        if len(all_groups) == 0:
             c3 = 0
         else:
-            c3 = len(groups)
+            c3 = len(all_groups)
         n3 = get_step(c3, 2)
-        result = []
+        result = [[c1, n1, c1 - 2 ** n1, 2 ** (n1 + 1)], [c2, n2, c2 - 3 ** n2, 3 ** (n2 + 1)], [c3, n3, c3 - 5 ** n3, 5 ** (n3 + 1)]]
     return result

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, request, redirect, url_for
+from flask import Flask, render_template, session, request, redirect, url_for, flash
 import db_functions
 import db_functions as db
 from os import urandom
@@ -382,6 +382,15 @@ def remove_user_from_group():
 def add_to_group():
     group_code = request.form.get("group_code")
     user_id = db.get_user_id(session['email'], 1)
+    role = db_functions.get_user_role(user_id, 1)
+    if role == 'teacher':
+        user_groups = db_functions.get_groups_for_teacher(user_id)
+    else:
+        user_groups = db_functions.get_groups_for_student(user_id)
+    for x in user_groups:
+        if x[2] == group_code:
+            flash("Вы уже состоите в этой группе")
+            return redirect(url_for("groups"))
     print(db.get_group_id(group_code), group_code)
     group_id = db.get_group_id(group_code)[0][0]
     role = db_functions.get_user_role(user_id, 1)
