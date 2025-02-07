@@ -117,10 +117,10 @@ def add_teacher_into_group(group_id, teacher_id):
     current = [group_id, teacher_id]
     make_interferation("INSERT INTO Groups_Teachers (ID_group, ID_user) VALUES (?, ?)", current)
 
-def add_student_into_group(group_token, student_id):
+def add_student_into_group(group_id, student_id):
     '''int group_id, int student_id'''
-    current = [group_token, student_id]
-    make_interferation("INSERT INTO Groups_Students (token, ID_user) VALUES (?, ?)", current)
+    current = [group_id, student_id]
+    make_interferation("INSERT INTO Groups_Students (ID_group, ID_user) VALUES (?, ?)", current)
 
 def add_group(name, user_id, token):
     """
@@ -184,16 +184,16 @@ def get_course(course_id):
 def get_groups_for_teacher(teacher_id):
     '''int teacher_id'''
     result = make_request(
-        "SELECT Groups.ID, Groups.name FROM Groups JOIN Groups_Teachers ON Groups.ID = Groups_Teachers.ID_group WHERE Groups_Teachers.ID_user = ?",
+        "SELECT Groups.ID, Groups.name, Groups.token FROM Groups JOIN Groups_Teachers ON Groups.ID = Groups_Teachers.ID_group WHERE Groups_Teachers.ID_user = ?",
         [teacher_id])
-    return result  # [(id, name)]
+    return result  # [(id, name, token)]
 
 def get_groups_for_student(student_id):
     '''int student_id'''
     result = make_request(
-        "SELECT Groups.ID, Groups.name FROM Groups JOIN Groups_Students ON Groups.ID = Groups_Students.ID_group WHERE Groups_Students.ID_user = ?",
+        "SELECT Groups.ID, Groups.name, Groups.token FROM Groups JOIN Groups_Students ON Groups.ID = Groups_Students.ID_group WHERE Groups_Students.ID_user = ?",
         [student_id])
-    return result  # [(id, name)]
+    return result  # [(id, name, token)]
 
 def get_options_for_group(group_id):
     """
@@ -267,7 +267,6 @@ def get_options_for_user_in_group_not_done(user_id, group_id):
 
 def get_results_for_option_user(user_id, option_id):
     """
-
     :param user_id: int
     :param option_id: int
     :return: List[Tuple[id:int, score:int, time:int, user_id:int, option_id:int]]
@@ -275,6 +274,7 @@ def get_results_for_option_user(user_id, option_id):
     '''int user_id, int option_id'''
     result = make_request("SELECT * FROM Results WHERE ID_option = ? AND ID_user = ?", [option_id, user_id])
     return result
+
 def get_task_count_for_option(option_id) -> int:
     """
     :param option_id: int
@@ -284,6 +284,7 @@ def get_task_count_for_option(option_id) -> int:
     if not result:
         return 0
     return result[0][0]
+
 def get_answer(task_id):
     '''int task_id'''
     result = make_request("SELECT answer FROM Tasks WHERE id = ?", [task_id])
@@ -312,6 +313,22 @@ def get_options():
     return: List[Tuple(id:int, name:str, ID_user:int, date1:int, date2:int)]
     """
     result = make_request("SELECT * FROM Options", [])
+    return result
+
+def get_cnt_options_for_teacher(user_id):
+    """
+    params: user_id:int
+    return: List[Tuple(id:int)]
+    """
+    result = make_request("SELECT DISTINCT ID FROM Options WHERE ID_user = ?", [user_id])
+    return result
+
+def get_cnt_groups_for_teacher(user_id):
+    """
+    params: user_id:int
+    return: List[Tuple(id:int)]
+    """
+    result = make_request("SELECT DISTINCT ID FROM Groups WHERE ID_user = ?", [user_id])
     return result
 
 def get_tasks_for_option(option_id):
