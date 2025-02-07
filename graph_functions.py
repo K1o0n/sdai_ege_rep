@@ -41,13 +41,13 @@ def convert_attempts_by_type(user_id):
         cur_index += 1
     return result1, result2, result3
 
-# def get_awards(id_user):
-#     """
-#     params: id_user: int
-#     return: List
-#     """
-#     role = db.get_user_role(id_user, 1)
-#     result = []
-#     if role != 'teacher':
-#       tasks = db.get_cnt_tasks_for_user(id_user)
-#       types = db.get_cnt_types_for_user(id_user)
+def get_awards(id_user):
+    """
+    params: id_user: int
+    return: List
+    """
+    role = db.get_user_role(id_user, 1)
+    result = []
+    if role != 'teacher':
+      tasks = db.get_cnt_tasks_for_user(id_user, 1)
+      types = db.get_cnt_types_for_user(id_user)

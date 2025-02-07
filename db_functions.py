@@ -117,18 +117,21 @@ def add_teacher_into_group(group_id, teacher_id):
     current = [group_id, teacher_id]
     make_interferation("INSERT INTO Groups_Teachers (ID_group, ID_user) VALUES (?, ?)", current)
 
-
-def add_student_into_group(group_id, student_id):
+def add_student_into_group(group_token, student_id):
     '''int group_id, int student_id'''
-    current = [group_id, student_id]
-    make_interferation("INSERT INTO Groups_Students (ID_group, ID_user) VALUES (?, ?)", current)
+    current = [group_token, student_id]
+    make_interferation("INSERT INTO Groups_Students (token, ID_user) VALUES (?, ?)", current)
 
-def add_group(name, user_id):
-    '''str name, int teacher_id'''
+def add_group(name, user_id, token):
+    """
+    params: name: str
+    params: user_of_creator: int
+    params: token: str
+    """
     current = [name]
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
-    cursor.execute("INSERT INTO Groups (name, ID_user) VALUES (?, ?)", (name, user_id))
+    cursor.execute("INSERT INTO Groups (name, ID_user, token) VALUES (?, ?)", [name, user_id, token])
     group_id = cursor.execute("SELECT max(ID) FROM Groups WHERE name = ?", current).fetchone()[0]
     connect.commit()
     connect.close()
@@ -291,7 +294,7 @@ def get_answer(task_id):
 def get_group(group_id):
     """
     :param group_id: int
-    :return: List[Tuple(id:int, name:str, id_of_creator:int)]
+    :return: List[Tuple(id:int, name:str, id_of_creator:int, token:str)]
     """
     result = make_request("SELECT * FROM Groups WHERE ID = ?", [group_id])
     return result
@@ -402,6 +405,7 @@ def del_user(user_id):
 def del_user_from_group(group_id, user_id):
     '''int group_id, int user_id'''
     make_interferation("DELETE FROM Groups_Students WHERE ID_group = ? AND ID_user = ?", [group_id, user_id])
+
 def del_task(task_id):
     '''int task_id'''
     make_interferation("UPDATE Tasks SET status=3 WHERE ID = ?", [task_id])
