@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>СДАЙ ЕГЭ</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/лого.jpg') }}" type="image/x-icon" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sign-in.css') }}">
+    <script src="{{ url_for('static', filename='js/add_task.js') }}"></script>
+    <style>
+        .input-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .input-group input[type="text"] {
+            width: 500px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .input-group button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            margin-left: 5px;
+        }
+
+        .input-group button:hover {
+            background-color: #0056b3;
+        }
+
+        .values-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .value-item {
+            display: flex;
+            align-items: center;
+            margin: 5px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+        }
+
+        .value-item span {
+            margin-right: 10px;
+        }
+
+        .value-item button {
+            background-color: transparent;
+            border: none;
+            color: red;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .value-item button:hover {
+            color: darkred;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Title section -->
+        <div class="title">Добавление задачи</div>
+        <div class="content">
+            <!-- Registration form -->
+            <p>Введите ID задач для добавления</p>
+            <form id="mainForm" action="#" method="post">
+                <div class="input-group">
+                    <input type="text" id="inputField" placeholder="Введите значение и нажмите Enter или нажмите на кнопку">
+                    <button type="button" id="addButton">+</button>
+                </div>
+                <div id="valuesContainer" class="values-container"></div>
+                <input type="hidden" id="hiddenValues" name="values">
+                <!-- Submit button -->
+                <div class="button">
+                    <input type="submit" value="Добавить">
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        const inputField = document.getElementById('inputField');
+        const valuesContainer = document.getElementById('valuesContainer');
+        const hiddenValues = document.getElementById('hiddenValues');
+        const form = document.getElementById('mainForm');
+        const addButton = document.getElementById('addButton');
+
+        let valuesList = [];
+
+        function addValue() {
+            const inputValue = inputField.value.trim();
+            if (inputValue !== '') {
+                // Добавляем значение в список
+                valuesList.push(inputValue);
+
+                // Обновляем скрытое поле
+                hiddenValues.value = JSON.stringify(valuesList);
+
+                // Создаем элемент для отображения
+                const valueItem = document.createElement('div');
+                valueItem.className = 'value-item';
+
+                const valueText = document.createElement('span');
+                valueText.textContent = inputValue;
+
+                const deleteButton = document.createElement('button');
+                deleteButton.innerHTML = '&times;';
+                deleteButton.onclick = function () {
+                    // Удаляем значение из списка
+                    valuesList = valuesList.filter(val => val !== inputValue);
+                    hiddenValues.value = JSON.stringify(valuesList);
+                    valueItem.remove();
+                };
+
+                valueItem.appendChild(valueText);
+                valueItem.appendChild(deleteButton);
+                valuesContainer.appendChild(valueItem);
+
+                // Очищаем поле ввода
+                inputField.value = '';
+            }
+        }
+
+        inputField.addEventListener('keypress', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Предотвращаем отправку формы
+                addValue();
+            }
+        });
+
+        addButton.addEventListener('click', function () {
+            addValue();
+        });
+
+        form.addEventListener('submit', function (event) {
+            // Преобразуем список в JSON и отправляем
+            hiddenValues.value = JSON.stringify(valuesList);
+        });
+    </script>
+</body>
+
+</html>
