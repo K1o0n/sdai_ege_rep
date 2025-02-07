@@ -42,8 +42,8 @@ def convert_attempts_by_type(user_id):
     return result1, result2, result3
 
 def get_step(num, step):
-    r = 0
-    while num >= step:
+    r = -1
+    while num >= 1:
         num //= step
         r += 1
     return r
@@ -74,7 +74,7 @@ def get_awards(id_user):
         else:
             c3 = len(groups)
         n3 = get_step(c3, 2)
-        result = [[c1, n1, c1 - 3 ** n1, 3 ** (n1 + 1)], [c2, n2, c2 - 5 ** n2, 5 ** (n2 + 1)], [c3, n3, c3 - 2 ** n3, 2 ** (n3 + 1)]]
+        result = [[c1, n1, 3 ** (n1 + 1)], [c2, n2, 5 ** (n2 + 1)], [c3, n3, 2 ** (n3 + 1)]]
     elif role == 'teacher':
         options = db.get_cnt_options_for_teacher(id_user)
         if len(options) == 0:
@@ -94,5 +94,9 @@ def get_awards(id_user):
         else:
             c3 = len(all_groups)
         n3 = get_step(c3, 2)
-        result = [[c1, n1, c1 - 2 ** n1, 2 ** (n1 + 1)], [c2, n2, c2 - 3 ** n2, 3 ** (n2 + 1)], [c3, n3, c3 - 5 ** n3, 5 ** (n3 + 1)]]
+        result = [[c1, n1, 2 ** (n1 + 1)]]
+        result.append([c2, n2, 3 ** (n2 + 1)])
+        result.append([c3, n3, 5 ** (n3 + 1)])
     return result
+
+print(get_awards(1))
