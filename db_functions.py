@@ -89,7 +89,7 @@ def add_attempt(data):
 
 def add_result(data):
     '''dict (score, time, ID_user, ID_option)'''
-    current = [data['score'], data['time'], data['ID_user'], data['ID_option'], data['']]
+    current = [data['score'], data['time'], data['ID_user'], data['ID_option']]
     make_interferation("INSERT INTO Results (score, time, ID_user, ID_option) VALUES (?, ?, ?, ?)", current)
 
 def add_student_into_course(data):
