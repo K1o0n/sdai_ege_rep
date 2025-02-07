@@ -19,6 +19,10 @@ def auth(route):
             return redirect('/sign-in/')
     return inner
 
+@app.errorhandler(404)
+def not_found(e):
+    return render_template('404.html')
+
 
 @app.route('/')
 def index():
