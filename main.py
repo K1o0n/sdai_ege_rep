@@ -24,6 +24,11 @@ def not_found(e):
     return render_template('404.html')
 
 
+@app.errorhandler(500)
+def not_found(e):
+    return render_template('500.html')
+
+
 @app.route('/')
 def index():
     user = 'email' in session
