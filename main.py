@@ -403,22 +403,15 @@ def add_to_group():
     else:
         db.add_student_into_group(group_id, user_id)
     return redirect(url_for("group", group_id=group_id))
-@app.route("/my-groups", methods=['POST', 'GET'])
-def my_groups():
+@app.route("/make_variant", methods = ['POST', "GET"])
+def make_variant():
     if 'email' not in session:
         return redirect('/sign-in/')
     uid = db.get_user_id(session['email'], 1)
-    user = db.get_user(uid, 1)
-
-    if not user:
-        return redirect('/sign-in/')
-    if request.method == 'GET':
-        groups = [[[1,1],[2,3],[4,6],[1,6],["-",1]],[[1,1],[2,3],[4,6],[1,6],["-",1]],[[1,1],[2,3],[4,6],[1,6],["-",1]]]
-        return render_template("groups.html", groups = groups, user=True)
-    elif request.method == 'POST':
+    if request.method == "POST":
         print(request.form)
-        db_functions.add_task(request.form)
-        return redirect("/")
+        return redirect("/make_variant")
+    return render_template("make_variant.html", user=True, role="teacher")  
 
 
 def init_db():
