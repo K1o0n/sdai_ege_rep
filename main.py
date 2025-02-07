@@ -392,13 +392,17 @@ def add_to_group():
             flash("Вы уже состоите в этой группе")
             return redirect(url_for("groups"))
     print(db.get_group_id(group_code), group_code)
-    group_id = db.get_group_id(group_code)[0][0]
+    try:
+        group_id = db.get_group_id(group_code)[0][0]
+    except Exception:
+        flash("Нет такой группы")
+        return redirect(url_for("groups"))
     role = db_functions.get_user_role(user_id, 1)
     if role == 'teacher':
         db.add_teacher_into_group(group_id, user_id)
     else:
         db.add_student_into_group(group_id, user_id)
-    return redirect(url_for("group", group_id=group_id, section="admin"))
+    return redirect(url_for("group", group_id=group_id))
 @app.route("/my-groups", methods=['POST', 'GET'])
 def my_groups():
     if 'email' not in session:
