@@ -9,7 +9,7 @@
 }
 
 body {
-  height: 100vh;
+  min-height: 100vh;  overflow-y: auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,6 +24,8 @@ body {
   padding: 25px 30px;
   border-radius: 5px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  margin: auto;
 }
 
 .container .title {
@@ -77,7 +79,7 @@ form .input-box span.details {
 .user-details .input-box input:valid,
 textarea input:focus,
 textarea .input-box input:valid{
-  border-color: #9b59b6;
+ border-color: #9b59b6;
 }
 
 form .gender-details .gender-title {
