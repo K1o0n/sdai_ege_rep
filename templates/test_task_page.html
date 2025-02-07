@@ -206,6 +206,42 @@
         .dropdown-content::-webkit-scrollbar-thumb:hover {
             background: #555;
         }
+        ul.ZADACHA,
+        ol.ZADACHA {
+            margin-left: 20px !important;
+            padding-left: 20px !important;
+            display: block !important;
+            list-style-position: outside !important;
+        }
+
+        ul.ZADACHA {
+            list-style-type: disc !important;
+            visibility: visible !important;
+        }
+
+        ol.ZADACHA {
+            list-style-type: decimal !important;
+            visibility: visible !important;
+            counter-reset: item !important;
+        }
+
+        ol.ZADACHA[type="a"] {
+            list-style-type: lower-alpha !important;
+        }
+
+        ul.ZADACHA li,
+        ol.ZADACHA li {
+            display: list-item !important;
+            visibility: visible !important;
+            list-style: inherit !important;
+            position: relative !important;
+        }
+
+        ol.ZADACHA li::before {
+            display: inline-block !important;
+            position: absolute !important;
+            left: -20px !important;
+        }
     </style>
     <div class="content-wrapper">
         <div class="task-content">
