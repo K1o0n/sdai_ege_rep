@@ -41,13 +41,45 @@ def convert_attempts_by_type(user_id):
         cur_index += 1
     return result1, result2, result3
 
+def get_step(num, step):
+    r = 0
+    while num >= step:
+        num //= step
+        r += 1
+    return r
+
 def get_awards(id_user):
     """
     params: id_user: int
-    return: List
+    return: List: if student: [List:[int
     """
     role = db.get_user_role(id_user, 1)
     result = []
-    if role != 'teacher':
-      tasks = db.get_cnt_tasks_for_user(id_user, 1)
-      types = db.get_cnt_types_for_user(id_user)
+    if role == 'student':
+        tasks = db.get_cnt_tasks_for_user(id_user, 1)
+        if len(tasks) == 0:
+            c1 = 0
+        else:
+            c1 = len(tasks)
+        n1 = get_step(c1, 5)
+        types = db.get_cnt_types_for_user(id_user)
+        if len(types) == 0:
+            c2 = 0
+        else:
+            c2 = len(types)
+        n2 = get_step(c2, 5)
+        groups = db.get_groups_for_student(id_user)
+        if len(groups) == 0:
+            c3 = 0
+        else:
+            c3 = len(groups)
+        n3 = get_step(c3, 2)
+        result = [[c1, n1, c1 - 3 ** n1, 3 ** (n1 + 1)], [c2, n2, c2 - 5 ** n2, 5 ** (n2 + 1)], [c3, n3, c3 - 2 ** n3, 2 ** (n3 + 1)]]
+    elif role == 'teacher':
+        groups = db.get_groups_for_student(id_user)
+        if len(groups) == 0:
+            c3 = 0
+        else:
+            c3 = len(groups)
+        n3 = get_step(c3, 2)
+    return result

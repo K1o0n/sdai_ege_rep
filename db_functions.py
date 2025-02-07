@@ -299,6 +299,14 @@ def get_group(group_id):
     result = make_request("SELECT * FROM Groups WHERE ID = ?", [group_id])
     return result
 
+def get_group_id(token):
+    """
+    params: token: str
+    return: List[Tuple(id:int))
+    """
+    result = make_request("SELECT ID FROM Groups WHERE token = ?", [token])
+    return result
+
 def get_options():
     """
     return: List[Tuple(id:int, name:str, ID_user:int, date1:int, date2:int)]
