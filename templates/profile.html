@@ -42,7 +42,7 @@
             </div>
         </div>
     </div>
-
+    {% if user.is_teacher == 0 %}
     <div class="additional-info">
         <div class="stats-card">
             <h3>📊 Активность</h3>
@@ -112,5 +112,6 @@
                 </script>
             </div>
         </div>
+    {% endif %}
 </div>
 {% endblock %}
