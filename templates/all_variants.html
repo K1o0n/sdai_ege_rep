@@ -94,15 +94,15 @@
             <div class="py-5 text-center container">
                 <div class="row py-lg-5">
                     <div class="col-lg-6 col-md-8 mx-auto">
-                        <h1 class="fw-light">Заданные варианты</h1>
+                        <h1 class="fw-light">Все варианты</h1>
                         {% for option in options %}
                         <div class="card mb-3">
                             <div class="card-body position-relative">
-                                <h5 class="card-title">{{ und_option.name }}</h5>
+                                <h5 class="card-title">{{ option.name }}</h5>
                                 <p class="card-text"></p>
                                 <a href="/variant"
                                     class="btn btn-card">Перейти к варианту</a>
-                                <div class="card-deadline">{{ und_option.deadline.strftime('%Y-%m-%d %H:%M') }}</div>
+                                <div class="card-deadline">{{ option.deadline.strftime('%Y-%m-%d %H:%M') }}</div>
                             </div>
                         </div>
                         {% endfor %}
