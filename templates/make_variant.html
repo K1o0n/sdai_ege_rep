@@ -11,7 +11,6 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f0f2f5;
             margin: 0;
             padding: 0;
             display: flex;
@@ -41,7 +40,7 @@
             }
         }
 
-        .title {
+        .titl {
             font-size: 24px;
             font-weight: 700;
             color: #333;
@@ -71,21 +70,21 @@
             max-width: 400px;
             padding: 12px;
             font-size: 16px;
-            border: 2px solid #007bff;
+            border: 2px solid #0097a8;
             border-radius: 8px;
             outline: none;
             transition: border-color 0.3s ease;
         }
 
         .input-group input[type="text"]:focus {
-            border-color: #0056b3;
+            border-color: #0097a8;
         }
 
         .input-group button {
             padding: 12px 20px;
             font-size: 16px;
             cursor: pointer;
-            background-color: #007bff;
+            background-color: #0097a8;
             color: white;
             border: none;
             border-radius: 8px;
@@ -94,7 +93,7 @@
         }
 
         .input-group button:hover {
-            background-color: #0056b3;
+            background-color: #077B88;
         }
 
         .values-container {
@@ -152,7 +151,7 @@
         .button input[type="submit"] {
             padding: 12px 30px;
             font-size: 16px;
-            background-color: #28a745;
+            background-color: #0097a8;
             color: white;
             border: none;
             border-radius: 8px;
@@ -161,7 +160,11 @@
         }
 
         .button input[type="submit"]:hover {
-            background-color: #218838;
+            background-color: #077B88;
+        }
+
+        .container .title::before {
+            background: white !important;
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.3/purify.min.js"></script>
@@ -176,7 +179,7 @@
 <body>
     <div class="container">
         <!-- Title section -->
-        <div class="title">Добавление задачи</div>
+        <div class="titl">Добавление задачи</div>
         <div class="content">
             <!-- Registration form -->
             <p>Введите ID задач для добавления</p>

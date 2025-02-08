@@ -6,6 +6,7 @@
   <title>СДАЙ ЕГЭ</title>
   <link rel="shortcut icon" href="{{ url_for('static', filename='images/лого.jpg') }}" type="image/x-icon" />
   <link rel="stylesheet" href="{{ url_for('static', filename='css/sign-in.css') }}">
+<<<<<<< HEAD
     <script src="{{ url_for('static', filename='js/add_task.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.3/purify.min.js"></script>
     <script type="module">
@@ -14,22 +15,190 @@
         e.innerHTML = DOMPurify.sanitize(marked.parse(e.innerText));
       });
     </script>
+=======
+  <script src="{{ url_for('static', filename='js/add_task.js') }}"></script>
+  <style>
+    .file-upload {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .file-upload label {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: 500;
+      color: white;
+      background-color: #077B88;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .file-upload label:hover {
+      background-color: #055f66;
+    }
+
+    .file-upload input[type="file"] {
+      display: none;
+    }
+
+    .file-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      margin: 5px;
+      padding: 10px 15px;
+      background-color: #e9f5ff;
+      border: 1px solid #007bff;
+      border-radius: 8px;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .file-item span {
+      margin-right: 10px;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .file-item button {
+      background-color: transparent;
+      border: none;
+      color: #ff4d4d;
+      font-size: 18px;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .file-item button:hover {
+      color: #cc0000;
+    }
+
+    .button {
+      text-align: left;
+      margin-top: 20px;
+    }
+
+    .button input[type="submit"] {
+      padding: 12px 30px;
+      font-size: 16px;
+      background-color: #077B88;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .button input[type="submit"]:hover {
+      background-color: #055f66;
+    }
+
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 400px;
+      background-color: #077B88;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%; /* Position the tooltip above the text */
+      left: 50%;
+      margin-left: -60px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .tooltip .tooltiptext::after {
+      content: "";
+      position: absolute;
+      top: 100%; /* At the bottom of the tooltip */
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #077B88 transparent transparent transparent;
+    }
+
+    .back-button {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      background-color: #077B88;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+    }
+
+    .back-button:hover {
+      background-color: #055f66;
+    }
+
+    .back-button svg {
+      margin-right: 5px;
+    }
+  </style>
+>>>>>>> 3b224fc31a3304c0cd64fde051823503183fad81
 </head>
 <body>
+  <a href="/" class="back-button">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M15 8a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 0 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 0 1 .708.708L2.707 7.5H14.5A.5.5 0 0 1 15 8z"/>
+    </svg>
+    Вернуться на главную
+  </a>
   <div class="container">
     <!-- Title section -->
     <div class="title">Добавление задачи</div>
     <div class="content">
       <!-- Registration form -->
-      <form action="#" method="post">
+      <form id="taskForm" action="/add-task" method="post" enctype="multipart/form-data">
         <div class="select-num">
           <div class="num">
             <label for="num_in_ege">Номер:</label>
             <select name="num_in_ege" id="num_in_ege" required>
               <option value="" >-</option>
-                {% for i in range(1,28) %}
-                  <option value="{{ i }}">{{ i }}</option>
-                {% endfor %}
+              {% for i in range(1,28) %}
+              <option value="{{ i }}">{{ i }}</option>
+              {% endfor %}
             </select>
           </div>
         </div>
@@ -37,39 +206,111 @@
         <div class="user-details">
           <!-- Input for Email -->
           <div class="input-box">
-              <label for="source" class="details">Источник</label>
-              <input type="text" name="source" id="source" placeholder="Введите источник задачи" required>
+            <label for="source" class="details">Источник</label>
+            <input type="text" name="source" id="source" placeholder="Введите источник задачи" required>
           </div>
         </div>
 
         <div class="t-ar">
           <label for="text" class="details">Условие задачи:</label>
+            <div class="tooltip" style="display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; background-color: #077B88; color: white;">?
+            <span class="tooltiptext">Чтобы встатить файл в нужное место, используйте конструкцию [расширение](файл). Файлы для скачивания настоятельно рекомендуется помещать в конец задачи. Например: <br> Основное условие задания<br> [jpg](img.jpg)<br> Остальное условие задачи</span>
+          </div>
           <textarea rows="1" id="text" name="text" required></textarea>
         </div>
 
         <div class="user-details">
           <div class="input-box">
-              <label for="answer" class="details">Правильный ответ(число):</label>
-              <input type="text" name="answer" id="answer" placeholder="Введите правильный ответ на задачу" required>
+            <label for="answer" class="details">Правильный ответ(число):</label>
+            <input type="text" name="answer" id="answer" placeholder="Введите правильный ответ на задачу" required>
           </div>
         </div>
 
         <div class="select-num">
-            <label for="difficulty">Сложность:</label>
-            <select name="difficulty" id="difficulty" required>
-              <option value="">-</option>
-                {% for i in range(1,4) %}
-                  <option value="{{ i }}" >{{ i }}</option>
-                {% endfor %}
-            </select>
+          <label for="difficulty">Сложность:</label>
+          <select name="difficulty" id="difficulty" required>
+            <option value="">-</option>
+            {% for i in range(1,11) %}
+            <option value="{{ i }}" >{{ i }}</option>
+            {% endfor %}
+          </select>
         </div>
+
+        <!-- File upload -->
+        <div class="file-upload">
+          <label for="fileInput">Загрузить файлы</label>
+          <input type="file" id="fileInput" name="files" accept=".xlsx,.docx,.jpg,.png" multiple>
+        </div>
+        <div id="fileList" class="file-list"></div>
 
         <!-- Submit button -->
         <div class="button">
-              <input type="submit" value="Добавить">
+          <input type="submit" value="Добавить">
         </div>
       </form>
     </div>
   </div>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const fileList = document.getElementById('fileList');
+    const taskForm = document.getElementById('taskForm');
+
+    let filesArray = [];
+
+    fileInput.addEventListener('change', function () {
+      const files = fileInput.files;
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        filesArray.push(file);
+
+        const fileItem = document.createElement('div');
+        fileItem.className = 'file-item';
+
+        const fileName = document.createElement('span');
+        fileName.textContent = file.name;
+
+        const deleteButton = document.createElement('button');
+        deleteButton.innerHTML = '&times;';
+        deleteButton.onclick = function () {
+          filesArray = filesArray.filter(f => f !== file);
+          fileItem.remove();
+        };
+
+        fileItem.appendChild(fileName);
+        fileItem.appendChild(deleteButton);
+        fileList.appendChild(fileItem);
+      }
+
+      // Очищаем поле ввода файла, чтобы можно было загрузить тот же файл снова
+      fileInput.value = '';
+    });
+
+    taskForm.addEventListener('submit', function (event) {
+      // Создаем объект FormData и добавляем файлы
+      const formData = new FormData(taskForm);
+      filesArray.forEach(file => {
+      formData.append('files', file);
+      });
+
+      // Отправляем форму с помощью fetch API
+      fetch(taskForm.action, {
+      method: 'POST',
+      body: formData
+      }).then(response => {
+      if (response.ok) {
+        window.location.href = '/'; // Add redirect after success
+      } else {
+        alert('Ошибка при добавлении задачи. Попробуйте еще раз.');
+      }
+      }).catch(error => {
+      console.error('Ошибка:', error);
+      alert('Ошибка при добавлении задачи.');
+      });
+
+      // Предотвращаем стандартную отправку формы
+      event.preventDefault();
+    });
+  </script>
 </body>
 </html>

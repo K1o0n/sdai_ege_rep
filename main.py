@@ -6,7 +6,8 @@ import sqlite3
 import time, datetime
 import random
 import graph_functions
-
+from werkzeug.utils import secure_filename
+import os
 app = Flask(__name__)
 DATABASE = 'forum.db'
 app.config['SECRET_KEY'] = urandom(16)
@@ -184,6 +185,13 @@ def add_task():
         return render_template("add-task.html", user=True)
     elif request.method == 'POST':
         print(request.form)
+        print(request.files)
+        if 'files' in request.files:
+            files = request.files.getlist('files')
+            for file in files:
+                if file:
+                    filename = secure_filename(file.filename)
+                    file.save(os.path.join('static/images', filename))
         db_functions.add_task(request.form)
         return redirect("/")
 
