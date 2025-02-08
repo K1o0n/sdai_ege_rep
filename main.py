@@ -374,6 +374,16 @@ def group(group_id):
     students = db_functions.get_students_for_group(group_id)
     teachers = db_functions.get_teachers_for_group(group_id)
     print(teachers)
+    ok = 0
+    for teacher in teachers:
+        if teacher[0] == uid:
+            ok = 1
+    for student in students:
+        if student[0] == uid:
+            ok = 1
+    if not ok:
+        flash("У вас нет доступа к этой группе")
+        return redirect("/groups")
     # TODO: fix kostil
     # ADMIN = db_functions.get_user_role(uid, 1) == "teacher"
     ADMIN = 1
