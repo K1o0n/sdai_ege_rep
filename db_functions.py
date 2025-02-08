@@ -90,6 +90,23 @@ def add_task(data):
     )
 
 
+def add_task2(data):
+    """dict (text, answer, difficulty, num_in_ege, date, source)"""
+    current = [
+        data["text"],
+        data["answer"],
+        data["difficulty"],
+        data["num_in_ege"],
+        data["source"],
+        data["time"],
+        1,
+    ]
+    make_interferation(
+        "INSERT INTO Tasks (text, answer, difficulty, source, ID_type, date, status) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        current,
+    )
+
+
 def add_user(data):
     """dict (name, surname, patronymic, email, password, telephone, age, country, role (student, teacher, admin), about, path (path to the photo))"""
     current = [
@@ -326,6 +343,7 @@ def get_teachers_for_group(group_id):
     )
     return result
 
+
 def get_user(user_id, status):
     """int user_id, int status (1-active, 2-banned, 3-deleted)"""
     result = make_request(
@@ -532,13 +550,20 @@ def get_tasks_for_course(course_id):
     )
     return result  # [(ID, ID_course, ID_task, is_required, ID, text, answer, difficulty, ID_type, source, solution, status)]
 
+
 def get_blocks_for_course(course_id):
     """
     params: course_id:int
     return: List[Tuple()]
     """
-    part1 = make_request("SELECT * FROM Blocks JOIN Tasks ON Tasks.ID = Blocks.ID_block WHERE ID_course = ? AND type = 1", [course_id])
-    part2 = make_request("SELECT * FROM Blocks JOIN Lessons ON Lessons.ID = Blocks.ID_block WHERE ID_course = ? AND type = 2", [course_id])
+    part1 = make_request(
+        "SELECT * FROM Blocks JOIN Tasks ON Tasks.ID = Blocks.ID_block WHERE ID_course = ? AND type = 1",
+        [course_id],
+    )
+    part2 = make_request(
+        "SELECT * FROM Blocks JOIN Lessons ON Lessons.ID = Blocks.ID_block WHERE ID_course = ? AND type = 2",
+        [course_id],
+    )
     result = part1 + part2
     return result
 

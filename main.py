@@ -7,7 +7,7 @@ import time, datetime
 import random
 import graph_functions
 from werkzeug.utils import secure_filename
-import os
+import os, re
 
 app = Flask(__name__)
 DATABASE = "forum.db"
@@ -199,6 +199,35 @@ def task_lesson(course_id, num):
     )
 
 
+def get_max_num(task_id) -> int:  # протестированная функция
+    """
+    Возвращает максимальный номер файла вида {task_id}\_{num}.ext, чтобы можно было сохранить файл с номером num+1
+    :param task_id:  id задания
+
+    :return: максимальный номер файла вида {task_id}\_{num}.ext
+    """
+    max_num = 0
+    pattern = re.compile(rf"{task_id}_(\d+)\.\w+")
+    for filename in os.listdir("static/images"):
+        match = pattern.match(filename)
+        if match:
+            num = int(match.group(1))
+            if num > max_num:
+                max_num = num
+    return max_num
+
+
+def save_file(file, task_id, form):
+    filename = file.filename
+    text = form["text"]
+    num = get_max_num(task_id) + 1
+    filename_ext = os.path.splitext(filename)[1][1:]  # Расширение без точки
+    new_filename = f"{task_id}_{num}.{filename_ext}"
+    text = text.replace(filename, f"static/images/{new_filename}")
+    form["text"] = text
+    file.save(os.path.join("static/images", new_filename))
+
+
 @app.route("/add-task", methods=["POST", "GET"])
 def add_task():
     if "email" not in session:
@@ -213,13 +242,34 @@ def add_task():
     elif request.method == "POST":
         print(request.form)
         print(request.files)
+        temp_form = {
+            "text": request.form["text"],
+            "answer": request.form["answer"],
+            "difficulty": request.form["difficulty"],
+            "num_in_ege": db.get_id_type(request.form["num_in_ege"]),
+            "source": request.form["source"],
+            "time": time.time(),
+            "status": 1,
+        }
         if "files" in request.files:
             files = request.files.getlist("files")
             for file in files:
                 if file:
-                    filename = secure_filename(file.filename)
-                    file.save(os.path.join("static/images", filename))
-        db_functions.add_task(request.form)
+
+                    def get_max_absent_task_id() -> (
+                        int
+                    ):  # вынести эту функцию в db_functions.py
+                        conn = sqlite3.connect("MAIN_BD.db")
+                        cursor = conn.cursor()
+                        cursor.execute("SELECT ID FROM tasks ORDER BY ID")
+                        ids = [row[0] for row in cursor.fetchall()]
+                        conn.close()
+                        if len(ids) == 0:
+                            return 1
+                        return max(ids) + 1
+
+                    save_file(file, get_max_absent_task_id(), temp_form)
+        db_functions.add_task2(temp_form)
         return redirect("/")
 
 
@@ -721,11 +771,12 @@ def all_variants():
     ]
     print(prepared_variants)
     return render_template(
-        "all_variants.html", 
-        user=True, 
+        "all_variants.html",
+        user=True,
         options=prepared_variants,
-        ADMIN=db.get_user_role(uid, 1) == "teacher"
+        ADMIN=db.get_user_role(uid, 1) == "teacher",
     )
+
 
 if __name__ == "__main__":
     init_db()  # Инициализация базы данных форума при запуске приложения

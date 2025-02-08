@@ -4,3 +4,4 @@ __pycache__/
 .env
 test_server.py
 forum.db
+test.ipynb
