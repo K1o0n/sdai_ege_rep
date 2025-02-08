@@ -249,7 +249,7 @@
             position: absolute !important;
             left: -20px !important;
         }
-        pre {
+        pre:not([class]) {
             border: 1px solid #ccc;
             background-color: #f5f5f5;
             padding: 10px;
@@ -257,6 +257,9 @@
             border-radius: 5px;
             overflow-x: auto;
         }
+        /* pre.markdown {
+            max-width: 200px;
+        } */
     </style>
     <div class="content-wrapper">
         <div class="task-content">
