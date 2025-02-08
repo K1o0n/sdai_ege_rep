@@ -271,6 +271,7 @@
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
+                                    <th scope="col" style="width: 90px;">Аватар</th>
                                     <th scope="col">Имя</th>
                                 </tr>
                             </thead>
@@ -280,14 +281,14 @@
                                     <th scope="row">{{ teacher[0] }}</th>
                                     <td>
                                         <div style="display: flex; align-items: center; justify-content: center;">
-                                            {% if teacher[3] != None %}
-                                            <img src="{{url_for('static', filename='avatars/' + teacher[3] )}}" alt="Profile Picture" class="profile-pic">
-                                            {% else %}
-                                            <span class="avatar-initials profile-pic avatar-circle">{{ teacher[1][0] }}{{ teacher[2][0] }}</span>
-                                            {% endif %}
-                                            {{ teacher[1] }} {{ teacher[2] }}
+                                        {% if teacher[3] != None %}
+                                        <img src="{{url_for('static', filename='avatars/' + teacher[3] )}}" alt="Profile Picture" class="profile-pic">
+                                        {% else %}
+                                        <span class="avatar-initials profile-pic avatar-circle">{{ teacher[1][0] }}{{ teacher[2][0] }}</span>
+                                        {% endif %}
                                         </div>
                                     </td>
+                                    <td style="vertical-align: middle;">{{ teacher[1] }} {{ teacher[2] }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -297,6 +298,7 @@
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
+                                    <th scope="col" style="width: 90px;">Аватар</th>
                                     <th scope="col">Имя</th>
                                 </tr>
                             </thead>
@@ -306,14 +308,14 @@
                                     <th scope="row">{{ user[0] }}</th>
                                     <td>
                                         <div style="display: flex; align-items: center; justify-content: center;">
-                                            {% if user[3] != None %}
-                                            <img src="{{url_for('static', filename='avatars/' + user[3] )}}" alt="Profile Picture" class="profile-pic">
-                                            {% else %}
-                                            <span class="avatar-initials profile-pic avatar-circle">{{ user[1][0] }}{{ user[2][0] }}</span>
-                                            {% endif %}
-                                            {{ user[1] }} {{ user[2] }}
+                                        {% if user[3] != None %}
+                                        <img src="{{url_for('static', filename='avatars/' + user[3] )}}" alt="Profile Picture" class="profile-pic">
+                                        {% else %}
+                                        <span class="avatar-initials profile-pic avatar-circle">{{ user[1][0] }}{{ user[2][0] }}</span>
+                                        {% endif %}
                                         </div>
                                     </td>
+                                    <td style="vertical-align: middle;">{{ user[1] }} {{ user[2] }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
