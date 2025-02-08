@@ -63,38 +63,48 @@
             <i class="fa fa-bars"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-               <ul class="navbar-nav">
+              <ul class="navbar-nav">
                   <div class="collapse navbar-collapse" id="navbarResponsive">
-                     <ul class="navbar-nav text-uppercase ml-auto">
-                        <li class="nav-item">
-                           <a class="nav-link js-scroll-trigger active" href="/">Главная</a>
-                        </li>
-                        <li class="nav-item">
-                           <a class="nav-link js-scroll-trigger" href="/courses">Курсы</a>
-                        </li>
-                        <li class="nav-item">
-                           <a class="nav-link js-scroll-trigger" href="/tasks">Задачи</a>
-                        </li>
-                        <li class="nav-item">
-                           <a class="nav-link js-scroll-trigger" href="/add-task">Добавить задачу</a>
-                        </li>
-                        {% if user %}
-                           <li class="nav-item">
-                              <a class="nav-link js-scroll-trigger" href="/dashboard">Личный кабинет</a>
-                           </li>
-                           {% else %}
-                           <li class="nav-item">
-                              <a class="nav-link js-scroll-trigger" href="/sign-in">Войти</a>
-                           </li>
-                           <li class="nav-item">
-                              <a class="nav-link js-scroll-trigger" href="/sign-up">Регистрация</a>
-                           </li>
-                        {% endif %}
-                     </ul>
+                      <ul class="navbar-nav text-uppercase ml-auto">
+                          <li class="nav-item">
+                              <a class="nav-link js-scroll-trigger" href="/">Главная</a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link js-scroll-trigger" href="/all_variants">Варианты</a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link js-scroll-trigger" href="/courses">Курсы</a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link js-scroll-trigger" href="/tasks">Задачи</a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link js-scroll-trigger" href="/forum">Форум</a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link js-scroll-trigger" href="/add-task">Добавить задачу</a>
+                          </li>
+                      </ul>
                   </div>
-               </ul>
-               
-               </div>
+              </ul>
+              <ul class="navbar-nav text-uppercase ml-auto">
+                  {% if user %}
+                  <li class="nav-item">
+                      <a style="text-align: right" class="nav-link js-scroll-trigger" href="/groups">Мои группы</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link js-scroll-trigger" href="/dashboard">Личный кабинет</a>
+                  </li>
+                  {% else %}
+                  <li class="nav-item">
+                      <a class="nav-link js-scroll-trigger" href="/sign-in">Войти</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link js-scroll-trigger" href="/sign-up">Регистрация</a>
+                  </li>
+                  {% endif %}
+              </ul>
+          </div>
             </div>
          </div>
       </nav>
