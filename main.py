@@ -97,11 +97,12 @@ def dashboard():
         _,
         about,
         phone,
+        role,
         path,
         *_,
     ] = user[0]
     is_teacher = 0
-    if path == "teacher":
+    if role == "teacher":
         is_teacher = 1
     user_data = {
         "last_name": surname,
@@ -110,6 +111,7 @@ def dashboard():
         "email": email,
         "is_teacher": is_teacher,
         "created_at": 0,
+        "avatar": path,
     }
 
     return render_template(
@@ -371,6 +373,7 @@ def group(group_id):
     uid = db.get_user_id(session["email"], 1)
     students = db_functions.get_students_for_group(group_id)
     teachers = db_functions.get_teachers_for_group(group_id)
+    print(teachers)
     # TODO: fix kostil
     # ADMIN = db_functions.get_user_role(uid, 1) == "teacher"
     ADMIN = 1

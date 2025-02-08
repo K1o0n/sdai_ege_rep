@@ -28,6 +28,24 @@
         e.innerHTML = DOMPurify.sanitize(marked.parse(e.innerText));
       });
     </script>
+    <style>
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+        .avatar-circle {
+            background-color: #007bff;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+    </style>
 </head>
 
 <body>
@@ -260,7 +278,16 @@
                                 {% for teacher in teachers %}
                                 <tr>
                                     <th scope="row">{{ teacher[0] }}</th>
-                                    <td>{{ teacher[1] }} {{ teacher[2] }}</td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; justify-content: center;">
+                                            {% if teacher[3] != None %}
+                                            <img src="{{url_for('static', filename='avatars/' + teacher[3] )}}" alt="Profile Picture" class="profile-pic">
+                                            {% else %}
+                                            <span class="avatar-initials profile-pic avatar-circle">{{ teacher[1][0] }}{{ teacher[2][0] }}</span>
+                                            {% endif %}
+                                            {{ teacher[1] }} {{ teacher[2] }}
+                                        </div>
+                                    </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -277,7 +304,16 @@
                                 {% for user in users %}
                                 <tr>
                                     <th scope="row">{{ user[0] }}</th>
-                                    <td>{{ user[1] }} {{ user[2] }}</td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; justify-content: center;">
+                                            {% if user[3] != None %}
+                                            <img src="{{url_for('static', filename='avatars/' + user[3] )}}" alt="Profile Picture" class="profile-pic">
+                                            {% else %}
+                                            <span class="avatar-initials profile-pic avatar-circle">{{ user[1][0] }}{{ user[2][0] }}</span>
+                                            {% endif %}
+                                            {{ user[1] }} {{ user[2] }}
+                                        </div>
+                                    </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

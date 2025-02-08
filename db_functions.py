@@ -323,10 +323,10 @@ def get_options_for_group(group_id):
 def get_students_for_group(group_id):
     """
     :param group_id: int
-    :return: List[Tuple(id:int, name:str, surname:str)]
+    :return: List[Tuple(id:int, name:str, surname:str, path: str|None)]
     """
     result = make_request(
-        "SELECT Users.id, name, surname FROM Users JOIN Groups_Students ON Users.id = Groups_Students.ID_user WHERE ID_group = ?",
+        "SELECT Users.id, name, surname, path FROM Users JOIN Groups_Students ON Users.id = Groups_Students.ID_user WHERE ID_group = ?",
         [group_id],
     )
     return result
@@ -335,10 +335,10 @@ def get_students_for_group(group_id):
 def get_teachers_for_group(group_id):
     """
     :param group_id: int
-    :return: List[Tuple(id:int, name:str, surname:str)]
+    :return: List[Tuple(id:int, name:str, surname:str, path: str|None)]
     """
     result = make_request(
-        "SELECT Users.id, name, surname FROM Users JOIN Groups_Teachers ON Users.id = Groups_Teachers.ID_user WHERE ID_group = ?",
+        "SELECT Users.id, name, surname, path FROM Users JOIN Groups_Teachers ON Users.id = Groups_Teachers.ID_user WHERE ID_group = ?",
         [group_id],
     )
     return result
