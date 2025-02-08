@@ -53,6 +53,13 @@
       background: #1669f2;
     }
   </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.3/purify.min.js"></script>
+    <script type="module">
+      import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
+      document.querySelectorAll('.markdown').forEach((e) => {
+        e.innerHTML = DOMPurify.sanitize(marked.parse(e.innerText));
+      });
+    </script>
 </head>
 
 <body>
