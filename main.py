@@ -719,6 +719,7 @@ def all_variants():
         }
         for i in variants
     ]
+    print(prepared_variants)
     return render_template(
         "all_variants.html", 
         user=True, 
