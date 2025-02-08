@@ -495,7 +495,10 @@ def groups():
 @app.route("/make_new_group", methods=["POST"])
 def make_new_group():
     uid = db.get_user_id(session["email"], 1)
-    db.add_group("Новая группа", uid)
+    token = "".join(
+        [str(random.choice("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789"))
+                     for i in range(6)])
+    db.add_group("Новая группа", uid, token)
     return redirect(url_for("groups"))
 
 

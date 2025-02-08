@@ -215,7 +215,7 @@ def add_group(name, user_id, token):
     connect = sqlite3.connect("MAIN_BD.db")
     cursor = connect.cursor()
     cursor.execute(
-        "INSERT INTO Groups (name, ID_user, token) VALUES (?, ?)",
+        "INSERT INTO Groups (name, ID_user, token) VALUES (?, ?, ?)",
         [name, user_id, token],
     )
     group_id = cursor.execute(
