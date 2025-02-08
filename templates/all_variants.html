@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Курсы</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sidebars/">
+
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/group.css') }}" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Я засунул это в css -->
+    <!-- Я хз о чем тот коммент, но не об этом скрипте -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.3/purify.min.js"></script>
+    <script type="module">
+      import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
+      document.querySelectorAll('.markdown').forEach((e) => {
+        e.innerHTML = DOMPurify.sanitize(marked.parse(e.innerText));
+      });
+    </script>
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" target="_blank" href="#">
+                    <img class="img-thumbnail" src="{{ url_for('static', filename='images/kegeh.png') }}" alt=""
+                        width="200" />
+                </a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                    data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    Главная
+                    <i class="fa fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <div class="collapse navbar-collapse" id="navbarResponsive">
+                            <ul class="navbar-nav text-uppercase ml-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link js-scroll-trigger" href="/">Главная</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link js-scroll-trigger" href="/courses">Курсы</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link js-scroll-trigger" href="/tasks">Задачи</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link js-scroll-trigger" href="/forum">Форум</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link js-scroll-trigger" href="/add-task">Добавить задачу</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </ul>
+                    <ul class="navbar-nav text-uppercase ml-auto">
+                        {% if user %}
+                        <li class="nav-item">
+                            <a style="text-align: right" class="nav-link js-scroll-trigger" href="/groups">Мои группы</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link js-scroll-trigger" href="/dashboard">Личный кабинет</a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link js-scroll-trigger" href="/sign-in">Войти</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link js-scroll-trigger" href="/sign-up">Регистрация</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <section id="lenta" class="section-content">
+            <div class="py-5 text-center container">
+                <div class="row py-lg-5">
+                    <div class="col-lg-6 col-md-8 mx-auto">
+                        <h1 class="fw-light">Заданные варианты</h1>
+                        {% for option in options %}
+                        <div class="card mb-3">
+                            <div class="card-body position-relative">
+                                <h5 class="card-title">{{ und_option.name }}</h5>
+                                <p class="card-text"></p>
+                                <a href="/variant"
+                                    class="btn btn-card">Перейти к варианту</a>
+                                <div class="card-deadline">{{ und_option.deadline.strftime('%Y-%m-%d %H:%M') }}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Футтер, не трогать -->
+    <div class="footer-distributed">
+        <div class="container">
+            <div class="footer-left">
+                <p class="footer-company-name">All Rights Reserved. &copy; 2025 </p>
+            </div>
+        </div><!-- end container -->
+    </div>
+
+    <div class="custom-tooltip" id="custom-tooltip">Скопировано!</div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const section = urlParams.get('section');
+        if (section) {
+            const sectionElement = document.getElementById(section);
+            if (sectionElement) {
+                sectionElement.classList.add('active');
+            }
+            const linkElement = document.getElementById('link-' + section);
+            if (linkElement) {
+                linkElement.classList.add('active');
+            }
+        }
+    });
+
+    function copyText() {
+        navigator.clipboard.writeText("{{ course_token }}").then(function() {
+            var tooltip = document.getElementById('custom-tooltip');
+            var button = document.querySelector('.course-id');
+            var rect = button.getBoundingClientRect();
+            tooltip.style.top = (rect.top - 5) + 'px';
+            tooltip.style.left = (rect.left) + 'px';
+            tooltip.style.display = 'block';
+            tooltip.style.position = 'fixed';
+            setTimeout(function() {
+                tooltip.style.display = 'none';
+            }, 1000);
+        });
+    }
+    document.getElementById('add-user-btn').addEventListener('click', function() {
+        var userForm = document.getElementById('add-user-form');
+        var optionForm = document.getElementById('add-option-form');
+        if (userForm.style.display === 'none') {
+            userForm.style.display = 'block';
+            optionForm.style.display = 'none';
+        } else {
+            userForm.style.display = 'none';
+            document.getElementById('user-form').reset();
+        }
+    });
+
+    document.getElementById('add-option-btn').addEventListener('click', function() {
+        var optionForm = document.getElementById('add-option-form');
+        var userForm = document.getElementById('add-user-form');
+        if (optionForm.style.display === 'none') {
+            optionForm.style.display = 'block';
+            userForm.style.display = 'none';
+        } else {
+            optionForm.style.display = 'none';
+            document.getElementById('option-form').reset();
+        }
+    });
+
+    function showPopup(message) {
+        var popup = document.getElementById('popup-message');
+        popup.textContent = message;
+        popup.style.display = 'block';
+        setTimeout(function() {
+            popup.style.display = 'none';
+        }, 2000);
+    }
+
+    document.getElementById('user-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        showPopup('Отправлено!');
+        document.getElementById('add-user-form').style.display = 'none';
+        this.submit(); // Submit the form after showing the popup
+        document.getElementById('user-form').reset();
+    });
+
+    document.getElementById('option-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        showPopup('Отправлено!');
+        document.getElementById('add-option-form').style.display = 'none';
+        this.submit(); // Submit the form after showing the popup
+        document.getElementById('option-form').reset();
+    });
+    </script>
+
+</body>
+
+</html>
