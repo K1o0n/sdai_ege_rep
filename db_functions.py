@@ -102,7 +102,7 @@ def add_task2(data):
         1,
     ]
     make_interferation(
-        "INSERT INTO Tasks (text, answer, difficulty, source, ID_type, date, status) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO Tasks (text, answer, difficulty, ID_type, source, date, status) VALUES (?, ?, ?, ?, ?, ?, ?)",
         current,
     )
 
