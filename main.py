@@ -225,6 +225,7 @@ def save_file(file, task_id, form):
     new_filename = f"{task_id}_{num}.{filename_ext}"
     print(text)
     print(f"[{filename_ext}]({filename})")
+    text = text.replace(f"[{filename_ext}]({filename})", f"""<pre class="markdown">![{filename}](/static/images/{new_filename})</pre>""")
     text = text.replace(f"[{filename_ext}]({filename})", f"""<img src="/static/images/{new_filename}" style="max-width: 100%">""")
     form["text"] = text
     file.save(os.path.join("static/images", new_filename))
