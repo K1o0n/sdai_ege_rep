@@ -318,7 +318,8 @@ def group(group_id):
     uid = db.get_user_id(session["email"], 1)
     students = db_functions.get_students_for_group(group_id)
     teachers = db_functions.get_teachers_for_group(group_id)
-    ADMIN = db_functions.get_user_role(uid, 1) == "teacher"
+    # TODO: fix kostil
+    # ADMIN = db_functions.get_user_role(uid, 1) == "teacher"
     ADMIN = 1
     students.sort(key=lambda x: x[0])
     data = graph_functions.convert_attempts_by_type(uid)
@@ -700,6 +701,31 @@ def delete_comment(comment_id):
     conn.close()
     return redirect(url_for("admin"))
 
+
+@app.route("/all_variants")
+def all_variants():
+    if "email" not in session:
+        return redirect("/sign-in/")
+    uid = db.get_user_id(session["email"], 1)
+
+    variants = db.get_options()
+    prepared_variants = [
+        {
+            "name": i[1],
+            "deadline": make_time(i[4]),
+            "solved_tasks": 0,
+            "total_tasks": 0,
+            "id": i[0],
+        }
+        for i in variants
+    ]
+    print(prepared_variants)
+    return render_template(
+        "all_variants.html", 
+        user=True, 
+        options=prepared_variants,
+        ADMIN=db.get_user_role(uid, 1) == "teacher"
+    )
 
 if __name__ == "__main__":
     init_db()  # Инициализация базы данных форума при запуске приложения
