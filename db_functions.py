@@ -533,11 +533,14 @@ def get_tasks_for_course(course_id):
     return result  # [(ID, ID_course, ID_task, is_required, ID, text, answer, difficulty, ID_type, source, solution, status)]
 
 def get_blocks_for_course(course_id):
-    """int course_id"""
+    """
+    params: course_id:int
+    return: List[Tuple()]
+    """
     part1 = make_request("SELECT * FROM Blocks JOIN Tasks ON Tasks.ID = Blocks.ID_block WHERE ID_course = ? AND type = 1", [course_id])
-    part2 = make_request("SELECT * FROM Lessons JOIN Blocks ON Lessons.ID = Blocks.ID_block WHERE ID_course = ? AND type = 2", [course_id])
+    part2 = make_request("SELECT * FROM Blocks JOIN Lessons ON Lessons.ID = Blocks.ID_block WHERE ID_course = ? AND type = 2", [course_id])
     result = part1 + part2
-    return result  # []
+    return result
 
 
 def get_files_for_information(lesson_id):
