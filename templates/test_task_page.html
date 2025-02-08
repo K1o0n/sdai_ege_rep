@@ -266,7 +266,7 @@
             {% for task in tasks %}
             <div class="task-text">
                 <div class="num">
-                    <h1> <b> №{{ task[3] }} </b> </h1>
+                    <h1> <b> №{{ task[3] }} </b> <span style="color: #999; font-size: 0.8em;">ID: {{ task[0] }}</span></h1>
                     <h6> Сложность: \({{ task[2] }}\) <br> Источник: {{ task[4] }}</h6>
                 </div>
                 {{ task[1]|safe }}

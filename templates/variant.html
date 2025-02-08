@@ -121,6 +121,53 @@
 	     color: #fff;
 	     font-size: 1.2em;
 	 }
+   ul.ZADACHA,
+        ol.ZADACHA {
+            margin-left: 20px !important;
+            padding-left: 20px !important;
+            display: block !important;
+            list-style-position: outside !important;
+        }
+
+        ul.ZADACHA {
+            list-style-type: disc !important;
+            visibility: visible !important;
+        }
+
+        ol.ZADACHA {
+            list-style-type: decimal !important;
+            visibility: visible !important;
+            counter-reset: item !important;
+        }
+
+        ol.ZADACHA[type="a"] {
+            list-style-type: lower-alpha !important;
+        }
+
+        ul.ZADACHA li,
+        ol.ZADACHA li {
+            display: list-item !important;
+            visibility: visible !important;
+            list-style: inherit !important;
+            position: relative !important;
+        }
+
+        ol.ZADACHA li::before {
+            display: inline-block !important;
+            position: absolute !important;
+            left: -20px !important;
+        }
+        pre:not([class]) {
+            border: 1px solid #ccc;
+            background-color: #f5f5f5;
+            padding: 10px;
+            /* margin-top: -20px; */
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .markdown img {
+            max-width: 100%;
+        }
       </style>
       <div id="timer">
 	--:--:--
@@ -230,8 +277,8 @@
         {% for task in tasks %}
           <div class = "task-text">
              <div class = "num">
-                <h1> <b> №{{ task[3] }} </b> </h1>
-                <h6> Сложность: {{ task[2] }} <br>  Источник: {{ task[4] }}</h6>
+              <h1> <b> №{{ task[3] }} </b> <span style="color: #999; font-size: 0.8em;">ID: {{ task[0] }}</span></h1>
+              <h6> Сложность: \({{ task[2] }}\) <br> Источник: {{ task[4] }}</h6>
              </div>
              {{ task[1]|safe }}
              <div>
