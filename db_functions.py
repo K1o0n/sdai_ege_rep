@@ -326,15 +326,6 @@ def get_teachers_for_group(group_id):
     )
     return result
 
-
-def get_messages(status):
-    """int status (1-active, 2-banned, 3-deleted)"""
-    result = make_request(
-        "SELECT * FROM Messages WHERE status = ? ORDER BY date", [status]
-    )
-    return result  # [(id, name, text, ID_user, status(1-active), date]
-
-
 def get_user(user_id, status):
     """int user_id, int status (1-active, 2-banned, 3-deleted)"""
     result = make_request(
@@ -468,12 +459,6 @@ def get_cnt_groups_for_teacher(user_id):
     return result
 
 
-def get_tasks_for_option(option_id):
-    """int option_id"""
-    result = make_request("SELECT id_task FROM Tasks_Options WHERE ID = ?", [option_id])
-    return result  # [(id_task)]
-
-
 def get_task(task_id, status):
     """int task_id, int status (1-active, 2-banned, 3-deleted)"""
     result = make_request(
@@ -547,23 +532,15 @@ def get_tasks_for_course(course_id):
     )
     return result  # [(ID, ID_course, ID_task, is_required, ID, text, answer, difficulty, ID_type, source, solution, status)]
 
-
-def get_lessons_for_course(course_id):
+def get_blocks_for_course(course_id):
     """int course_id"""
-    result = make_request(
-        "SELECT * FROM Lessons_Course JOIN Lessons ON Lessons.ID = Lessons_Courses.ID_task WHERE ID_course = ?",
-        [course_id],
-    )
-    return result  # [(ID, ID_course, ID_task, is_required, ID, name)]
+    part1 = make_request("SELECT * FROM Blocks JOIN Tasks ON Tasks.ID = Blocks.ID_block WHERE ID_course = ? AND type = 1", [course_id])
+    part2 = make_request("SELECT * FROM Lesson JOIN Blocks ON Lesson.ID = Blocks.ID_block WHERE ID_course = ? AND type = 2", [course_id])
+    result = part1 + part2
+    return result  # []
 
 
-def get_blok_for_course(course_id):
-    """int course_id"""
-    result = make_request("SELECT * FROM Blocks WHERE ID_course = ?", [course_id])
-    return result  # [(id_lesson)]
-
-
-def get_files_for_lesson(lesson_id):
+def get_files_for_information(lesson_id):
     """int lesson_id"""
     result = make_request("SELECT * FROM Information WHERE ID_lesson = ?", [lesson_id])
     return result  # [(id, path, ID_lesson)]

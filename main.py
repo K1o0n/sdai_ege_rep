@@ -187,7 +187,7 @@ def task_lesson(course_id, num):
     if not user:
         return redirect("/sign-in/")
 
-    tasks = db_functions.get_tasks_for_course(course_id)
+    tasks = db_functions.get_blocks_for_course(course_id)
     print(tasks)
     return render_template(
         "task-lesson.html",
