@@ -263,6 +263,9 @@
         .markdown img {
             max-width: 100%;
         }
+        .goida img {
+            width: 20px !important; height: 20px;
+        }
     </style>
     <div class="content-wrapper">
         <div class="task-content">
@@ -276,7 +279,7 @@
                 {% if task[0] == 23 %}
                     <br> 
                     <a href="/static/other/23.xlsx" class="btn btn-link" download>
-                        <img src="{{ url_for('static', filename='images/excel-logo.png')}}" alt="Excel Icon" style="width: 20px; height: 20px; vertical-align: middle;">
+                        <img src="{{ url_for('static', filename='images/xlsx.png')}}" alt="Excel Icon" style="width: 20px; height: 20px; vertical-align: middle;">
                         3.xlsx
                     </a>
                 {% endif %}

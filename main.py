@@ -225,12 +225,23 @@ def save_file(file, task_id, form):
     num = get_max_num(task_id) + 1
     filename_ext = os.path.splitext(filename)[1][1:]  # Расширение без точки
     new_filename = f"{task_id}_{num}.{filename_ext}"
-    print(text)
-    print(f"[{filename_ext}]({filename})")
-    text = text.replace(f"[{filename_ext}]({filename})", f"""<pre class="markdown">![{filename}](/static/images/{new_filename})</pre>""")
-    text = text.replace(f"[{filename_ext}]({filename})", f"""<img src="/static/images/{new_filename}" style="max-width: 100%">""")
-    form["text"] = text
-    file.save(os.path.join("static/images", new_filename))
+    # print(text)
+    if filename_ext in ["png", "jpg", "jpeg"]:
+        # text = text.replace(f"[{filename_ext}]({filename})", f"""<img src="/static/images/{new_filename}" style="max-width: 100%">""")
+        text = text.replace(f"[{filename_ext}]({filename})", f"""<pre class="markdown">![{filename}](/static/images/{new_filename})</pre>""")
+        form["text"] = text
+    else:
+        _temp = f"""<br>
+        <a href="/static/other/{new_filename}" class="btn btn-link goida" download>
+            <pre class="markdown goida" style="display: inline-block; padding: 0; border: none; background: none;">![...](/static/images/{filename_ext}.png) {form["num_in_ege"]}.{filename_ext}</pre>
+        </a>
+        """
+        text = text.replace(f"[{filename_ext}]({filename})",_temp)
+        form["text"] = text
+    if filename_ext in ["png", "jpg", "jpeg"]:
+        file.save(os.path.join("static/images", new_filename))
+    elif filename_ext in ["docx", 'xlsx', 'txt', 'csv']:
+        file.save(os.path.join("static/other", new_filename))
 
 
 @app.route("/add-task", methods=["POST", "GET"])
@@ -261,9 +272,7 @@ def add_task():
             for file in files:
                 if file:
 
-                    def get_max_absent_task_id() -> (
-                        int
-                    ):  # вынести эту функцию в db_functions.py
+                    def get_max_absent_task_id() -> int:  # вынести эту функцию в db_functions.py
                         conn = sqlite3.connect("MAIN_BD.db")
                         cursor = conn.cursor()
                         cursor.execute("SELECT ID FROM tasks ORDER BY ID")
