@@ -431,7 +431,7 @@ def get_tasks_for_option(option_id: int) -> Pizdec:
     :return: int - the count of tasks associated with the given option_id.
     """
     result = make_request(
-        "SELECT * FROM Tasks_Options WHERE ID_option = ?", [option_id]
+        "SELECT * FROM Tasks WHERE ID IN (SELECT ID_task FROM Tasks_Options WHERE ID_option = ?)", [option_id]
     )
     return result
 
