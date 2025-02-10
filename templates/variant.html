@@ -282,10 +282,84 @@
 		this.control = false;
 	    }
 	}
-      </script>
+       {% if time is none %}
+	let time = {{ time }};
+       {% else %}
+	 let time = 20 * 60;
+       {% endif %}
+
+       {% if variant_id is none %}
+         let variant_id = {{ variant_id }};
+       {% else %}
+	 let variant_id = 0;
+       {% endif %}
+
+       let timer = new Timer();
+       timer.set(
+	 time * 60,
+	 'timer', 
+	 sendAll);
+       timer.start();
+
+       function submitAnswer(variant_id, score, time) {
+	 fetch("/submit-test", {
+	   method: "POST",
+	   credentials: "include",
+	   headers: {
+	     "Content-Type": "application/json",
+	   },
+	   body: JSON.stringify({
+	     variant_id: variant_id,
+	     score: score,
+	     time: time,
+	   })
+	 }).then((r) => console.log("GOIDA! Answer received"));
+       }
+
+       function changeAnswers(task_id) {
+	 let ua = document.querySelector(`#task-input-${task_id}`);
+	 let sa = document.querySelector(`#task-answer-${task_id}`);
+	 let showing = sa.getAttribute('showing').trim() === "true";
+	 let correct = false;
+	 if(!showing) {
+	   sa.setAttribute('showing', 'true');
+	   let answer = sa.getAttribute('task-answer'); 
+	   sa.innerText = answer;
+	   if(ua.value.trim() === answer.trim()) {
+	     correct = true;
+	     ua.style.color = 'green';
+	   } else {
+	     ua.style.color = 'red';
+	   }
+	 } else {
+	   sa.setAttribute('showing', 'false');
+	   sa.innerText = "***";
+	   ua.style.color = 'black';
+	 }
+	 ua.setAttribute('disabled', 'meow');
+	 return correct;
+       }
+
+       function sendAll() {
+	   document
+	     .querySelector('#toggleAnswers')
+	     .setAttribute('disabled', 'meow');	
+	   let answers = Array.from(document
+	     .querySelectorAll('.task-text'))
+	     .map((e) => {
+	       let task_id = e.getAttribute('task-id');
+	       return changeAnswers(task_id);		
+	     });
+	   let total_score = answers.reduce((a, b) => a + (+b));
+	   let time = timer.time;
+	   submitAnswer(variant_id, total_score, time);
+       }
+	console.log("meow");
+        </script>
+
       <main id = "task">
         {% for task in tasks %}
-          <div class = "task-text">
+        <div class="task-text" task-id="{{ task[0] }}">
              <div class = "num">
               <h1> <b> №{{ task[3] }} </b> <span style="color: #999; font-size: 0.8em;">ID: {{ task[0] }}</span></h1>
               <h6> Сложность: \({{ task[2] }}\) <br> Источник: {{ task[4] }}</h6>
@@ -295,7 +369,7 @@
                 <table border="1" width="30%" cellpadding="5">
                    <tr>
                       <th style="text-align:center; width:50%;">Ваш ответ:</th>
-                      <th style="text-align:center" >Правильный ответ:</th>
+                      <th style="text-align:center">Правильный ответ:</th>
                    </tr>
                    <tr>
                       <td>
@@ -316,68 +390,10 @@
             style="background: #223436; color: white;"
             class="button" 
             id="toggleAnswers" 
-            next="Скрыть ответы" 
-            onclick="sendAll()">Отправить тест
+            next="Скрыть ответы"
+	    onclick="sendAll()">
+	    Отправить тест
 	  </button>
-        <script>
-	   {% if time is none %}
-             let time = {{ time }};
-	   {% else %}
-	     let time = 20 * 60;
-	   {% endif %}
-	   let timer = new Timer();
-           timer.set(
-	     time * 60,
-	     'timer', 
-	     sendAll);
-	   timer.start();
-
-           function submitAnswer(task_id, ans) {
-             fetch("/submit-task", {
-               method: "POST",
-               credentials: "include",
-               headers: {
-                 "Content-Type": "application/json",
-               },
-               body: JSON.stringify({
-                 task_id: task_id,
-                 ans: ans
-               })
-             }).then((r) => console.log("GOIDA! Answer received"));
-           }
-
-           function changeAnswers(task_id) {
-             let ua = document.querySelector(`#task-input-${task_id}`);
-             let sa = document.querySelector(`#task-answer-${task_id}`);
-             let showing = sa.getAttribute('showing').trim() === "true";
-             if(!showing) {
-               sa.setAttribute('showing', 'true');
-               let answer = sa.getAttribute('task-answer'); 
-               sa.innerText = answer;
-               if(ua.value.trim() === answer.trim()) {
-                 ua.style.color = 'green';
-               } else {
-                 ua.style.color = 'red';
-               }
-               submitAnswer(task_id, ua.value.trim());
-             } else {
-               sa.setAttribute('showing', 'false');
-               sa.innerText = "***";
-               ua.style.color = 'black';
-             }
-	     ua.setAttribute('disabled', 'meow');
-           }
-
-	   function sendAll() {
-	       document
-		 .querySelector('#toggleAnswers')
-		 .setAttribute('disabled', 'meow');	
-	       for(let i = 0; i < 50; i++) {
-	           try { changeAnswers(i); }
-		   catch {}
-	       }
-	   }
-        </script>
       </main>
       <!-- ALL JS FILES -->
       <script src="{{ url_for('static', filename='js/all.js') }}"></script>
