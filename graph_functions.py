@@ -59,7 +59,7 @@ def get_step(num, step):
 def get_awards(id_user):
     """
     params: id_user: int
-    return: List: if student: [List:[int
+    return: List: if student: List[Tuple(name:str, current_points:int, current_level:int, next_points:int)]
     """
     role = db.get_user_role(id_user, 1)
     result = []
@@ -83,9 +83,9 @@ def get_awards(id_user):
             c3 = len(groups)
         n3 = get_step(c3, 2)
         result = [
-            [c1, n1, 3 ** (n1 + 1)],
-            [c2, n2, 5 ** (n2 + 1)],
-            [c3, n3, 2 ** (n3 + 1)],
+            ["Вы выполнили свои первые задания.<br>Вы становитесь заметным пользователем сайта.", c1, n1 + 1, 3 ** (n1 + 1)],
+            ["Вы выполнили решили задания нескольких типов.<br>Вы превращаетесь в многофункциональный компьютер.", c2, n2 + 1, 5 ** (n2 + 1)],
+            ["Вы присоединились к группе.<br>Это доказывает, что Вы не одни на этом тернистом пути.", c3, n3 + 1, 2 ** (n3 + 1)]
         ]
     elif role == "teacher":
         options = db.get_cnt_options_for_teacher(id_user)
@@ -105,11 +105,11 @@ def get_awards(id_user):
             c3 = 0
         else:
             c3 = len(all_groups)
-        n3 = get_step(c3, 2)
-        result = [[c1, n1, 2 ** (n1 + 1)]]
-        result.append([c2, n2, 3 ** (n2 + 1)])
-        result.append([c3, n3, 5 ** (n3 + 1)])
+        n3 = get_step(c3, 3)
+        result = [
+            ["Вы создали свои первые варианты.<br>Вы становитесь заметным пользователем сайта.", c1, n1 + 1, 5 ** (n1 + 1)],
+            ["Вы создали собственную группу.<br>Это доказывает, что Вы заботитесь обо всех своих учениках.", c2, n2 + 1, 2 ** (n2 + 1)],
+            ["Вы состоите в нескольких группах.<br>Вы очень востребованный преподаватель.", c3, n3 + 1, 3 ** (n3 + 1)]
+        ]
     return result
 
-
-print(get_awards(1))

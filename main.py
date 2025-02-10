@@ -168,6 +168,7 @@ def dashboard():
         user=user_data,
         labels=labels,
         correct=correct,
+        awards = graph_functions.get_awards(uid),
         incorrect=incorrect,
         user_id=uid,
     )
