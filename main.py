@@ -876,6 +876,17 @@ def all_variants():
     )
 
 
+@app.route("/submit-test", methods=["POST"])
+def submit_test():
+    if "email" not in session:
+        return redirect("/sign-in/")
+    uid = db.get_user_id(session["email"], 1)
+    data = request.json
+    data["ID_option"] = data["variant_id"]
+    data["ID_user"] = uid
+    db.add_result(data)
+    return {"status": "ok", "message": "goida!"}
+
 if __name__ == "__main__":
     init_db()  # Инициализация базы данных форума при запуске приложения
     app.run(host="0.0.0.0", port=5000)
