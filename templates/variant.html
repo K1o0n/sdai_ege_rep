@@ -289,9 +289,9 @@
        {% endif %}
 
        {% if variant_id is none %}
-         let variant_id = {{ variant_id }};
+         let variant_id = 0;
        {% else %}
-	 let variant_id = 0;
+	 let variant_id = {{ variant_id }};
        {% endif %}
 
        let timer = new Timer();

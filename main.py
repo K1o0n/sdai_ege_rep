@@ -467,10 +467,24 @@ def group(group_id):
     # ADMIN = db_functions.get_user_role(uid, 1) == "teacher"
     ADMIN = 1
     students.sort(key=lambda x: x[0])
-    data = graph_functions.convert_attempts_by_type(uid)
-    labels = data[0]
-    correct = data[1]
-    incorrect = data[2]
+    correct = []
+    incorrect = []
+    labels = []
+    for person in students:
+        name = person[1] + " " + person[2]
+        labels.append(name)
+        all_options_for_person = db_functions.get_results_for_user_in_group(person[0], group_id)
+        cor = 0
+        if db_functions.get_results_for_user_in_group(person[0], group_id):
+            for option in all_options_for_person:
+                cor += option[1]
+        else:
+            cor = 0
+        incor = len(all_options_for_person) * 10 - cor
+
+        correct.append(cor)
+        incorrect.append(incor)
+
     try:
         group_name = db.get_group(group_id)[0][
             1
@@ -573,7 +587,7 @@ def groups():
     if request.method == "POST":
         print(request.form)
         # db_functions.add_task(request.form)
-        return render_template("groups.html", groups=groups, user=True, role="teacher")
+        return render_template("groups.html",  user=True, role="teacher")
     if not user:
         return redirect("/sign-in/")
     role = db_functions.get_user_role(uid, 1)

@@ -150,7 +150,7 @@
                             <div class="card-body position-relative">
                                 <h5 class="card-title">{{ und_option.name }}</h5>
                                 <p class="card-text">Решенные задачи: --/--</p>
-                                <a href="/variant"
+                                <a href="/variant/{{und_option.id}}"
                                     class="btn btn-card">Перейти к варианту</a>
                                 <div class="card-deadline">{{ und_option.deadline.strftime('%Y-%m-%d %H:%M') }}</div>
                             </div>
@@ -163,7 +163,7 @@
                             <div class="card-body position-relative">
                                 <h5 class="card-title">{{ und_option.name }}</h5>
                                 <p class="card-text">Решенные задачи: --/--</p>
-                                <a href="/variant"
+                                <a href="/variant/{{und_option.id}}"
                                     class="btn btn-card">Перейти к варианту</a>
                                 <div class="card-deadline">{{ und_option.deadline.strftime('%Y-%m-%d %H:%M') }}</div>
                             </div>
@@ -179,7 +179,7 @@
                                     <span class="solved-tasks">Решенные задачи: {{ done_option.solved_tasks }}/{{
                                         done_option.total_tasks }}</span>
                                 </p>
-                                <a href="/group/{{ course_id }}/variant/{{ done_option.name.split(' ')[1] }}"
+                                <a href="/variant/{{und_option.id}}"
                                     class="btn btn-card">Посмотреть результаты</a>
                                 <div class="card-deadline">{{ done_option.deadline.strftime('%Y-%m-%d %H:%M') }}</div>
                             </div>
