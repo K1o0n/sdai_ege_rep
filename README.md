@@ -69,7 +69,7 @@ os.urandom(16)
    - Заполните необходимые поля и при окончании настройки, вернитесь на пунке 7.
 9. Выберите `Web application`
 10. Укажите в Authorized redirect URI's:
-    http://127.0.0.1:5000/ и http://127.0.0.1:5000/login
+    http://127.0.0.1:5000/dashboard и http://127.0.0.1:5000/login/google/authorized
 11. Нажмите create
 12. Теперь перед вами плашка с некоторыми значениями:
 13. Client secret скопируйте и вставьте после `GOOGLE_CLIENT_SECRET=` в вашем .env файле
