@@ -189,8 +189,12 @@
         <div class="titl">Добавление задачи</div>
         <div class="content">
             <!-- Registration form -->
-            <p>Введите ID задач для добавления</p>
             <form id="mainForm" action="#" method="post">
+                <p>Введите название варианта</p>
+                <div class="input-group">
+                    <input type="text" name="name" placeholder="Название варианта" autocomplete="off">
+                </div>
+                <p>Введите ID задач для добавления</p>
                 <div class="input-group">
                     <input type="text" id="inputField" placeholder="Введите значение и нажмите Enter или нажмите на кнопку" autocomplete="off">
                     <button type="button" id="addButton">+</button>

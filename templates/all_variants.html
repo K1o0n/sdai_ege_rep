@@ -105,6 +105,7 @@
 			    <a href="/variant/{{ option.id }}"
 				class="btn btn-card">Перейти к варианту</a>
 			    <div class="card-deadline">{{ option.deadline.strftime('%Y-%m-%d %H:%M') }}</div>
+                <div class="card-id text-muted">ID: {{ option.id }}</div>
 			</div>
 		    </div>
 		    {% endfor %}
