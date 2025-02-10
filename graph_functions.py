@@ -41,9 +41,9 @@ def convert_attempts_by_type(user_id):
     result3 = [0] * 27
     while cur_index < len(all_attempts):
         if all_attempts[cur_index][1]:
-            result2[all_attempts[cur_index][2]] += 1
+            result2[all_attempts[cur_index][2] - 1] += 1
         else:
-            result3[all_attempts[cur_index][2]] += 1
+            result3[all_attempts[cur_index][2] - 1] += 1
         cur_index += 1
     return result1, result2, result3
 
