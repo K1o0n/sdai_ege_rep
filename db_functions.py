@@ -410,6 +410,15 @@ def get_results_for_option_user(user_id, option_id):
     )
     return result
 
+def get_results_for_user_in_group(user_id, group_id):
+    """
+    params: user_id:int
+    params: group_id:int
+    return: List[Tuple(id:int, score:int, time:int, id_user:int, id_option:int)]
+    """
+    result = make_request("SELECT Results.ID, Results.score, Results.time, Results.ID_user, Results.ID_option FROM Results JOIN Options ON Results.ID_option = Options.ID WHERE Results.ID_user = ? AND Options.ID IN (SELECT ID_option FROM Groups_Options WHERE ID_group = ?)", [user_id, group_id])
+    return result
+
 
 def get_task_count_for_option(option_id) -> int:
     """
@@ -431,7 +440,7 @@ def get_tasks_for_option(option_id: int) -> Pizdec:
     :return: int - the count of tasks associated with the given option_id.
     """
     result = make_request(
-        "SELECT * FROM Tasks_Options WHERE ID_option = ?", [option_id]
+        "SELECT * FROM Tasks WHERE ID IN (SELECT ID_task FROM Tasks_Options WHERE ID_option = ?)", [option_id]
     )
     return result
 
