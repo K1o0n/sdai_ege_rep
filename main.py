@@ -6,14 +6,29 @@ import sqlite3
 import time, datetime
 import random
 import graph_functions
-from werkzeug.utils import secure_filename
 import os, re
-
+from flask_dance.contrib.google import make_google_blueprint, google
+from dotenv import load_dotenv
+load_dotenv()
 app = Flask(__name__)
 DATABASE = "forum.db"
 app.config["SECRET_KEY"] = urandom(16)
-
-
+# app.config["secret_key"] = urandom(16)
+# print(urandom(16))
+client_id = os.getenv("GOOGLE_CLIENT_ID")
+client_secret = os.getenv("GOOGLE_CLIENT_SECRET")
+app.secret_key = os.getenv("secret_key")
+print(app.secret_key)
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+os.environ["OAUTHLIB_RELAX_TOKEN_SCOPE"] = "1"
+blueprint = make_google_blueprint(
+    client_id=client_id,
+    client_secret=client_secret,
+    reprompt_consent=True,
+    scope=["profile", "email"],
+)
+app.register_blueprint(blueprint, url_prefix="/login")
+google_data = None
 def auth(route):
     def inner(*args, **kwargs):
         if "email" in session:
@@ -37,11 +52,28 @@ def not_found(e):
 @app.route("/")
 def index():
     user = "email" in session
+    print(google_data)
     return render_template("main.html", user=user)
 
 
 @app.route("/sign-up/", methods=["GET", "POST"])
 def sign_up():
+    print("GOIDA", google_data)
+    if google_data:
+        data = {"name" :google_data["given_name"],
+                "surname": google_data["family_name"],
+                "patronymic": " ",
+                "email": google_data["email"],
+                "password": " ",
+                "telephone": "88005553535",
+                "age": "13",
+                "country": "Russia! Goida!",
+                "role": "student",
+                "about": "GOIDA",
+                "path": None}
+        db.add_user(data)
+        session["email"] = google_data["email"]
+        return redirect("/")
     if request.method == "GET":
         return render_template("sign-up.html")
     data = dict(request.form)
@@ -56,20 +88,36 @@ def sign_up():
     session["email"] = data["email"]
     return redirect("/")
 
+@app.route("/login", methods=["POST", "GET"])
+def login():
+    return redirect(url_for("google.login"))
 
 @app.route("/sign-in/", methods=["GET", "POST"])
 def sign_in():
+    global google_data
+    user_info_endpoint = "/oauth2/v2/userinfo"
+    if google.authorized:
+        google_data = google.get(user_info_endpoint).json()
+        uid = db.get_user_id(google_data["email"], 1)
+        session["email"] = google_data["email"]
+        print(google_data, uid)
+        if uid == -1:
+            return redirect("/sign-up")
+        return redirect("/dashboard/")
     if request.method == "GET":
-        return render_template("sign-in.html")
+        return render_template("sign-in.html",google_data=google_data,
+            fetch_url=google.base_url + user_info_endpoint)
     data = dict(request.form)
     uid = db.get_user_id(data["email"], 1)
     user = db.get_user(uid, 1)
+    
     # orms were invented in 1995... People before 1995:
     if user and user[0][6] == data["password"]:
         session["email"] = data["email"]
         return redirect("/")
     else:
-        return render_template("sign-in.html", error="Неверные данные!")
+        return render_template("sign-in.html", error="Неверные данные!",google_data=google_data,
+            fetch_url=google.base_url + "/oauth2/v2/userinfo")
 
 
 @app.route("/dashboard/")
@@ -126,8 +174,10 @@ def dashboard():
 
 @app.route("/logout/")
 def logout():
+    global google_data
     if "email" in session:
         del session["email"]
+    google_data=None
     return redirect("/")
 
 
@@ -808,4 +858,4 @@ def all_variants():
 
 if __name__ == "__main__":
     init_db()  # Инициализация базы данных форума при запуске приложения
-    app.run(host="0.0.0.0", port=8080)
+    app.run(host="0.0.0.0", port=5000)
