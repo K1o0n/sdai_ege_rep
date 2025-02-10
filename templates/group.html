@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.84.0">
-    <title>Курсы</title>
+    <title>Группа</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sidebars/">
 
@@ -363,6 +363,7 @@
 
                         <div id="add-option-form" style="display: none;">
                             <form id="option-form" action="{{ url_for('add_option_to_group') }}" method="post">
+                                <h2 style="margin-top:10px;">Выбрать вариант</h2>
                                 <div class="form-group">
                                     <label for="option-id">ID варианта:</label>
                                     <input type="text" class="form-control" id="option-id" name="option-id">
@@ -370,6 +371,10 @@
                                 <input type="hidden" name="group_id" value="{{ course_id }}">
                                 <button type="submit" class="btn btn-primary">Отправить</button>
                             </form>
+                                <h2 style="margin-top:10px;">или</h2>
+                                <form action="/make_variant" target="_blank">
+                                    <button type="submit" class="btn btn-primary" style="margin-bottom:32px;">Создать вариант</button>
+                                </form>
                         </div>
                     </div>
                 </div>
