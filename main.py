@@ -95,6 +95,7 @@ def login():
 @app.route("/sign-in/", methods=["GET", "POST"])
 def sign_in():
     global google_data
+    print("[sign-in]", google_data)
     user_info_endpoint = "/oauth2/v2/userinfo"
     if google.authorized:
         google_data = google.get(user_info_endpoint).json()

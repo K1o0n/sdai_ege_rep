@@ -85,7 +85,6 @@
             <label for="password" class="details">Пароль</label>
             <input type="password" name="password" id="password" placeholder="Введите пароль" required>
           </div>
-          {% if not google_data %}
           <a href="/login" class="google-btn">
             <div class="google-icon-wrapper">
               <img class="google-icon"
@@ -93,7 +92,6 @@
             </div>
             <p class="btn-text"><b>Sign in with google</b></p>
           </a>
-          {% endif %}
           <!-- Submit button -->
           <div class="button" style="width: 100%; margin: 0.5em 10%;">
             <input type="submit" value="Войти">
