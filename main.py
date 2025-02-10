@@ -6,7 +6,7 @@ import sqlite3
 import time, datetime
 import random
 import graph_functions
-import os, re
+import os, re, ast
 from flask_dance.contrib.google import make_google_blueprint, google
 from dotenv import load_dotenv
 load_dotenv()
@@ -672,8 +672,16 @@ def make_variant():
         return redirect("/sign-in/")
     uid = db.get_user_id(session["email"], 1)
     if request.method == "POST":
-        print(request.form)
-        return redirect("/make_variant")
+        print(request.form['values'], request.form['name'])
+        # vals = [int(x) for x in request.form['values']]
+        vals = [int(x) for x in ast.literal_eval(request.form['values'])]
+        vid = db.add_option({
+            'name': request.form['name'],
+            'user_id': uid,
+            'date': time.time() + 100000})
+        for val in vals:
+            db.add_task_into_option(vid,val)
+        return redirect("/all_variants")
     return render_template("make_variant.html", user=True, role="teacher")
 
 
