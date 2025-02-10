@@ -390,6 +390,24 @@ def variant():
     return render_template("variant.html", user=True, tasks=tasks)
 
 
+@app.route("/variant/<int:id>")
+def variant_by_id(id: int):
+    if "email" not in session:
+        return redirect("/sign-in/")
+    uid = db.get_user_id(session["email"], 1)
+    user = db.get_user(uid, 1)
+    if not user:
+        return redirect("/sign-in/")
+
+    tasks = db.get_tasks_for_option(id)
+    tasks = [(i[0], i[1], i[3], i[4], i[5], i[2]) for i in tasks]
+#    random.shuffle(tasks)
+#    tasks = tasks[:20]
+    tasks.sort(key=lambda x: x[3])
+
+    return render_template("variant.html", user=True, tasks=tasks, variant_id=id)
+
+
 @app.route("/submit-task", methods=["POST"])
 def submit_task():
     # print(session)

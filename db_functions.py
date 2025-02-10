@@ -1,5 +1,6 @@
 import sqlite3
 from time import time
+from typing import Any
 
 # Special  functions:
 
@@ -416,11 +417,23 @@ def get_task_count_for_option(option_id) -> int:
     :return: int - the count of tasks associated with the given option_id.
     """
     result = make_request(
-        "SELECT COUNT(*) FROM Tasks_Options WHERE option_id = ?", [option_id]
+        "SELECT COUNT(*) FROM Tasks_Options WHERE ID_option = ?", [option_id]
     )
     if not result:
         return 0
     return result[0][0]
+
+
+type Pizdec = Any
+def get_tasks_for_option(option_id: int) -> Pizdec:
+    """
+    :param option_id: int
+    :return: int - the count of tasks associated with the given option_id.
+    """
+    result = make_request(
+        "SELECT * FROM Tasks_Options WHERE ID_option = ?", [option_id]
+    )
+    return result
 
 
 def get_answer(task_id):
