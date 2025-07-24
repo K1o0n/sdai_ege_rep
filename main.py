@@ -7,7 +7,6 @@ import time, datetime
 import random
 import graph_functions
 import os, re, ast
-from flask_dance.contrib.google import make_google_blueprint, google
 from dotenv import load_dotenv
 load_dotenv()
 app = Flask(__name__)
@@ -21,14 +20,6 @@ app.secret_key = os.getenv("secret_key")
 print(app.secret_key)
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 os.environ["OAUTHLIB_RELAX_TOKEN_SCOPE"] = "1"
-blueprint = make_google_blueprint(
-    client_id=client_id,
-    client_secret=client_secret,
-    reprompt_consent=True,
-    scope=["profile", "email"],
-)
-app.register_blueprint(blueprint, url_prefix="/login")
-google_data = None
 def auth(route):
     def inner(*args, **kwargs):
         if "email" in session:
@@ -52,28 +43,11 @@ def not_found(e):
 @app.route("/")
 def index():
     user = "email" in session
-    print(google_data)
     return render_template("main.html", user=user)
 
 
 @app.route("/sign-up/", methods=["GET", "POST"])
 def sign_up():
-    print("GOIDA", google_data)
-    if google_data:
-        data = {"name" :google_data["given_name"],
-                "surname": google_data["family_name"],
-                "patronymic": " ",
-                "email": google_data["email"],
-                "password": " ",
-                "telephone": "88005553535",
-                "age": "13",
-                "country": "Russia! Goida!",
-                "role": "student",
-                "about": "GOIDA",
-                "path": None}
-        db.add_user(data)
-        session["email"] = google_data["email"]
-        return redirect("/")
     if request.method == "GET":
         return render_template("sign-up.html")
     data = dict(request.form)
@@ -88,26 +62,11 @@ def sign_up():
     session["email"] = data["email"]
     return redirect("/")
 
-@app.route("/login", methods=["POST", "GET"])
-def login():
-    return redirect(url_for("google.login"))
-
 @app.route("/sign-in/", methods=["GET", "POST"])
 def sign_in():
-    global google_data
-    print("[sign-in]", google_data)
-    user_info_endpoint = "/oauth2/v2/userinfo"
-    if google.authorized:
-        google_data = google.get(user_info_endpoint).json()
-        uid = db.get_user_id(google_data["email"], 1)
-        session["email"] = google_data["email"]
-        print(google_data, uid)
-        if uid == -1:
-            return redirect("/sign-up")
-        return redirect("/dashboard/")
+    print("[sign-in]")
     if request.method == "GET":
-        return render_template("sign-in.html",google_data=google_data,
-            fetch_url=google.base_url + user_info_endpoint)
+        return render_template("sign-in.html")
     data = dict(request.form)
     uid = db.get_user_id(data["email"], 1)
     user = db.get_user(uid, 1)
@@ -117,8 +76,7 @@ def sign_in():
         session["email"] = data["email"]
         return redirect("/")
     else:
-        return render_template("sign-in.html", error="Неверные данные!",google_data=google_data,
-            fetch_url=google.base_url + "/oauth2/v2/userinfo")
+        return render_template("sign-in.html", error="Неверные данные!")
 
 
 @app.route("/dashboard/")
@@ -176,10 +134,8 @@ def dashboard():
 
 @app.route("/logout/")
 def logout():
-    global google_data
     if "email" in session:
         del session["email"]
-    google_data=None
     return redirect("/")
 
 
